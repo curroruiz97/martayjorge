@@ -12,7 +12,7 @@ formulario de confirmación con acompañantes, autocar y alergias.
 
 | Sección | Qué hace |
 |---|---|
-| **Portada** | Nombres escritos a pincel, foto en arco, cuenta atrás sobria (días · horas · minutos) y botón para confirmar |
+| **Portada** | Entrada animada (un avión de papel traza la ruta, los nombres se escriben a pluma y unas puertas en arco se abren sobre la foto), cuenta atrás sobria (días · horas · minutos) y botón para confirmar. Guía en [`docs/animacion-entrada.md`](docs/animacion-entrada.md) |
 | **Agenda** | Ilustraciones a pluma de San Pablo y del Palomar unidas por una ruta con un lazo en forma de corazón y un avión que la recorre; botones «¿Cómo llegar?» a Google Maps |
 | **Transporte** | Coche (parking recomendado junto a la Catedral) y autocar |
 | **Alojamiento** | Texto y mapa con la zona recomendada marcada con un círculo «a rotulador» |
@@ -28,16 +28,16 @@ Stack: HTML/CSS/JS **sin build ni frameworks** · hosting y funciones en **Verce
 ```
 public/                 ← lo que se publica
   index.html            la página entera
-  css/                  base.css (diseño: colores, fuentes) · site.css (secciones) · rsvp.css · mapa.css
-  js/                   boot.js · main.js (animaciones, cuenta atrás, copiar IBAN) · rsvp.js · mapa.js
+  css/                  base.css (diseño: colores, fuentes) · site.css (secciones) · intro.css (entrada de la portada) · rsvp.css · mapa.css
+  js/                   boot.js · main.js (animaciones, cuenta atrás, copiar IBAN) · intro.js (saltar la entrada, parallax) · rsvp.js · mapa.js
   assets/fonts/         tipografías autoalojadas (Caveat, Cormorant Garamond, Inter)
   assets/img/           fotos optimizadas (WebP), textura de papel, imagen para compartir (og.jpg)
   assets/ilustraciones/ SVG a pluma: San Pablo, Palomar, ruta, adornos, iconos, favicon (guía: docs/ilustraciones.md)
   admin/                panel de respuestas
 api/                    funciones serverless de Vercel (rsvp, admin, ping)
 supabase/               schema.sql (tabla y vistas) · consultas.sql (consultas listas para pegar)
-scripts/                dev.mjs (servidor local) · test-rsvp.mjs · ilustraciones/ (generador de los SVG)
-docs/                   rsvp.md (guía completa del formulario y los datos) · contenido-original.md (brief)
+scripts/                dev.mjs (servidor local) · test-rsvp.mjs · ilustraciones/ (generador de los SVG) · intro/ (generador de los nombres a pluma)
+docs/                   rsvp.md (guía completa del formulario y los datos) · animacion-entrada.md · ilustraciones.md · contenido-original.md (brief)
 vercel.json             salida en public/, cabeceras de seguridad, cron diario
 ```
 
@@ -110,6 +110,7 @@ boda y, después, exportad lo que queráis conservar y vaciad la tabla. Guía co
 | Fotos | `public/assets/img/` (WebP; la de la portada es un recorte 4:5) |
 | Ilustraciones | `public/assets/ilustraciones/` (guía en [`docs/ilustraciones.md`](docs/ilustraciones.md)); se regeneran con `python3 scripts/ilustraciones/generar.py` |
 | Mensajes del formulario | arriba de `public/js/rsvp.js` y atributos `data-texto-si` / `data-texto-no` en `index.html` |
+| Entrada de la portada | tiempos en `public/css/intro.css`; ver [`docs/animacion-entrada.md`](docs/animacion-entrada.md). Solo se reproduce la primera vez por sesión: para verla otra vez, añadid `?intro=1` a la dirección |
 
 ## Notas de diseño
 

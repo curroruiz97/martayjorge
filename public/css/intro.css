@@ -1,0 +1,96 @@
+/* ==========================================================================
+   Entrada de la portada · «se escribe y se abre»
+   Línea de tiempo (s): 0.2 vuela el avión y se traza la ruta · 0.75 etiqueta ·
+   0.85 los nombres se escriben a pluma · 1.2 se dibujan las puertas del arco ·
+   3.0 las puertas se abren y la foto se «enfoca» · 3.5 fecha · 3.85 cuenta atrás y botón.
+   Todas las animaciones son de tipo «desde»: el estado normal de cada elemento es el FINAL.
+   Así, sin animaciones (prefers-reduced-motion, ya vista, avance rápido) la portada sale completa.
+   ========================================================================== */
+.portada {
+  --escritura: .85s;
+  --lineas: 1.2s;
+  --abre: 3s;
+  --ev: cubic-bezier(.22, .61, .36, 1);
+  --ev-pluma: cubic-bezier(.5, .08, .3, 1);
+  --ev-postigo: cubic-bezier(.62, .02, .2, 1);
+  --ev-foto: cubic-bezier(.16, 1, .3, 1);
+}
+
+/* ---- Ornamento: ruta con corazón; las rayas aparecen en la estela del avión (ver intro.generado) ---- */
+.portada__ruta { width: min(78vw, 21rem); margin: 0 auto .25rem; }
+.portada__ruta-svg { display: block; width: 100%; height: auto; overflow: visible; }
+.rz { fill: none; stroke: var(--terracota); stroke-width: 2.7; stroke-linecap: round; stroke-dasharray: 1 2; stroke-dashoffset: 0; animation: raya .26s ease-out var(--d) backwards; }
+@keyframes raya { from { stroke-dashoffset: 1; } }
+
+/* ---- Entrada suave de textos ---- */
+.intro { animation: entrar 1s var(--ev) var(--d, 0s) backwards; }
+@keyframes entrar { from { opacity: 0; transform: translateY(.9rem); filter: blur(4px); } }
+
+/* ---- Nombres escritos a pluma ---- */
+.nombres { display: block; margin: 0; line-height: 0; }
+.nombres__svg { display: block; width: min(80vw, 22rem); height: auto; margin-inline: auto; overflow: visible; color: var(--tinta); }
+.pal--y { color: var(--terracota); }
+.tz {
+  fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: 1 2; stroke-dashoffset: 0;
+  animation: pluma var(--t) var(--ev-pluma) calc(var(--d) + var(--escritura)) backwards;
+}
+@keyframes pluma { from { stroke-dashoffset: 1; } }
+/* el relleno real de la letra entra al terminar su trazo y remata cualquier hueco */
+.rl { fill: currentColor; animation: relleno .5s ease-out calc(var(--d) + var(--escritura)) backwards; }
+@keyframes relleno { from { opacity: 0; } }
+
+/* ---- Ventana en arco con puertas de papel ---- */
+.ventana { position: relative; overflow: hidden; border-radius: inherit; perspective: 1500px; perspective-origin: 50% 38%; isolation: isolate; transform: translateZ(0); }
+.ventana__foto { position: relative; z-index: 0; transform: scale(1.1); will-change: transform; }
+.ventana img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; filter: saturate(.93) contrast(.99);
+  animation: foto-revela 2.6s var(--ev-foto) calc(var(--abre) + .1s) backwards,
+             respira 32s ease-in-out calc(var(--abre) + 2.8s) infinite alternate; }
+/* vida muy sutil: la foto «respira» (≈3 % de zoom en 32 s) cuando termina el enfoque */
+@keyframes respira { to { transform: scale(1.035); } }
+@keyframes foto-revela {
+  from { opacity: 0; transform: scale(1.2); filter: blur(14px) saturate(.6) contrast(.95); }
+  20%  { opacity: 1; filter: blur(9px) saturate(.72) contrast(.96); }
+  52%  { filter: blur(1.6px) saturate(.88) contrast(.98); }
+  to   { transform: scale(1); filter: saturate(.93) contrast(.99); }
+}
+
+.postigo { position: absolute; top: 0; bottom: 0; width: 50%; z-index: 2; opacity: 0; visibility: hidden; pointer-events: none;
+  -webkit-backface-visibility: hidden; backface-visibility: hidden; will-change: transform; }
+.postigo--izq { left: 0; transform-origin: 0 50%; animation: abre-izq 1.5s var(--ev-postigo) var(--abre) both; }
+.postigo--der { right: 0; transform-origin: 100% 50%; animation: abre-der 1.5s var(--ev-postigo) calc(var(--abre) + .08s) both; }
+@keyframes abre-izq { from { opacity: 1; visibility: visible; transform: rotateY(0); } 72% { opacity: 1; visibility: visible; } to { opacity: 0; visibility: hidden; transform: rotateY(-112deg); } }
+@keyframes abre-der { from { opacity: 1; visibility: visible; transform: rotateY(0); } 72% { opacity: 1; visibility: visible; } to { opacity: 0; visibility: hidden; transform: rotateY(112deg); } }
+.postigo__cara { position: absolute; inset: 0; background: var(--papel-2); animation: velo 1.1s ease calc(var(--lineas) + 1.05s) backwards; }
+@keyframes velo { from { opacity: 0; } }
+.postigo svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.po { fill: none; stroke: var(--tinta); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 2; stroke-dashoffset: 0; opacity: .85;
+  animation: trazo-po 1.3s var(--ev-pluma) calc(var(--lineas) + var(--k, 0s)) backwards; }
+.po--f { stroke-width: 1.3; opacity: .55; }
+@keyframes trazo-po { from { stroke-dashoffset: 1; } }
+.po-pomo { fill: var(--terracota); animation: velo .6s ease calc(var(--lineas) + 1.5s) backwards; }
+.postigo__sombra { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(43, 42, 40, 0), rgba(43, 42, 40, .34)); opacity: 0; animation: sombra 1.5s ease var(--abre) both; }
+.postigo--der .postigo__sombra { background: linear-gradient(270deg, rgba(43, 42, 40, 0), rgba(43, 42, 40, .34)); animation-delay: calc(var(--abre) + .08s); }
+@keyframes sombra { 0% { opacity: 0; } 55% { opacity: 1; } 100% { opacity: 1; } }
+
+/* contorno desplazado del marco: «se corre» al abrirse la ventana */
+.portada__foto.marco::before { animation: marco-corre 1.4s var(--ev) calc(var(--abre) + .2s) backwards; }
+@keyframes marco-corre { from { transform: translate(0, 0); opacity: 0; } }
+
+/* ---- Sin movimiento: la portada sale completa, sin esperar a ningún retardo ---- */
+@media (prefers-reduced-motion: reduce) {
+  .portada *, .portada *::before { animation: none !important; }
+}
+/* ---- Ya vista en esta sesión (o ?intro=0): portada completa al instante ---- */
+.intro-vista .portada *, .intro-vista .portada *::before { animation: none !important; }
+/* Al terminar la entrada se libera la capa de composición */
+.intro-fin .postigo, .intro-fin .ventana__foto { will-change: auto; }
+
+@media (min-width: 900px) {
+  .nombres__svg { width: min(29vw, 23rem); }
+  .portada__ruta { width: min(30vw, 24rem); margin-bottom: .6rem; }
+}
+/* GENERADO por scripts/intro/ornamento.cjs · no editar a mano */
+@keyframes vuelo-portada{0.0%{transform:translate(14px,96px) rotate(-11.2deg)}1.8%{transform:translate(14.4px,95.9px) rotate(-11.3deg)}3.6%{transform:translate(15.7px,95.7px) rotate(-11.7deg)}5.4%{transform:translate(18px,95.2px) rotate(-12.6deg)}7.1%{transform:translate(21.4px,94.4px) rotate(-13.4deg)}8.9%{transform:translate(25.9px,93.3px) rotate(-13.3deg)}10.7%{transform:translate(31.7px,92px) rotate(-11.6deg)}12.5%{transform:translate(39px,90.8px) rotate(-6.8deg)}14.3%{transform:translate(48px,90.4px) rotate(0.8deg)}16.1%{transform:translate(58.7px,91.1px) rotate(6.2deg)}17.9%{transform:translate(71.2px,92.9px) rotate(10deg)}19.6%{transform:translate(85.6px,96.1px) rotate(15.7deg)}21.4%{transform:translate(101.7px,101.2px) rotate(18deg)}23.2%{transform:translate(119.8px,107.6px) rotate(19.9deg)}25.0%{transform:translate(140.6px,112.9px) rotate(8.5deg)}26.8%{transform:translate(164.1px,110.3px) rotate(-23.7deg)}28.6%{transform:translate(183.9px,93.6px) rotate(-46.7deg)}30.4%{transform:translate(199.8px,71px) rotate(-68.5deg)}32.1%{transform:translate(192.2px,45.7px) rotate(-158.9deg)}33.9%{transform:translate(168.8px,57.9px) rotate(-255.9deg)}35.7%{transform:translate(152.7px,44.3px) rotate(-162.2deg)}37.5%{transform:translate(130.2px,59px) rotate(-261.6deg)}39.3%{transform:translate(139.9px,85.8px) rotate(-307.4deg)}41.1%{transform:translate(161px,103.8px) rotate(-329.4deg)}42.9%{transform:translate(183.2px,118.2px) rotate(-330.7deg)}44.6%{transform:translate(206px,127.6px) rotate(-351.8deg)}46.4%{transform:translate(229.2px,128.3px) rotate(-363.9deg)}48.2%{transform:translate(250.6px,125px) rotate(-372.5deg)}50.0%{transform:translate(270.1px,120.4px) rotate(-373deg)}51.8%{transform:translate(288.2px,116.3px) rotate(-373.6deg)}53.6%{transform:translate(304.9px,112.3px) rotate(-372.8deg)}55.4%{transform:translate(320.5px,109.2px) rotate(-369.3deg)}57.1%{transform:translate(334.9px,107.2px) rotate(-366.6deg)}58.9%{transform:translate(348.3px,105.9px) rotate(-364.4deg)}60.7%{transform:translate(360.6px,105.2px) rotate(-362.3deg)}62.5%{transform:translate(372px,105px) rotate(-358deg)}64.3%{transform:translate(382.4px,105.8px) rotate(-354.7deg)}66.1%{transform:translate(391.9px,106.7px) rotate(-354.9deg)}67.9%{transform:translate(400.7px,107.2px) rotate(-358.5deg)}69.6%{transform:translate(408.7px,107px) rotate(-363.7deg)}71.4%{transform:translate(415.9px,106.4px) rotate(-366.7deg)}73.2%{transform:translate(422.5px,105.5px) rotate(-368.9deg)}75.0%{transform:translate(428.4px,104.5px) rotate(-370.6deg)}76.8%{transform:translate(433.8px,103.4px) rotate(-371.9deg)}78.6%{transform:translate(438.5px,102.3px) rotate(-372.9deg)}80.4%{transform:translate(442.8px,101.3px) rotate(-375.4deg)}82.1%{transform:translate(446.5px,100.2px) rotate(-378.5deg)}83.9%{transform:translate(449.7px,99px) rotate(-380.9deg)}85.7%{transform:translate(452.4px,97.9px) rotate(-382.4deg)}87.5%{transform:translate(454.8px,96.9px) rotate(-383deg)}89.3%{transform:translate(456.8px,96.1px) rotate(-382.8deg)}91.1%{transform:translate(458.4px,95.4px) rotate(-382.3deg)}92.9%{transform:translate(459.7px,94.9px) rotate(-381.7deg)}94.6%{transform:translate(460.7px,94.5px) rotate(-381.2deg)}96.4%{transform:translate(461.4px,94.2px) rotate(-381deg)}98.2%{transform:translate(461.6px,94.1px) rotate(-380.9deg)}100.0%{transform:translate(461.6px,94.1px) rotate(-380.8deg)}}
+.avion-h{transform:translate(461.6px,94.1px) rotate(-20.8deg)}
+.js .avion-h,.avion-h{animation:vuelo-portada 2.1s linear 0.2s backwards}

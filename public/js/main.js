@@ -37,13 +37,6 @@
     }, 2400);
   }
 
-  /* ---------- Tipografías listas: arranca la "escritura" de los nombres ---------- */
-  function initFuentes() {
-    const listo = () => root.classList.add('fuentes-listas');
-    if (!document.fonts || !document.fonts.ready) { listo(); return; }
-    Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 2500))]).then(listo);
-  }
-
   /* ---------- Revelado al hacer scroll ---------- */
   function initRevelado() {
     const els = $$('.revelar');
@@ -267,7 +260,6 @@
   }
 
   /* ---------- Arranque ---------- */
-  initFuentes();
   initRevelado();
   initCuenta();
   initIlustraciones();
