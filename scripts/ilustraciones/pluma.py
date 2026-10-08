@@ -83,6 +83,13 @@ class Datos:
     def _d(self, p):
         return (round(p[0] - self.cur[0], 1), round(p[1] - self.cur[1], 1))
 
+    def m(self, p):
+        """Movimiento relativo (nuevo subtrazo dentro del mismo path)."""
+        d = self._d(p)
+        self._nums("m", d)
+        self.cur = (round(self.cur[0] + d[0], 1), round(self.cur[1] + d[1], 1))
+        self.cmd = "m"
+
     def l(self, p):
         d = self._d(p)
         self._nums("l", d)
@@ -246,7 +253,7 @@ def ondas(rng, amp, l1=(60, 130), l2=(16, 32), l3=(6, 11)):
 
 class Lienzo:
     # familia: (mín, máx, paso de cuantización)
-    PESOS = {"c": (2.2, 2.8, 0.2), "d": (1.2, 1.6, 0.2), "s": (0.8, 1.0, 0.1)}
+    PESOS = {"c": (2.2, 2.6, 0.2), "d": (1.2, 1.6, 0.2), "s": (0.8, 1.0, 0.1)}
     # temblor base, longitud de tramo entre puntos de control
     TEMBLOR = {"c": 0.62, "d": 0.42, "s": 0.3}
     TRAMO = {"c": 34.0, "d": 22.0, "s": 30.0}
@@ -264,6 +271,28 @@ class Lienzo:
         self.clips = []         # pila de oclusores activos
         self.n = 0
         self.extra_linea = []   # elementos extra (p. ej. puntos rellenos) dentro de .linea
+        self._grupo = None      # textura en curso (varios subtrazos en un path)
+
+    # ------------------------------------------------------------ texturas
+    @contextmanager
+    def textura(self, peso="s", ancho=None):
+        """Agrupa rayas cortas (rayado, sillería, tejas...) en UN path con subtrazos.
+
+        Al animar con pathLength=1, cada subtrazo arranca a la vez (el patrón de
+        guiones se reinicia en cada subtrazo), así que el rayado «aparece» de golpe
+        mientras las líneas se dibujan: queda natural y ahorra muchos bytes."""
+        if self._grupo is not None:          # ya estamos dentro de otra textura
+            yield
+            return
+        self._grupo = {"peso": peso, "d": Datos(), "k": 0, "ancho": ancho}
+        try:
+            yield
+        finally:
+            g, self._grupo = self._grupo, None
+            if g["k"]:
+                self.n += 1
+                self.trazos.append((g["peso"], self._ancho(g["peso"], g["ancho"]), self.n,
+                                    g["d"].texto()))
 
     # ------------------------------------------------------------- oclusión
     @contextmanager
@@ -340,7 +369,7 @@ class Lienzo:
     # ------------------------------------------------------- trazo genérico
     def trazo(self, pts, peso="d", suave=False, cerrado=False, amp=None,
               pasado=None, hueco=None, tramo=None, ancho=None, curvar=1.0,
-              recortar=True):
+              recortar=True, giro=38.0):
         """Dibuja una línea a mano alzada que sigue pts.
 
         suave=True: pts son puntos de paso de una curva (Catmull-Rom).
@@ -359,10 +388,10 @@ class Lienzo:
             if longitud(t_pts) < 1.2:
                 continue
             self._emitir(t_pts, t_esq, peso, amp, pasado, hueco, tramo, ancho,
-                         r0, r1, curvar, cerrado and not self.clips)
+                         r0, r1, curvar, cerrado and not self.clips, giro)
 
     def _emitir(self, pts, esquinas, fam, amp, pasado, hueco, tramo, ancho,
-                r0, r1, curvar, cerrado):
+                r0, r1, curvar, cerrado, giro=38.0):
         rng = self.rng
         L = longitud(pts)
         # --- extremos: pasado o quedarse corto
@@ -388,11 +417,11 @@ class Lienzo:
         for pz, ez in piezas:
             if longitud(pz) < 1.0:
                 continue
-            d = self._datos_mano(pz, ez, fam, amp, tramo, curvar)
+            d = self._datos_mano(pz, ez, fam, amp, tramo, curvar, giro)
             self.n += 1
             self.trazos.append((fam, self._ancho(fam, ancho), self.n, d))
 
-    def _datos_mano(self, pts, esquinas, fam, amp, tramo, curvar):
+    def _datos_mano(self, pts, esquinas, fam, amp, tramo, curvar, giro_max=38.0):
         rng = self.rng
         L = longitud(pts)
         A = (self.TEMBLOR[fam] if amp is None else amp) * self.temblor
@@ -417,8 +446,9 @@ class Lienzo:
             if i in esquinas:
                 ctrl.append(i)
                 ult, giro = cum[i], 0.0
-            elif cum[i] - ult >= tr or giro > math.radians(38):
-                if cum[-1] - cum[i] > tr * 0.35:
+            elif cum[i] - ult >= tr or giro > math.radians(giro_max):
+                # no dejar un último tramo diminuto
+                if cum[-1] - cum[i] > (cum[i] - ult) * 0.35:
                     ctrl.append(i)
                     ult, giro = cum[i], 0.0
         ctrl.append(len(pts) - 1)
@@ -463,6 +493,8 @@ class Lienzo:
             k = 1 + deriva * t
             pts.append((cx + r * k * math.cos(a), cy - ry * k * math.sin(a)))
         kw.setdefault("pasado", (0, 0.3))
+        if max(r, ry) < 6:
+            kw.setdefault("giro", 58.0)
         self.trazo(pts, peso=peso, suave=True, **kw)
 
     def punto(self, x, y, r=0.9, peso="d"):
@@ -541,8 +573,9 @@ class Lienzo:
             self.trazo(pts, peso=peso, suave=False, amp=0.25, pasado=(0, 0.3),
                        hueco=(0, 1e9))
             return
-        for A, B in segs:
-            self.raya(A, B, peso=peso, curv=curv)
+        with self.textura(peso):
+            for A, B in segs:
+                self.raya(A, B, peso=peso, curv=curv)
 
     def raya(self, A, B, peso="s", curv=0.5, ancho=None):
         """Una rayita casi recta (curva cuadrática leve)."""
@@ -572,18 +605,28 @@ class Lienzo:
             k = rng.uniform(-curv, curv) * min(1.0, L / 14.0)
             M = lerp(a, b, rng.uniform(0.4, 0.6))
             C = (M[0] + nrm[0] * k * 2, M[1] + nrm[1] * k * 2)
-            d = Datos()
-            d.M(a)
+            g = self._grupo
+            if g is not None:
+                d = g["d"]
+                if g["k"] == 0:
+                    d.M(a)
+                else:
+                    d.m(a)
+                g["k"] += 1
+            else:
+                d = Datos()
+                d.M(a)
             if L < 3.5:
                 d.l(b)
             else:
                 d.q(C, b)
-            self.n += 1
-            self.trazos.append((peso, self._ancho(peso, ancho), self.n, d.texto()))
+            if g is None:
+                self.n += 1
+                self.trazos.append((peso, self._ancho(peso, ancho), self.n, d.texto()))
 
     # -------------------------------------------------------------- aguada
-    def aguada(self, poly, color, op=0.2, dx=3.0, dy=2.0, amp=2.2, paso=7.0,
-               suave=True):
+    def aguada(self, poly, color, op=0.2, dx=3.0, dy=2.0, amp=2.2, paso=13.0,
+               suave=False):
         """Mancha de color con borde irregular, desplazada (desregistro)."""
         rng = self.rng
         P = list(poly) + [poly[0]]
