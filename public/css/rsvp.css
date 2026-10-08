@@ -1,0 +1,319 @@
+/* ==========================================================================
+   Marta & Jorge · formulario de confirmación de asistencia (RSVP)
+   Solo usa los tokens de base.css. Todo cuelga de .rsvp / .rsvp-* para no
+   chocar con site.css. Mobile-first: pensado para el pulgar (objetivos ≥ 44 px,
+   texto de los campos ≥ 16 px para que iOS no haga zoom).
+   ========================================================================== */
+
+.rsvp {
+  --rsvp-alto: 3.25rem;              /* 52 px: alto mínimo de los campos */
+  --rsvp-dur: .45s;                  /* plegado / desplegado */
+  --rsvp-tarjeta: rgba(236, 228, 210, .42);  /* --papel-2 suave */
+  --rsvp-error-fondo: rgba(156, 47, 47, .06);
+}
+.rsvp [hidden] { display: none !important; }
+
+.rsvp .cabecera .rsvp__entradilla { max-width: 32ch; margin-top: .35rem; color: var(--tinta-suave); text-wrap: balance; }
+
+/* ---------- Tarjeta de papel (en pantallas anchas) ---------- */
+.rsvp__tarjeta { position: relative; }
+@media (min-width: 640px) {
+  .rsvp__tarjeta {
+    padding: clamp(2.25rem, 5vw, 3.25rem) clamp(2rem, 5.5vw, 3.5rem);
+    background: rgba(251, 248, 241, .66);
+    border: 1px solid var(--linea);
+    border-radius: var(--radio);
+    box-shadow: 0 1.25rem 2.5rem -2rem rgba(43, 42, 40, .35);
+  }
+  /* filete interior, como una tarjeta impresa */
+  .rsvp__tarjeta::before {
+    content: ""; position: absolute; inset: .55rem; pointer-events: none;
+    border: 1px solid rgba(43, 42, 40, .12); border-radius: 3px;
+  }
+}
+
+.rsvp__sin-js {
+  margin-bottom: 1.75rem; padding: 1rem 1.15rem;
+  border: 1px dashed var(--linea-fuerte); border-radius: var(--radio);
+  background: rgba(251, 248, 241, .7);
+  font: 400 .9375rem/1.5 var(--f-sans); color: var(--tinta);
+}
+
+/* ---------- Formulario ---------- */
+.rsvp__form {
+  font-family: var(--f-sans); font-size: 1rem; line-height: 1.45; color: var(--tinta);
+  touch-action: manipulation;
+}
+.rsvp__form:focus { outline: none; }
+:where(.rsvp) fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+:where(.rsvp) legend { padding: 0; }
+
+.rsvp__cargando { display: none; margin-bottom: 1.5rem; font: italic 400 1.0625rem/1.4 var(--f-serif); color: var(--tinta-suave); text-align: center; }
+.js .rsvp__form:not(.rsvp-listo) .rsvp__cargando { display: block; }
+
+.rsvp__recuperado {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 1rem;
+  margin-bottom: 1.5rem; padding: .35rem .5rem .35rem 1rem;
+  background: var(--rsvp-tarjeta); border-radius: var(--radio);
+  font: 400 .875rem/1.4 var(--f-sans); color: var(--tinta-suave);
+}
+.rsvp__enlace {
+  min-height: 2.75rem; padding: .25rem .5rem; border: 0; background: none;
+  font: 500 .875rem/1.2 var(--f-sans); color: var(--tinta);
+  text-decoration: underline; text-decoration-color: var(--terracota); text-underline-offset: .22em;
+}
+
+.rsvp-campo + .rsvp-campo { margin-top: 1.75rem; }
+
+.rsvp-label {
+  display: block; margin-bottom: .5rem;
+  font: 500 .9375rem/1.35 var(--f-sans); letter-spacing: .005em; color: var(--tinta);
+}
+.rsvp-req { color: var(--terracota); }
+.rsvp-opcional { font-weight: 400; color: var(--tinta-tenue); }
+.rsvp-ayuda { font: italic 400 1.0625rem/1.4 var(--f-serif); color: var(--tinta-suave); }
+
+/* ---------- Campos de texto ---------- */
+.rsvp-input {
+  display: block; width: 100%; min-height: var(--rsvp-alto); margin: 0;
+  padding: .8rem 1rem;
+  font: 400 1.0625rem/1.4 var(--f-sans); color: var(--tinta);
+  background: var(--papel-3);
+  border: 1px solid var(--linea-fuerte); border-radius: var(--radio);
+  -webkit-appearance: none; appearance: none;
+  transition: border-color .2s var(--ease), background-color .2s var(--ease);
+}
+.rsvp-input::placeholder { color: #7a7466; opacity: 1; }
+.rsvp-input:focus-visible { outline: 2px solid var(--terracota); outline-offset: 2px; border-color: var(--tinta); }
+.rsvp-textarea { min-height: 8.5rem; resize: vertical; line-height: 1.5; }
+@media (hover: hover) { .rsvp-input:hover { border-color: var(--tinta-suave); } }
+
+.rsvp-input[aria-invalid="true"] { border-color: var(--error); background-color: #fcf5f1; }
+
+.rsvp-error {
+  display: flex; align-items: flex-start; gap: .5rem; margin-top: .55rem;
+  font: 500 .875rem/1.4 var(--f-sans); color: var(--error);
+}
+.rsvp-error::before {
+  content: "!"; flex: none; display: grid; place-items: center;
+  width: 1.125rem; height: 1.125rem; margin-top: .05rem; border-radius: 50%;
+  background: var(--error); color: var(--papel-3); font: 700 .75rem/1 var(--f-sans);
+}
+
+/* ---------- ¿Podrás asistir? (tarjetas con radio) ---------- */
+.rsvp-asistencia > .rsvp-label { float: left; width: 100%; }
+.rsvp-asistencia > .rsvp-label + * { clear: both; }
+.rsvp-opciones { display: grid; gap: .75rem; }
+@media (min-width: 30rem) { .rsvp-opciones { grid-template-columns: 1fr 1fr; } }
+.rsvp-opcion {
+  display: flex; align-items: center; gap: .85rem; min-height: 3.5rem; padding: .85rem 1.1rem;
+  background: var(--papel-3); border: 1px solid var(--linea-fuerte); border-radius: var(--radio);
+  font: 500 1.0625rem/1.3 var(--f-sans); color: var(--tinta); cursor: pointer;
+  transition: border-color .2s var(--ease), box-shadow .2s var(--ease), background-color .2s var(--ease);
+}
+@media (hover: hover) { .rsvp-opcion:hover { border-color: var(--tinta); } }
+.rsvp-opcion--activa { border-color: var(--tinta); box-shadow: inset 0 0 0 1px var(--tinta); background: #fffdf9; }
+.rsvp-opcion:has(input[aria-invalid="true"]) { border-color: var(--error); }
+
+/* Radios y casillas propios: tinta + marca terracota */
+.rsvp-opcion input,
+.rsvp-casilla input {
+  -webkit-appearance: none; appearance: none; flex: none; margin: 0;
+  display: grid; place-content: center;
+  width: 1.375rem; height: 1.375rem;
+  border: 1.5px solid var(--tinta); background: var(--papel-3); color: var(--terracota);
+  cursor: pointer;
+}
+.rsvp-opcion input { border-radius: 50%; }
+.rsvp-opcion input::before {
+  content: ""; width: .72rem; height: .72rem; border-radius: 50%;
+  background: currentColor; transform: scale(0); transition: transform .18s var(--ease);
+}
+.rsvp-casilla input { border-radius: 3px; }
+.rsvp-casilla input::before {
+  content: ""; width: .85rem; height: .85rem; background: currentColor;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  transform: scale(0); transition: transform .15s var(--ease);
+}
+.rsvp-opcion input:checked::before,
+.rsvp-casilla input:checked::before { transform: scale(1); }
+.rsvp-opcion input:focus-visible,
+.rsvp-casilla input:focus-visible { outline: 2px solid var(--terracota); outline-offset: 3px; }
+@media (forced-colors: active) {
+  .rsvp-opcion input, .rsvp-casilla input { -webkit-appearance: auto; appearance: auto; }
+  .rsvp-opcion input::before, .rsvp-casilla input::before { display: none; }
+}
+
+/* ---------- Plegado suave (grid-template-rows 0fr → 1fr) ---------- */
+.rsvp-plegable {
+  display: grid; grid-template-rows: 0fr;
+  transition: grid-template-rows var(--rsvp-dur) var(--ease);
+}
+.rsvp-plegable.abierto { grid-template-rows: 1fr; }
+.rsvp-plegable__interior {
+  min-height: 0; overflow: hidden;
+  /* holgura para que no se recorte el contorno de foco de los campos */
+  padding: 0 6px 6px; margin: 0 -6px -6px;
+  visibility: hidden; opacity: 0;
+  transition: opacity .25s ease, visibility 0s linear var(--rsvp-dur);
+}
+/* «inherit» y no «visible»: un bloque abierto dentro de otro cerrado debe seguir oculto */
+.rsvp-plegable.abierto > .rsvp-plegable__interior {
+  visibility: inherit; opacity: 1;
+  transition: opacity .35s ease .08s, visibility 0s;
+}
+.rsvp-sin-animacion .rsvp-plegable,
+.rsvp-sin-animacion .rsvp-plegable__interior { transition: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .rsvp-plegable__interior { transition-delay: 0s !important; }
+}
+
+/* ---------- Bloques (acompañantes, autocar, alergias) ---------- */
+.rsvp-detalles > .rsvp-plegable__interior > .rsvp-plegable__contenido { padding-top: 2.25rem; }
+.rsvp-bloque { padding-top: 1.85rem; border-top: 1.5px dotted var(--linea-fuerte); }
+.rsvp-bloque + .rsvp-bloque { margin-top: 2.5rem; }
+.rsvp-bloque__titulo {
+  float: left; width: 100%; margin-bottom: .9rem;
+  font-family: var(--f-script); font-weight: 600;
+  font-size: clamp(1.95rem, 1.7rem + 1.1vw, 2.35rem); line-height: 1.05; color: var(--tinta);
+}
+.rsvp-bloque__titulo + * { clear: both; }
+.rsvp-bloque__intro { margin-bottom: 1.15rem; max-width: 40rem; }
+
+.rsvp-fila { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+.rsvp-fila .rsvp-label { margin-bottom: .1rem; }
+
+/* Contador −/+ */
+.rsvp-contador { display: inline-flex; align-items: center; gap: .15rem; flex: none; }
+.rsvp-contador__btn {
+  display: grid; place-items: center; width: 2.75rem; height: 2.75rem; padding: 0;
+  border: 1px solid var(--linea-fuerte); border-radius: 50%;
+  background: var(--papel-3); color: var(--tinta);
+  transition: background-color .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease), transform .15s var(--ease);
+}
+.rsvp-contador__btn svg { width: 1rem; height: 1rem; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+@media (hover: hover) {
+  .rsvp-contador__btn:hover { background: var(--tinta); border-color: var(--tinta); color: var(--papel-3); }
+}
+.rsvp-contador__btn:active { transform: scale(.93); }
+.rsvp-contador__btn[aria-disabled="true"] {
+  opacity: .32; cursor: default; transform: none;
+  background: var(--papel-3); border-color: var(--linea-fuerte); color: var(--tinta);
+}
+.rsvp-contador__valor {
+  width: 2.75rem; height: 2.75rem; margin: 0; padding: 0;
+  border: 0; border-radius: var(--radio); background: transparent;
+  font: 600 1.3rem/1 var(--f-sans); color: var(--tinta); text-align: center;
+  font-variant-numeric: tabular-nums;
+  -moz-appearance: textfield; appearance: textfield;
+}
+.rsvp-contador__valor::-webkit-outer-spin-button,
+.rsvp-contador__valor::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.rsvp-contador__valor:focus-visible { outline: 2px solid var(--terracota); outline-offset: 0; }
+.rsvp-contador__valor[aria-invalid="true"] { color: var(--error); }
+
+/* Nombres de acompañantes */
+.rsvp-acompanante { padding-top: 1.1rem; }
+.rsvp-acompanantes { margin-top: .25rem; }
+
+/* Trayectos de autocar */
+.rsvp-trayecto {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center;
+  column-gap: 1rem; padding-block: 1rem; border-top: 1px solid var(--linea);
+}
+.rsvp-trayecto:last-child { border-bottom: 1px solid var(--linea); }
+.rsvp-trayecto__tipo {
+  display: block; margin-bottom: .25rem;
+  font: 500 var(--fs-etiqueta)/1.3 var(--f-sans); letter-spacing: .22em; text-transform: uppercase;
+  color: var(--tinta-tenue);
+}
+.rsvp-trayecto__ruta { display: block; font: 500 .9375rem/1.4 var(--f-sans); color: var(--tinta); }
+.rsvp-trayecto__lugar { display: block; }
+@media (min-width: 640px) { .rsvp-trayecto__lugar { display: inline; } }
+.rsvp-trayecto .rsvp-error { grid-column: 1 / -1; }
+
+/* Tarjetas de alergias por persona */
+.rsvp-personas > .rsvp-plegable + .rsvp-plegable > .rsvp-plegable__interior > .rsvp-plegable__contenido { padding-top: .9rem; }
+.rsvp-persona {
+  padding: 1rem 1rem 1.2rem;
+  background: var(--rsvp-tarjeta);
+  border: 1px solid var(--linea); border-radius: var(--radio);
+}
+.rsvp-persona__titulo {
+  float: left; width: 100%; margin-bottom: .5rem;
+  font: italic 500 1.4rem/1.2 var(--f-serif); color: var(--tinta); overflow-wrap: anywhere;
+}
+.rsvp-persona__titulo + * { clear: both; }
+.rsvp-casillas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: .85rem; margin-bottom: .8rem; }
+@media (max-width: 21.9rem) { .rsvp-casillas { grid-template-columns: 1fr; } }
+.rsvp-casilla {
+  display: flex; align-items: center; gap: .65rem; min-height: 2.75rem; padding-block: .3rem;
+  font: 400 .9375rem/1.3 var(--f-sans); color: var(--tinta); cursor: pointer;
+}
+.rsvp-label--sub { font-size: .875rem; color: var(--tinta-suave); margin-bottom: .4rem; }
+
+/* ---------- Mensaje ---------- */
+.rsvp-campo--mensaje { margin-top: 2.5rem; padding-top: 1.85rem; border-top: 1.5px dotted var(--linea-fuerte); }
+.rsvp-cuenta {
+  margin-top: .4rem; text-align: right;
+  font: 400 .8125rem/1.3 var(--f-sans); color: var(--tinta-tenue); font-variant-numeric: tabular-nums;
+}
+
+/* Trampa antispam: fuera de la pantalla (no display:none, que algunos robots detectan) */
+.rsvp-trampa { position: absolute !important; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+
+/* ---------- Envío ---------- */
+.rsvp-envio { display: grid; justify-items: center; gap: 1rem; margin-top: 2.25rem; text-align: center; }
+.rsvp-envio__aviso { width: 100%; }
+.rsvp-envio__aviso:empty { margin-bottom: -1rem; } /* sin hueco cuando no hay aviso */
+.rsvp-enviar { width: 100%; max-width: 22rem; min-height: 3.5rem; font-size: .8125rem; }
+.rsvp-enviar__giro {
+  display: none; width: 1rem; height: 1rem; flex: none;
+  border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%;
+  animation: rsvp-giro .8s linear infinite;
+}
+.rsvp-enviar--enviando .rsvp-enviar__giro { display: inline-block; }
+.rsvp .rsvp-enviar.rsvp-enviar--enviando { opacity: 1; background: var(--tinta); color: var(--papel); }
+@keyframes rsvp-giro { to { transform: rotate(1turn); } }
+.rsvp-privacidad { font: italic 400 1.0625rem/1.4 var(--f-serif); color: var(--tinta-suave); }
+
+/* Avisos (error, sin conexión) */
+.rsvp-aviso {
+  display: grid; gap: .65rem; padding: 1rem 1.1rem; text-align: left;
+  border: 1px solid rgba(156, 47, 47, .4); border-radius: var(--radio);
+  background: var(--rsvp-error-fondo);
+  font: 400 .9375rem/1.5 var(--f-sans); color: var(--tinta);
+}
+.rsvp-aviso__titulo { font-weight: 600; color: var(--error); }
+.rsvp-aviso--info { border-color: rgba(79, 107, 69, .45); background: rgba(79, 107, 69, .07); }
+.rsvp-aviso--info .rsvp-aviso__titulo { color: var(--ok); }
+.rsvp-aviso__acciones { display: flex; flex-wrap: wrap; gap: .5rem; }
+.rsvp-aviso__acciones .boton { min-height: 2.75rem; padding: .7rem 1.2rem; font-size: .6875rem; background: var(--papel-3); }
+@media (hover: hover) { .rsvp-aviso__acciones .boton:hover { background: var(--tinta); color: var(--papel); } }
+
+/* ---------- Agradecimiento ---------- */
+.rsvp-gracias {
+  display: grid; justify-items: center; gap: .9rem; text-align: center;
+  padding: clamp(2.5rem, 9vw, 3.5rem) clamp(1.25rem, 6vw, 2.5rem);
+  background: rgba(251, 248, 241, .7);
+  border: 1px solid var(--linea); border-radius: var(--radio);
+  animation: rsvp-aparecer .7s var(--ease) both;
+}
+@media (min-width: 640px) { .rsvp-gracias { padding: 1.5rem 0 1rem; border: 0; background: none; } }
+.rsvp-gracias__corazon {
+  width: 3rem; height: 2.75rem; overflow: visible;
+  fill: rgba(164, 86, 58, .12); stroke: var(--terracota); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
+}
+.rsvp-gracias__titulo {
+  font-family: var(--f-script); font-weight: 600; font-size: clamp(2.75rem, 2.1rem + 3vw, 3.75rem);
+  line-height: 1.02; color: var(--tinta); overflow-wrap: anywhere; text-wrap: balance;
+}
+.rsvp-gracias__titulo:focus { outline: none; }
+.rsvp-gracias__texto { max-width: 28ch; font-size: clamp(1.2rem, 1.1rem + .5vw, 1.375rem); line-height: 1.45; text-wrap: balance; }
+.rsvp-gracias__resumen {
+  display: grid; gap: .2rem; margin-top: .15rem; max-width: 30rem;
+  font: 500 var(--fs-etiqueta)/1.6 var(--f-sans); letter-spacing: .18em; text-transform: uppercase;
+  color: var(--tinta-tenue);
+}
+.rsvp-gracias .boton { margin-top: 1rem; }
+@keyframes rsvp-aparecer { from { opacity: 0; transform: translateY(.75rem); } }

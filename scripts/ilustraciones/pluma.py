@@ -655,6 +655,10 @@ class Lienzo:
         self.aguadas.append((color, op, dd))
 
     # ------------------------------------------------------------ salida
+    def datos(self):
+        """Lista de atributos d en orden de dibujo (para sprites)."""
+        return [d for _f, _w, _n, d in sorted(self.trazos, key=lambda t: t[2])]
+
     def svg(self, titulo=None, con_color=True, op_color=None, attrs=""):
         W, H = self.w, self.h
         o = ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %s %s"%s>' % (fnum(W), fnum(H), attrs)]

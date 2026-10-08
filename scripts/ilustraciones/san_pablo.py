@@ -250,13 +250,20 @@ def cuerpo_central(L):
     # --- rosetón dentro de su conopial con cresterías
     roseton(L, CX, 357.0, 23.0)
     izq, der = conopial_pts(CX, 33.0, 402.0, 80.0, hombro=0.8, punta=0.55)
-    L.trazo([(CX - 33.0, 409.0)] + izq + der[1:] + [(CX + 33.0, 409.0)], peso="d", suave=False)
+    L.trazo([(CX - 33.0, 433.0)] + izq + der[1:] + [(CX + 33.0, 433.0)], peso="d", suave=False)
     iz2, de2 = conopial_pts(CX, 28.5, 402.0, 71.0, hombro=0.8, punta=0.55, n=12)
     L.trazo(iz2 + de2[1:], peso="s", suave=False)
     cresteria(L, izq, cada=7.2, alto=3.8, lado=1, desde=0.25, hasta=0.9)
     cresteria(L, list(reversed(der)), cada=7.2, alto=3.8, lado=-1, desde=0.25, hasta=0.9)
     pinaculo(L, CX, 322.0, 302.0, 3.4, peso="d", ganchos_n=1)
-    # a los lados del rosetón: santos bajo dosel y escudos
+    # conopiales ciegos a los lados del rosetón, con dos lancetas cada uno
+    for cx in (207.0, 313.0):
+        a, b = conopial_pts(cx, 16.0, 442.0, 44.0, hombro=0.85, punta=0.6, n=10)
+        L.trazo(a + b[1:], peso="d", suave=False)
+        cresteria(L, a, cada=6.5, alto=3.0, lado=1, desde=0.35, hasta=0.9)
+        cresteria(L, list(reversed(b)), cada=6.5, alto=3.0, lado=-1, desde=0.35, hasta=0.9)
+        escudo(L, cx, 425.0, 13.0, 16.0, peso="s", cimera=False, lambrequin=False)
+    # a los lados del rosetón: santos bajo dosel
     santo(L, 199.0, 372.0, 30.0, dosel_w=16.0)
     santo(L, 321.0, 372.0, 30.0, dosel_w=16.0)
     for xp in (184.0, 214.0, 306.0, 336.0):
@@ -269,7 +276,7 @@ def cuerpo_central(L):
     L.trazo(iz2 + de2[1:], peso="d", suave=False)
     cresteria(L, izq, cada=7.8, alto=4.6, peso="d", lado=1, desde=0.12, hasta=0.95)
     cresteria(L, list(reversed(der)), cada=7.8, alto=4.6, peso="d", lado=-1, desde=0.12, hasta=0.95)
-    pinaculo(L, CX, 420.0, 386.0, 4.4, peso="d", ganchos_n=3)
+    pinaculo(L, CX, 420.0, 388.0, 4.4, peso="d", ganchos_n=1)
     L.linea((xa, 478.0), (xa, ZOCALO), peso="c")
     L.linea((xb, 478.0), (xb, ZOCALO), peso="c")
     L.linea((xa + 7.5, 480.0), (xa + 7.5, ZOCALO), peso="d")
@@ -406,7 +413,6 @@ def dibujar(semilla=1506):
              dx=2.4, dy=2.0, amp=1.0, paso=8)
     L.aguada(copa_poly, OLIVA, op=0.32, dx=3.5, dy=2.5, amp=3.0)
     L.aguada([(60, 586), (460, 586), (452, 612), (80, 612)], OCRE, op=0.13, dx=0, dy=1, amp=3.5)
-    L.aguada([(22, 389), (84, 386), (84, 401), (14, 403)], TERRACOTA, op=0.18, dx=2, dy=2, amp=1.2, paso=9)
     return L
 
 

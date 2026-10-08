@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 170">
+<title>Ruta de la iglesia de San Pablo al Palomar</title>
+<path id="ruta" fill="none" stroke="#2b2a28" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="9 6.5 7 7 10.5 6 6.5 7.5 8 6" d="M8 109c16.6-2.3 32.5-6.6 49.7-7s36.3 1.7 53.9 4.2 36.2 7.7 52 10.5 30.5 5.3 42.9 6.5 23.1 1.5 31.6.8 14.4-2.8 19.9-5 8.2-4.3 13-8 10.8-9.1 15.6-14.3 10.4-11.4 13.4-16.9 5.3-11.5 4.9-16.4-3.6-10.7-7-13.3-9.7-2.9-13.6-2.1-7.9 4.1-10.2 7.1-2.5 7.4-3.7 11.1c-1.5-3.7-2-7.8-4.6-11s-6.8-7.1-10.8-8.1-9.5 0-13.1 2.5-8.1 7.2-8.8 12.5 1.8 12.8 4.8 18.9 8.3 12.4 13.8 17.4 13 8 19.3 12.6 10.6 10.8 18.4 14.8 15.7 7.8 28.5 9.1 29.4.5 47.7-1.6 40.1-7.9 62-11.1 46.5-7.4 69.6-8.3 46.4 1.3 69.1 3.1 46.1 7.1 67.4 7.7 41.3-2.1 60.3-4.7 37.2-7.8 53.6-10.6 29.6-4.3 44.4-6.4"/>
+<g id="avion" stroke="#2b2a28" stroke-linecap="round" stroke-linejoin="round">
+<path fill="#fbf8f1" stroke="none" d="M15.5 0L-14.5 -9L-7.5 .6L-12 8.4Z"/>
+<path fill="none" stroke-width="1.9" d="M16.4 -.2L-14.5 -9L-7.5 .6L-12 8.4L15.1 .3"/>
+<path fill="none" stroke-width="1.3" d="M14.5 .1L-7.5 .6"/>
+<path fill="none" stroke-width="1.1" d="M12.5 .9L-5.6 4.4L-7.5 .6"/>
+<path fill="none" stroke-width=".8" d="M-8.4 5.6l3.6-2.6M-4.4 4.2l3.8-2.4M-.6 2.9l3.4-1.9"/>
+</g>
+</svg>
