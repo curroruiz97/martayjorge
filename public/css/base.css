@@ -1,0 +1,154 @@
+/* ==========================================================================
+   Marta & Jorge · sistema de diseño compartido
+   Papel crema + tinta + caligrafía de pincel (Caveat) + serif cursiva
+   (Cormorant Garamond) + etiquetas en versalitas (Inter).
+   Todo son variables: para retocar el estilo basta con tocar :root.
+   ========================================================================== */
+
+/* ---------- Fuentes (autoalojadas, subconjunto latino) ---------- */
+@font-face { font-family: "Caveat"; font-style: normal; font-weight: 400 700; font-display: swap;
+  src: url("../assets/fonts/caveat-latin-wght-normal.woff2") format("woff2"); }
+@font-face { font-family: "Cormorant Garamond"; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("../assets/fonts/cormorant-garamond-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Cormorant Garamond"; font-style: normal; font-weight: 600; font-display: swap;
+  src: url("../assets/fonts/cormorant-garamond-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Cormorant Garamond"; font-style: italic; font-weight: 400; font-display: swap;
+  src: url("../assets/fonts/cormorant-garamond-latin-400-italic.woff2") format("woff2"); }
+@font-face { font-family: "Cormorant Garamond"; font-style: italic; font-weight: 500; font-display: swap;
+  src: url("../assets/fonts/cormorant-garamond-latin-500-italic.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("../assets/fonts/inter-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 500; font-display: swap;
+  src: url("../assets/fonts/inter-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 600; font-display: swap;
+  src: url("../assets/fonts/inter-latin-600-normal.woff2") format("woff2"); }
+
+/* ---------- Tokens ---------- */
+:root {
+  color-scheme: light;
+  /* papel y tinta */
+  --papel: #fdf8ec;            /* crema base: la textura lo oscurece ~4 % hasta ≈ #f3efe4 */
+  --papel-2: #ece4d2;          /* crema más oscuro: tarjetas, bandas */
+  --papel-3: #fbf8f1;          /* crema casi blanco: campos de formulario */
+  --tinta: #2b2a28;            /* tinta de ilustraciones y texto principal */
+  --tinta-suave: #5a564e;      /* texto secundario (contraste 6:1 sobre papel) */
+  --tinta-tenue: #6f6a5b;      /* etiquetas pequeñas (contraste 4.7:1) */
+  --linea: rgba(43, 42, 40, .22);   /* filetes finos */
+  --linea-fuerte: rgba(43, 42, 40, .55);
+  /* acentos (usar con mucha mesura) */
+  --terracota: #a4563a;        /* teja del palomar, corazón, foco */
+  --oliva: #6c7550;            /* pinar */
+  --ocre: #c3a063;             /* piedra de San Pablo, atardecer */
+  --error: #9c2f2f;
+  --ok: #4f6b45;
+
+  /* tipografía */
+  --f-script: "Caveat", "Segoe Print", "Bradley Hand", "Comic Sans MS", cursive;
+  --f-serif: "Cormorant Garamond", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  --f-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --fs-cuerpo: clamp(1.125rem, 1.02rem + .45vw, 1.3125rem);   /* 18 → 21 px */
+  --fs-etiqueta: .75rem;                                        /* 12 px, versalitas */
+  --fs-h2: clamp(2.75rem, 1.9rem + 4.2vw, 4.75rem);
+  --fs-h3: clamp(2rem, 1.6rem + 1.8vw, 2.75rem);
+
+  /* espaciado y layout */
+  --gutter: clamp(1.25rem, 6vw, 3rem);
+  --max: 1080px;
+  --sp-1: .5rem; --sp-2: 1rem; --sp-3: 1.5rem; --sp-4: 2.5rem; --sp-5: 4rem; --sp-6: 6rem;
+  --seccion: clamp(4.5rem, 11vw, 9rem);
+  --radio: 6px;
+
+  /* movimiento */
+  --ease: cubic-bezier(.22, .61, .36, 1);
+}
+
+/* ---------- Reset mínimo ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-behavior: smooth; }
+body, h1, h2, h3, h4, p, figure, blockquote, dl, dd { margin: 0; }
+img, svg, picture, video { display: block; max-width: 100%; height: auto; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+ul[role="list"], ol[role="list"] { list-style: none; margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  background-color: var(--papel);
+  background-image: url("../assets/img/papel.webp"), url("../assets/img/papel-mancha.webp");
+  background-size: 512px 512px, 1536px 1536px;
+  background-blend-mode: multiply, multiply;
+  color: var(--tinta);
+  font-family: var(--f-serif);
+  font-size: var(--fs-cuerpo);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+::selection { background: rgba(164, 86, 58, .22); }
+:focus-visible { outline: 2px solid var(--terracota); outline-offset: 3px; border-radius: 2px; }
+html { -webkit-tap-highlight-color: rgba(164, 86, 58, .14); }
+a { color: inherit; text-decoration-color: var(--terracota); text-decoration-thickness: 1px; text-underline-offset: .28em; }
+a:hover { text-decoration-thickness: 2px; }
+
+/* ---------- Layout ---------- */
+.contenedor { width: min(100% - 2 * var(--gutter), var(--max)); margin-inline: auto; }
+.contenedor--estrecho { --max: 680px; }
+.seccion { padding-block: var(--seccion); position: relative; }
+.seccion[id] { scroll-margin-top: 1rem; }
+
+/* ---------- Tipografía ---------- */
+/* Etiqueta pequeña en versalitas: "CEREMONIA · 12:00" */
+.etiqueta {
+  font-family: var(--f-sans); font-weight: 500; font-size: var(--fs-etiqueta);
+  letter-spacing: .26em; text-transform: uppercase; line-height: 1.4;
+  color: var(--tinta-tenue);
+}
+/* Títulos caligráficos */
+.titulo, .script {
+  font-family: var(--f-script); font-weight: 600; line-height: 1;
+  letter-spacing: .005em; color: var(--tinta);
+}
+.titulo { font-size: var(--fs-h2); text-wrap: balance; }
+.titulo--m { font-size: var(--fs-h3); }
+/* Texto en cursiva serif, como en las capturas de referencia */
+.cursiva { font-style: italic; font-weight: 400; }
+.suave { color: var(--tinta-suave); }
+.centrado { text-align: center; }
+
+/* ---------- Botones: píldora de línea fina ---------- */
+.boton {
+  display: inline-flex; align-items: center; justify-content: center; gap: .65em;
+  min-height: 3rem; padding: .85rem 1.9rem;
+  border: 1px solid var(--tinta); border-radius: 999px;
+  background: transparent; color: var(--tinta);
+  font-family: var(--f-sans); font-weight: 500; font-size: var(--fs-etiqueta);
+  letter-spacing: .22em; text-transform: uppercase; line-height: 1; text-decoration: none;
+  transition: background-color .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease), transform .3s var(--ease);
+}
+.boton:hover { background: var(--tinta); color: var(--papel); text-decoration: none; }
+.boton:active { transform: scale(.98); }
+.boton--solido { background: var(--tinta); color: var(--papel); }
+.boton--solido:hover { background: var(--terracota); border-color: var(--terracota); }
+.boton[disabled], .boton[aria-disabled="true"] { opacity: .5; pointer-events: none; }
+
+/* ---------- Separadores ---------- */
+.divisor { border: 0; border-top: 1.5px dotted var(--linea-fuerte); width: min(100%, 22rem); margin: var(--sp-5) auto; }
+
+/* ---------- Revelado al hacer scroll (lo activa js/boot.js + js/main.js) ---------- */
+.js .revelar { opacity: 0; transform: translateY(1.25rem); transition: opacity .9s var(--ease), transform .9s var(--ease); transition-delay: var(--d, 0s); }
+.js .revelar.visible { opacity: 1; transform: none; }
+.reveal-fallback .revelar { opacity: 1 !important; transform: none !important; }
+
+/* ---------- Utilidades ---------- */
+[hidden] { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
+  .js .revelar { opacity: 1; transform: none; }
+}

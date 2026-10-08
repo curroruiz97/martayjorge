@@ -1,0 +1,3 @@
+# Invitación privada: no queremos que aparezca en buscadores.
+User-agent: *
+Disallow: /
