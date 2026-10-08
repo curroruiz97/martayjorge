@@ -69,7 +69,7 @@
 .mapa .mapa-pin:hover .mapa-pin__svg { transform: translateY(-2px) scale(1.06); }
 .mapa .mapa-pin:focus-visible { outline: 3px solid var(--terracota); outline-offset: 2px; border-radius: 10px; }
 .mapa .mapa-pin__nombre {
-  position: absolute; left: calc(100% - 6px); top: 9px; white-space: nowrap; pointer-events: none;
+  position: absolute; left: calc(100% - 6px); top: 9px; white-space: nowrap; cursor: pointer;
   font: 600 1.375rem/1 var(--f-script); color: var(--tinta);
   text-shadow: 0 0 2px var(--papel-3), 0 0 3px var(--papel-3), 0 0 6px var(--papel-3), 0 0 9px var(--papel-3);
 }
@@ -105,7 +105,7 @@
 
 /* ---------- Avisos: «Usa dos dedos…» / «Haz clic…» (discretos) ---------- */
 .mapa .mapa__aviso {
-  position: absolute; z-index: 1100; left: .6rem; top: .6rem; max-width: calc(100% - 4.75rem);
+  position: absolute; z-index: 1100; right: .6rem; top: .6rem; max-width: calc(100% - 4.75rem);
   transform: translateY(-.35rem); opacity: 0; pointer-events: none;
   padding: .5rem .9rem; border-radius: 999px;
   background: var(--tinta); color: var(--papel);

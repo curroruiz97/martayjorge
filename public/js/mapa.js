@@ -252,7 +252,7 @@
       subdomains: 'abcd', maxZoom: 20, minZoom: 0, attribution: CFG.atribucion, crossOrigin: false
     }).addTo(map);
     L.control.attribution({ prefix: '<a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a>' }).addTo(map);
-    L.control.zoom({ position: 'topright', zoomInTitle: TXT.acercar, zoomOutTitle: TXT.alejar }).addTo(map);
+    L.control.zoom({ position: 'topleft', zoomInTitle: TXT.acercar, zoomOutTitle: TXT.alejar }).addTo(map);
 
     /* Círculo a rotulador */
     var geo = circuloARotulador(CFG.centro, CFG.radio, CFG.semilla);
@@ -277,7 +277,7 @@
 
     /* Marcadores con ventana «¿Cómo llegar?» */
     var abiertoConTeclado = null;
-    // Ancho útil de la ventana: que quepa a la izquierda de los botones +/− (en móvil el mapa mide ~340 px)
+    // Ancho útil de la ventana: que quepa a la derecha de los botones +/− (en móvil el mapa mide ~340 px)
     function anchoPopup() { return Math.max(150, Math.min(260, lienzo.clientWidth - 150)); }
     CFG.puntos.forEach(function (p) {
       var icono = L.divIcon({
@@ -297,7 +297,7 @@
       sr.textContent = ' a ' + p.nombre + ' (se abre en Google Maps)';
       a.appendChild(sr);
       c.appendChild(t); c.appendChild(d); c.appendChild(a);
-      m.bindPopup(c, { minWidth: 150, maxWidth: anchoPopup(), autoPanPaddingTopLeft: [16, 16], autoPanPaddingBottomRight: [64, 16], closeButton: true });
+      m.bindPopup(c, { minWidth: 150, maxWidth: anchoPopup(), autoPanPaddingTopLeft: [64, 16], autoPanPaddingBottomRight: [16, 16], closeButton: true });
 
       m.getElement().addEventListener('keydown', function (e) {
         if (e.key === 'Enter') abiertoConTeclado = m;
