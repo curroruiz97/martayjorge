@@ -32,7 +32,7 @@ public/                 ← lo que se publica
   js/                   boot.js · main.js (animaciones, cuenta atrás, copiar IBAN) · rsvp.js · mapa.js
   assets/fonts/         tipografías autoalojadas (Caveat, Cormorant Garamond, Inter)
   assets/img/           fotos optimizadas (WebP), textura de papel, imagen para compartir (og.jpg)
-  assets/ilustraciones/ SVG a pluma: San Pablo, Palomar, ruta, adornos, iconos, favicon (ver LEEME.md)
+  assets/ilustraciones/ SVG a pluma: San Pablo, Palomar, ruta, adornos, iconos, favicon (guía: docs/ilustraciones.md)
   admin/                panel de respuestas
 api/                    funciones serverless de Vercel (rsvp, admin, ping)
 supabase/               schema.sql (tabla y vistas) · consultas.sql (consultas listas para pegar)
@@ -108,7 +108,7 @@ boda y, después, exportad lo que queráis conservar y vaciad la tabla. Guía co
 | IBAN | `public/index.html`, sección *Lista de bodas* (texto visible y atributo `data-copiar`) |
 | Colores y tipografías | variables de `:root` en `public/css/base.css` |
 | Fotos | `public/assets/img/` (WebP; la de la portada es un recorte 4:5) |
-| Ilustraciones | `public/assets/ilustraciones/` (ver [`LEEME.md`](public/assets/ilustraciones/LEEME.md)); se regeneran con `python3 scripts/ilustraciones/generar.py` |
+| Ilustraciones | `public/assets/ilustraciones/` (guía en [`docs/ilustraciones.md`](docs/ilustraciones.md)); se regeneran con `python3 scripts/ilustraciones/generar.py` |
 | Mensajes del formulario | arriba de `public/js/rsvp.js` y atributos `data-texto-si` / `data-texto-no` en `index.html` |
 
 ## Notas de diseño

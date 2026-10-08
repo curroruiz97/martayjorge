@@ -203,8 +203,8 @@ npm test             # pruebas de la API contra el Supabase simulado (node:test)
 - Con `MOCK_SUPABASE=1` **no se toca ningún Supabase real**: un simulador de la API de Supabase con
   las mismas columnas y restricciones que `schema.sql` guarda en memoria y en `.dev-data/rsvps.json`
   (ignorado por git). Para vaciarlo: borrad ese fichero y reiniciad.
-- Rutas útiles: `/` (la web), `/_dev/rsvp` (solo el formulario), `/_dev/pagina` (`index.html` con
-  el formulario insertado), `/admin` (contraseña en local: `desarrollo-local-2027`).
+- Rutas útiles: `/` (la web), `/_dev/rsvp` (solo la sección del formulario, para trabajar en ella),
+  `/admin` (contraseña en local: `desarrollo-local-2027`).
 - El servidor aplica las cabeceras de `vercel.json` (incluida la CSP) para ver los problemas antes
   de desplegar, y recarga `api/*.js` en cada petición.
 - Contra el Supabase real: copiad `.env.example` a `.env`, rellenadlo y ejecutad
@@ -232,9 +232,9 @@ truncate table public.rsvps;
 
 - **WhatsApp/correo de rescate**: si el envío fallara, el formulario puede ofrecer «Envíanosla por
   WhatsApp» con la respuesta ya escrita. Basta con poner el teléfono (con prefijo, sin espacios) en
-  la sección: `<section … id="confirmacion" data-whatsapp="34600111222">` (o `data-email="…"`).
+  la sección `#confirmacion` de `public/index.html`: `data-whatsapp="34600111222"` (o `data-email="…"`).
   Si no se pone, usa el de la sección `#alojamiento`, si lo tiene.
-- **Textos**: los mensajes de agradecimiento están en `public/partials/rsvp.html`
+- **Textos**: los mensajes de agradecimiento están en `public/index.html`, sección `#confirmacion`
   (`data-texto-si` / `data-texto-no`); los de error, al principio de `public/js/rsvp.js` (`TXT`).
 
 ---
@@ -319,7 +319,7 @@ Consulta mínima para que Supabase no pause el proyecto. Si existe `CRON_SECRET`
 
 | Fichero | Qué hace |
 |---|---|
-| `public/partials/rsvp.html` | Sección del formulario (se pega en `index.html`) |
+| `public/index.html` (sección `#confirmacion`) | Marcado del formulario |
 | `public/css/rsvp.css` · `public/js/rsvp.js` | Estilos y comportamiento del formulario |
 | `public/admin/` | Panel de los novios (`index.html`, `admin.css`, `admin.js`) |
 | `api/rsvp.js` · `api/admin.js` · `api/ping.js` | Funciones de Vercel |

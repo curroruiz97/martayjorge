@@ -1,6 +1,7 @@
 /* ==========================================================================
    Marta & Jorge · formulario de confirmación de asistencia (RSVP)
-   Solo usa los tokens de base.css. Todo cuelga de .rsvp / .rsvp-* para no
+   Solo usa los tokens de base.css y las fuentes que ya usa la página (Inter 400/500,
+   Cormorant 400 normal/cursiva, Caveat): no añade descargas de fuentes. Todo cuelga de .rsvp / .rsvp-* para no
    chocar con site.css. Mobile-first: pensado para el pulgar (objetivos ≥ 44 px,
    texto de los campos ≥ 16 px para que iOS no haga zoom).
    ========================================================================== */
@@ -97,7 +98,7 @@
 .rsvp-error::before {
   content: "!"; flex: none; display: grid; place-items: center;
   width: 1.125rem; height: 1.125rem; margin-top: .05rem; border-radius: 50%;
-  background: var(--error); color: var(--papel-3); font: 700 .75rem/1 var(--f-sans);
+  background: var(--error); color: var(--papel-3); font: 500 .75rem/1 var(--f-sans);
 }
 
 /* ---------- ¿Podrás asistir? (tarjetas con radio) ---------- */
@@ -204,7 +205,7 @@
 .rsvp-contador__valor {
   width: 2.75rem; height: 2.75rem; margin: 0; padding: 0;
   border: 0; border-radius: var(--radio); background: transparent;
-  font: 600 1.3rem/1 var(--f-sans); color: var(--tinta); text-align: center;
+  font: 500 1.3rem/1 var(--f-sans); color: var(--tinta); text-align: center;
   font-variant-numeric: tabular-nums;
   -moz-appearance: textfield; appearance: textfield;
 }
@@ -242,7 +243,7 @@
 }
 .rsvp-persona__titulo {
   float: left; width: 100%; margin-bottom: .5rem;
-  font: italic 500 1.4rem/1.2 var(--f-serif); color: var(--tinta); overflow-wrap: anywhere;
+  font: italic 400 1.45rem/1.2 var(--f-serif); color: var(--tinta); overflow-wrap: anywhere;
 }
 .rsvp-persona__titulo + * { clear: both; }
 .rsvp-casillas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: .85rem; margin-bottom: .8rem; }
@@ -285,7 +286,7 @@
   background: var(--rsvp-error-fondo);
   font: 400 .9375rem/1.5 var(--f-sans); color: var(--tinta);
 }
-.rsvp-aviso__titulo { font-weight: 600; color: var(--error); }
+.rsvp-aviso__titulo { font-weight: 500; color: var(--error); }
 .rsvp-aviso--info { border-color: rgba(79, 107, 69, .45); background: rgba(79, 107, 69, .07); }
 .rsvp-aviso--info .rsvp-aviso__titulo { color: var(--ok); }
 .rsvp-aviso__acciones { display: flex; flex-wrap: wrap; gap: .5rem; }

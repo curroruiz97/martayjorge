@@ -18,11 +18,14 @@ AQUI = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, AQUI)
 RAIZ = os.path.abspath(os.path.join(AQUI, "..", ".."))
 SALIDA = os.path.join(RAIZ, "public", "assets", "ilustraciones")
+# Variantes «solo tinta» (sin aguada): no se usan en la web, así que no se publican
+ALTERNATIVAS = os.path.join(RAIZ, "docs", "ilustraciones")
 
 LIMITE = 70 * 1024
 
 
 def escribir(carpeta, nombre, texto):
+    os.makedirs(carpeta, exist_ok=True)
     ruta = os.path.join(carpeta, nombre)
     with open(ruta, "w", encoding="utf-8", newline="\n") as f:
         f.write(texto)
@@ -35,14 +38,14 @@ def pieza_san_pablo(carpeta):
     import san_pablo
     L = san_pablo.dibujar()
     escribir(carpeta, "san-pablo.svg", L.svg())
-    escribir(carpeta, "san-pablo-linea.svg", L.svg(con_color=False))
+    escribir(ALTERNATIVAS, "san-pablo-linea.svg", L.svg(con_color=False))
 
 
 def pieza_palomar(carpeta):
     import palomar
     L = palomar.dibujar()
     escribir(carpeta, "palomar.svg", L.svg())
-    escribir(carpeta, "palomar-linea.svg", L.svg(con_color=False))
+    escribir(ALTERNATIVAS, "palomar-linea.svg", L.svg(con_color=False))
 
 
 def pieza_rutas(carpeta):

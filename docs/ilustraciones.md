@@ -1,5 +1,8 @@
 # Ilustraciones · Marta y Jorge
 
+> **Nota de ubicación:** esta guía vive en `docs/` para no publicarse con la web. Las variantes solo tinta (`san-pablo-linea.svg`, `palomar-linea.svg`) están en `docs/ilustraciones/` por la misma razón; las ilustraciones que usa la web están en `public/assets/ilustraciones/`.
+
+
 Dibujos a pluma propios (no calcados): San Pablo, el Palomar, la ruta con el corazón y el
 avioncito, adornos, iconos y favicon. Todo es SVG vectorial, transparente, sin `<text>`, sin
 imágenes incrustadas, sin `<filter>` y solo con `viewBox` (sin width/height).
@@ -15,7 +18,7 @@ imágenes incrustadas, sin `<filter>` y solo con `viewBox` (sin width/height).
 |---|---|---|
 | `san-pablo.svg` / `san-pablo-linea.svg` | `0 0 520 620` | 59 / 56 KB |
 | `palomar.svg` / `palomar-linea.svg` | `0 0 700 440` | 51 / 48 KB |
-| `ruta-horizontal.svg` | `0 0 800 170` | 1,2 KB |
+| `ruta-horizontal.svg` | `0 0 480 150` | 1,2 KB |
 | `ruta-vertical.svg` | `0 0 170 560` | 1,3 KB |
 | `adornos.svg` (sprite) | por símbolo | 4 KB |
 | `iconos.svg` (sprite) | `0 0 48 48` | 5 KB |
@@ -127,10 +130,12 @@ document.querySelectorAll('.ilustracion[data-svg]').forEach(async (fig) => {
 ## 2. `ruta-horizontal.svg` y `ruta-vertical.svg`
 
 - `<path id="ruta">`: UN trazo continuo, sin subtrazos ni `pathLength`. Lleva
-  `stroke-dasharray="9 6.5 7 7 10.5 6 6.5 7.5 8 6"` (guiones irregulares, a mano), `stroke-width="2.1"` y tinta.
+  `stroke-dasharray="9 6.5 7 7 10.5 6 6.5 7.5 8 6"` (guiones irregulares, a mano) y tinta.
   Va de la iglesia al palomar (izquierda → derecha / arriba → abajo) y hace un lazo en forma de corazón
   hacia el primer tercio (entra por la punta, se cruza consigo mismo y sale).
-  `getTotalLength()` ≈ 1006 (horizontal) y ≈ 856 (vertical) unidades.
+  `getTotalLength()` ≈ 700 (horizontal) y ≈ 856 (vertical) unidades. La horizontal está dibujada para
+  verse a ~260–420 px (columna central de la agenda): guiones, corazón y avión a esa escala; trazo 2,4
+  (la vertical, 2,1).
 - `<g id="avion">`: avión de papel **centrado en (0,0), morro hacia +X, sin transform**, de
   ~30 × 18 unidades, con relleno crema claro (`#fbf8f1`) que tapa los guiones que tenga debajo.
   ⚠️ Mientras el JS no lo coloque, se ve en la esquina (0,0) recortado; por eso la ruta debe ir en

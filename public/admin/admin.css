@@ -24,7 +24,7 @@
   width: min(100%, 26rem); padding: clamp(1.5rem, 6vw, 2.25rem);
   background: rgba(251, 248, 241, .7); border: 1px solid var(--linea); border-radius: var(--radio);
 }
-.admin-acceso__titulo { margin-bottom: 1.25rem; font: italic 500 1.5rem/1.2 var(--f-serif); text-align: center; }
+.admin-acceso__titulo { margin-bottom: 1.25rem; font: italic 400 1.55rem/1.2 var(--f-serif); text-align: center; }
 .admin-acceso__boton { width: 100%; margin-top: 1.25rem; }
 
 /* Barra de acciones */

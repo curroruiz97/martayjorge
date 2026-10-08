@@ -105,7 +105,9 @@
       const doc = new DOMParser().parseFromString(await r.text(), 'image/svg+xml');
       const svg = doc.documentElement;
       if (!svg || svg.localName !== 'svg' || doc.querySelector('parsererror')) throw new Error('SVG no válido');
-      $$('script, foreignObject, iframe, object, embed', svg).forEach((n) => n.remove());
+      $$('script, style, foreignObject, iframe, object, embed', svg).forEach((n) => n.remove());
+      // defensa extra: fuera atributos de eventos (onload, onclick…) por si algún SVG se editara a mano
+      $$('*', svg).forEach((n) => Array.from(n.attributes).forEach((a) => { if (/^on/i.test(a.name)) n.removeAttribute(a.name); }));
       svg.removeAttribute('width');
       svg.removeAttribute('height');
       svg.setAttribute('focusable', 'false');
@@ -190,7 +192,8 @@
       if (!svg) return;
       const ruta = $('#ruta', svg);
       if (ruta) {
-        const fijar = prepararRuta(svg); // primero se prepara (busca #ruta y #avion)…
+        let fijar = null;
+        try { fijar = prepararRuta(svg); } catch (e) { console.warn('Ruta sin animar', e); } // primero se prepara (busca #ruta y #avion)…
         const sufijo = caja.className || 'x';
         ruta.id = 'ruta-' + sufijo;      // …y después se hacen únicos los ids (hay una ruta horizontal y otra vertical)
         ruta.classList.add('ruta__linea'); // el color terracota lo pone el CSS

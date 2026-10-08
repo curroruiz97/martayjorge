@@ -1,0 +1,130 @@
+/* ==========================================================================
+   Marta & Jorge · mapa de alojamiento (Leaflet autoalojado, ver js/mapa.js)
+   El tamaño del contenedor (.mapa) lo da site.css (aspect-ratio + min-height),
+   así que la altura queda reservada antes de cargar Leaflet y no hay saltos.
+   Aquí: estado previo/sin JS, piezas de Leaflet con la estética de papelería,
+   marcadores, rótulo del círculo, ventanas, avisos y foco.
+   Todo cuelga de .mapa para no tocar nada fuera de él.
+   ========================================================================== */
+
+/* ---------- Antes de cargar (o sin JS / si falla): círculo a rotulador ---------- */
+.mapa {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M101 19c44-3 82 35 81 81-1 46-38 82-83 81-46-1-81-37-80-83S56 22 101 19z' fill='rgba(164,86,58,.08)' stroke='%23a4563a' stroke-width='2.6' stroke-linecap='round' stroke-dasharray='9 8'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: auto 78%;
+}
+.mapa--lista { background-image: none; }
+
+/* Altura mínima a partir de 600 px: así el círculo (radio 900 m) cabe entero a zoom 15 y se ven
+   las calles. Con menos ancho (móvil) cabe a zoom 14 en el alto que ya reserva site.css. */
+@media (min-width: 600px) { #mapa-alojamiento.mapa { min-height: 34rem; } }
+
+/* El lienzo de Leaflet llena el contenedor. El recorte (overflow) va aquí y no en
+   .mapa para no cortar el marco desplazado (.marco::before) de site.css. */
+.mapa .mapa__lienzo { position: absolute; inset: 0; border-radius: inherit; }
+/* Fondo opaco del color del papel: sin teselas (o mientras cargan) se ve papel y no se transparenta el marco. */
+.mapa .mapa__lienzo.leaflet-container {
+  background: var(--papel-2);
+  font: inherit; color: var(--tinta);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Teselas: un velo cálido y poco saturado para que encajen con el papel crema */
+.mapa .leaflet-tile-pane { filter: sepia(.3) saturate(.75) contrast(.96) brightness(1.02); }
+
+/* ---------- Foco visible ---------- */
+.mapa .mapa__lienzo.leaflet-container:focus-visible { outline: 3px solid var(--terracota); outline-offset: -3px; border-radius: inherit; }
+.mapa .mapa__lienzo.leaflet-container:focus:not(:focus-visible) { outline: none; }
+.mapa--activo .mapa__lienzo.leaflet-container { box-shadow: inset 0 0 0 2px var(--terracota); }
+
+/* ---------- Botones +/− (44 px mínimo para el dedo) ---------- */
+.mapa .leaflet-container .leaflet-bar {
+  border: 1px solid var(--tinta); border-radius: 8px; overflow: hidden;
+  background: var(--papel-3); box-shadow: 2px 2px 0 rgba(43, 42, 40, .16);
+}
+.mapa .leaflet-container .leaflet-bar a {
+  width: 44px; height: 44px; line-height: 42px;
+  background: var(--papel-3); color: var(--tinta);
+  font: 500 1.625rem/42px var(--f-sans); text-decoration: none;
+  border-bottom: 1px solid var(--linea);
+}
+.mapa .leaflet-container .leaflet-bar a:last-child { border-bottom: 0; }
+.mapa .leaflet-container .leaflet-bar a:hover { background: var(--papel-2); color: var(--tinta); }
+.mapa .leaflet-container .leaflet-bar a:focus-visible { outline: 3px solid var(--terracota); outline-offset: -3px; border-radius: 0; }
+.mapa .leaflet-container .leaflet-bar a.leaflet-disabled { background: var(--papel-3); color: var(--tinta-tenue); opacity: .55; cursor: default; }
+
+/* ---------- Atribución (obligatoria: OpenStreetMap y CARTO) ---------- */
+.mapa .leaflet-container .leaflet-control-attribution {
+  margin: 0; padding: 2px 7px;
+  background: rgba(251, 248, 241, .9); color: var(--tinta-suave);
+  font: 400 .6875rem/1.5 var(--f-sans);
+}
+.mapa .leaflet-container .leaflet-control-attribution a { color: var(--tinta); text-decoration: underline; text-decoration-color: var(--terracota); text-underline-offset: .18em; }
+.mapa .leaflet-container .leaflet-control-attribution a:focus-visible { outline: 2px solid var(--terracota); outline-offset: 1px; }
+
+/* ---------- Marcadores a pluma ---------- */
+.mapa .mapa-pin { background: none; border: 0; cursor: pointer; }
+.mapa .mapa-pin__svg { width: 44px; height: 52px; overflow: visible; filter: drop-shadow(1px 2px 0 rgba(43, 42, 40, .18)); transition: transform .2s var(--ease); transform-origin: 50% 100%; }
+.mapa .mapa-pin:hover .mapa-pin__svg { transform: translateY(-2px) scale(1.06); }
+.mapa .mapa-pin:focus-visible { outline: 3px solid var(--terracota); outline-offset: 2px; border-radius: 10px; }
+.mapa .mapa-pin__nombre {
+  position: absolute; left: calc(100% - 6px); top: 9px; white-space: nowrap; pointer-events: none;
+  font: 600 1.375rem/1 var(--f-script); color: var(--tinta);
+  text-shadow: 0 0 2px var(--papel-3), 0 0 3px var(--papel-3), 0 0 6px var(--papel-3), 0 0 9px var(--papel-3);
+}
+
+/* ---------- Rótulo del círculo ---------- */
+.mapa .mapa-rotulo { background: none; border: 0; }
+.mapa .mapa-rotulo span {
+  position: absolute; left: 0; top: 0; transform: translate(-50%, -50%) rotate(-5deg);
+  white-space: nowrap; text-align: center; pointer-events: none;
+  font: 600 clamp(1.3rem, 1.05rem + 1.2vw, 1.9rem)/1.02 var(--f-script); color: var(--terracota);
+  text-shadow: 0 0 2px var(--papel-3), 0 0 4px var(--papel-3), 0 0 8px var(--papel-3), 0 0 12px var(--papel-3);
+}
+
+/* ---------- Ventanas (nombre + «¿Cómo llegar?») ---------- */
+.mapa .leaflet-popup-content-wrapper {
+  background: var(--papel-3); color: var(--tinta);
+  border: 1px solid var(--tinta); border-radius: 8px;
+  box-shadow: 3px 3px 0 rgba(43, 42, 40, .18);
+}
+.mapa .leaflet-popup-tip { background: var(--papel-3); box-shadow: none; border: 1px solid var(--tinta); }
+.mapa .leaflet-popup-content { margin: .9rem 2.75rem .95rem 1.1rem; font: 400 1rem/1.25 var(--f-serif); }
+.mapa .mapa-popup { display: grid; justify-items: start; gap: .3rem; }
+.mapa .mapa-popup__titulo { font: 600 1.5rem/1.05 var(--f-script); color: var(--tinta); }
+.mapa .mapa-popup__detalle { font-style: italic; color: var(--tinta-suave); }
+.mapa .leaflet-container a.boton { margin-top: .5rem; min-height: 2.75rem; padding: .6rem 1.15rem; letter-spacing: .16em; color: var(--tinta); }
+.mapa .leaflet-container a.boton:hover { color: var(--papel); }
+.mapa .leaflet-container a.leaflet-popup-close-button {
+  top: 0; right: 0; width: 44px; height: 44px;
+  font: 400 1.75rem/44px var(--f-sans); color: var(--tinta); border-radius: 0 8px 0 0;
+}
+.mapa .leaflet-container a.leaflet-popup-close-button:hover { color: var(--terracota); background: transparent; }
+.mapa .leaflet-container a.leaflet-popup-close-button:focus-visible { outline: 3px solid var(--terracota); outline-offset: -4px; }
+
+/* ---------- Avisos: «Usa dos dedos…» / «Haz clic…» (discretos) ---------- */
+.mapa .mapa__aviso {
+  position: absolute; z-index: 1100; left: .6rem; top: .6rem; max-width: calc(100% - 4.75rem);
+  transform: translateY(-.35rem); opacity: 0; pointer-events: none;
+  padding: .5rem .9rem; border-radius: 999px;
+  background: var(--tinta); color: var(--papel);
+  font: 500 .8125rem/1.3 var(--f-sans); letter-spacing: .01em;
+  transition: opacity .25s var(--ease), transform .25s var(--ease);
+}
+.mapa--aviso .mapa__aviso { opacity: 1; transform: none; }
+
+/* ---------- Si el mapa no carga: se quita el círculo y queda el aviso con su enlace ---------- */
+.mapa[data-mapa="error"] { background-image: none; }
+.mapa .mapa__error {
+  position: absolute; inset: 0; display: grid; place-content: center;
+  padding: 1.5rem; text-align: center;
+}
+.mapa .mapa__error p { max-width: 24ch; margin: 0; font-style: italic; color: var(--tinta-suave); }
+.mapa .mapa__error a { color: var(--tinta); }
+
+/* ---------- Modo de contraste forzado ---------- */
+@media (forced-colors: active) {
+  .mapa .mapa-pin__svg { forced-color-adjust: none; }
+  .mapa .mapa__aviso { border: 1px solid CanvasText; }
+}

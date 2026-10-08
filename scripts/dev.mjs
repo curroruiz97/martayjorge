@@ -12,8 +12,9 @@
  *   · Aplica las cabeceras de vercel.json (incluida la CSP) para ver los fallos antes de desplegar.
  *   · MOCK_SUPABASE=1: imita la API de Supabase (PostgREST) con las mismas columnas y
  *     restricciones que supabase/schema.sql; guarda en memoria y en .dev-data/rsvps.json.
- *   · /_dev/rsvp   → el formulario aislado (vista previa de public/partials/rsvp.html).
- *     /_dev/pagina → index.html con el formulario ya insertado entre <!-- RSVP:INICIO/FIN -->.
+ *   · /_dev/rsvp   → el formulario aislado (la sección #confirmacion de index.html,
+ *     o public/partials/rsvp.html si existe). /_dev/pagina → index.html (con el parcial
+ *     insertado entre los marcadores RSVP:INICIO/FIN si los hay).
  *
  * Variables: PORT (3000), HOST (127.0.0.1), MOCK_SUPABASE, DEV_DATA_DIR, ADMIN_TOKEN.
  */
@@ -247,8 +248,18 @@ function crearMock(dirDatos) {
 
 /* ------------------------------------------------------------ vistas previas */
 
+/** La sección del formulario: public/partials/rsvp.html si existe; si no, la que ya está en index.html. */
+async function seccionRsvp() {
+  try { return await fsp.readFile(path.join(PUBLICO, 'partials', 'rsvp.html'), 'utf8'); } catch { /* ya pegada en index.html */ }
+  const indice = await fsp.readFile(path.join(PUBLICO, 'index.html'), 'utf8');
+  const m = /<section\b[^>]*\bid="confirmacion"[^>]*>/.exec(indice);
+  const fin = m ? indice.indexOf('</section>', m.index) : -1;
+  return fin === -1 ? null : indice.slice(m.index, fin + '</section>'.length);
+}
+
 async function vistaPreviaFormulario() {
-  const parcial = await fsp.readFile(path.join(PUBLICO, 'partials', 'rsvp.html'), 'utf8');
+  const parcial = await seccionRsvp();
+  if (parcial === null) return null;
   const hay = async (rel) => existeFichero(path.join(PUBLICO, rel));
   return `<!doctype html>
 <html lang="es">
@@ -276,14 +287,15 @@ ${(await hay('js/main.js')) ? '<script src="/js/main.js" defer></script>' : ''}
 }
 
 async function paginaConFormulario() {
-  const indice = await fsp.readFile(path.join(PUBLICO, 'index.html'), 'utf8');
-  const parcial = await fsp.readFile(path.join(PUBLICO, 'partials', 'rsvp.html'), 'utf8');
-  const ini = indice.indexOf('<!-- RSVP:INICIO');
-  const fin = indice.indexOf('<!-- RSVP:FIN');
-  if (ini === -1 || fin === -1 || fin < ini) return null;
-  const finIni = indice.indexOf('-->', ini) + 3;
-  return (indice.slice(0, finIni) + '\n' + parcial + '\n  ' + indice.slice(fin))
-    .replace('<head>', '<head>\n  <base href="/">');
+  let html = await fsp.readFile(path.join(PUBLICO, 'index.html'), 'utf8');
+  let parcial = null;
+  try { parcial = await fsp.readFile(path.join(PUBLICO, 'partials', 'rsvp.html'), 'utf8'); } catch { /* ya pegada */ }
+  const ini = html.indexOf('<!-- RSVP:INICIO');
+  const fin = html.indexOf('<!-- RSVP:FIN');
+  if (parcial && ini !== -1 && fin > ini) {
+    html = html.slice(0, html.indexOf('-->', ini) + 3) + '\n' + parcial + '\n  ' + html.slice(fin);
+  }
+  return html.replace('<head>', '<head>\n  <base href="/">');
 }
 
 /* ------------------------------------------------------------------ servidor */
@@ -340,7 +352,7 @@ export async function iniciar({
       // Vistas previas de desarrollo
       if (pathname === '/_dev/rsvp' || pathname === '/_dev/pagina') {
         const html = pathname === '/_dev/rsvp' ? await vistaPreviaFormulario() : await paginaConFormulario();
-        if (html === null) { res.statusCode = 404; return res.end('index.html no tiene los marcadores <!-- RSVP:INICIO --> / <!-- RSVP:FIN -->'); }
+        if (html === null) { res.statusCode = 404; return res.end('No encuentro la sección #confirmacion en index.html'); }
         res.statusCode = 200;
         res.setHeader('Content-Type', 'text/html; charset=utf-8');
         res.setHeader('Cache-Control', 'no-store');

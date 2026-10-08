@@ -128,7 +128,7 @@
   .ruta { grid-area: r; align-self: center; margin: 0 0 4.5rem; }
   .ruta__v { display: none; }
   .ruta__h { display: block; width: 100%; }
-  .evento { margin-top: 2rem; margin-bottom: 0; }
+  .evento { margin-top: 2rem; margin-bottom: 0; align-self: start; }
   .evento--ceremonia { grid-area: t1; }
   .evento--celebracion { grid-area: t2; }
 }
@@ -150,7 +150,7 @@
 .medio p { margin-top: .3rem; }
 
 /* ---------- ALOJAMIENTO ---------- */
-.alojamiento__texto { max-width: 36ch; margin-inline: auto; text-align: center; }
+.alojamiento__texto { max-width: 36ch; margin-inline: auto; text-align: center; text-wrap: pretty; }
 .alojamiento__contacto { display: flex; justify-content: center; margin-top: 1.5rem; }
 .alojamiento__mapa { --max: 900px; margin-top: clamp(2.25rem, 6vw, 3.5rem); }
 .alojamiento__mapa .mapa { width: 100%; max-width: 100%; aspect-ratio: 4 / 3; min-height: 19rem; border-radius: var(--radio); background-color: var(--papel-2); }
@@ -158,12 +158,12 @@
 @media (min-width: 900px) { .alojamiento__mapa .mapa { aspect-ratio: 16 / 9; } }
 
 /* ---------- INTERLUDIO (foto) ---------- */
-.interludio { margin: 0; display: grid; justify-items: center; padding-inline: var(--gutter); overflow: clip; }
+.interludio { margin: 0; display: grid; justify-items: center; padding-inline: var(--gutter); padding-bottom: 1.5rem; overflow: clip; }
 .interludio__marco { width: min(72vw, 21rem); transform: rotate(-1.2deg); margin-bottom: .75rem; }
 
 /* ---------- LISTA DE BODAS ---------- */
 .regalo__icono { width: 3.25rem; height: 3.25rem; margin: 0 auto 1.25rem; }
-.regalo__texto { max-width: 36ch; margin-inline: auto; }
+.regalo__texto { max-width: 36ch; margin-inline: auto; text-wrap: pretty; }
 .iban { display: grid; justify-items: center; gap: 1.1rem; margin: 2rem auto 0; }
 .iban__numero {
   display: flex; flex-wrap: wrap; justify-content: center; gap: .35rem .85rem;
@@ -171,6 +171,7 @@
   border: 1px dashed var(--linea-fuerte); border-radius: var(--radio); background: rgba(251, 248, 241, .55);
   font: 500 clamp(1.05rem, .9rem + 1vw, 1.3rem)/1.25 var(--f-sans); letter-spacing: .08em; font-variant-numeric: tabular-nums;
 }
+@media (max-width: 30em) { .iban__numero { display: grid; grid-template-columns: repeat(3, auto); justify-content: center; } }
 .iban__copiar .icono { width: 1.15rem; height: 1.15rem; color: currentColor; }
 .iban__copiar.copiado { background: var(--tinta); color: var(--papel); }
 .regalo__gracias { font-size: clamp(2.2rem, 1.7rem + 2.2vw, 3rem); margin-top: 2.25rem; color: var(--terracota); }
@@ -201,3 +202,10 @@
   transition: opacity .35s var(--ease), transform .35s var(--ease);
 }
 .aviso.visible { opacity: 1; transform: translate(-50%, 0); }
+
+/* Tablet: la maqueta móvil llega hasta 900 px, así que las ilustraciones crecen un poco */
+@media (min-width: 600px) and (max-width: 899.98px) {
+  .ilu--san-pablo { --w: 24rem; }
+  .ilu--palomar { --w: 30rem; }
+  .ruta__v { width: 7.5rem; }
+}

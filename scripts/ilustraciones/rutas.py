@@ -53,32 +53,34 @@ def avion():
     return "\n".join(o)
 
 
-def _svg(w, h, d, titulo):
+def _svg(w, h, d, titulo, grosor=2.1):
     o = ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d">' % (w, h)]
-    o.append('<path id="ruta" fill="none" stroke="%s" stroke-width="2.1" stroke-linecap="round" '
-             'stroke-linejoin="round" stroke-dasharray="%s" d="%s"/>' % (TINTA, GUIONES, d))
+    o.append('<path id="ruta" fill="none" stroke="%s" stroke-width="%s" stroke-linecap="round" '
+             'stroke-linejoin="round" stroke-dasharray="%s" d="%s"/>' % (TINTA, grosor, GUIONES, d))
     o.append(avion())
     o.append("</svg>")
     return "\n".join(o) + "\n"
 
 
 def horizontal():
-    """viewBox 800 x 170. De izquierda a derecha; corazón hacia el primer tercio."""
+    """viewBox 480 x 150 (pensada para verse a ~260-420 px de ancho, en la columna central
+    de la agenda). De izquierda a derecha; corazón hacia el primer tercio."""
+    T = (168.0, 108.0)
     pts = [
-        (20.0, 108.0), (62.0, 101.5), (112.0, 106.0), (164.0, 117.0), (206.0, 123.5), (238.0, 124.0),
-        (258.0, 119.0),
-        (271.0, 111.0),                      # punta del corazón (entrada, subiendo)
-        (287.0, 97.0), (300.5, 80.0), (305.0, 63.0), (298.0, 50.5), (284.5, 47.5), (274.5, 55.0),
-        (270.5, 66.0),                       # hendidura (pico)
-        (266.0, 55.0), (255.0, 47.0), (241.5, 49.5), (233.5, 62.5), (237.5, 81.0), (252.0, 98.0),
-        (271.0, 111.0),                      # punta (salida, bajando)
-        (289.0, 126.0), (318.0, 134.5), (366.0, 133.0), (428.0, 122.0), (497.0, 113.5), (566.0, 117.0),
-        (628.0, 124.5), (684.0, 119.5), (734.0, 110.0), (776.0, 104.0),
+        (14.0, 96.0), (44.0, 90.0), (76.0, 93.5), (104.0, 102.0), (126.0, 110.0), (146.0, 113.5),
+        (158.0, 112.0),
+        T,                                   # punta del corazón (entrada, subiendo)
+        (184.0, 94.0), (197.5, 77.0), (202.0, 60.0), (195.0, 47.5), (181.5, 44.5), (171.5, 52.0),
+        (167.5, 63.0),                       # hendidura (pico)
+        (163.0, 52.0), (152.0, 44.0), (138.5, 46.5), (130.5, 59.5), (134.5, 78.0), (149.0, 95.0),
+        T,                                   # punta (salida, bajando)
+        (184.0, 119.0), (204.0, 127.0), (236.0, 127.5), (276.0, 119.0), (322.0, 108.5), (366.0, 105.0),
+        (406.0, 107.5), (440.0, 102.0), (462.0, 94.0),
     ]
-    pts = _mano(pts, 8, amp=0.5)
-    pts[7] = pts[21] = (271.0, 111.0)
+    pts = _mano(pts, 8, amp=0.4)
+    pts[7] = pts[21] = T
     d = _ruta_d(pts, [14])
-    return _svg(800, 170, d, "Ruta de la iglesia de San Pablo al Palomar")
+    return _svg(480, 150, d, "Ruta de la iglesia de San Pablo al Palomar", grosor=2.4)
 
 
 def vertical():
