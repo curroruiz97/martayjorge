@@ -55,7 +55,6 @@ def avion():
 
 def _svg(w, h, d, titulo):
     o = ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d">' % (w, h)]
-    o.append("<title>%s</title>" % titulo)
     o.append('<path id="ruta" fill="none" stroke="%s" stroke-width="2.1" stroke-linecap="round" '
              'stroke-linejoin="round" stroke-dasharray="%s" d="%s"/>' % (TINTA, GUIONES, d))
     o.append(avion())

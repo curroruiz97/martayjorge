@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <title>Confirmaciones · Marta y Jorge</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/admin/admin.css">
+  <script src="/admin/admin.js" defer></script>
+</head>
+<body>
+<main class="admin contenedor">
+  <header class="admin__cabecera">
+    <p class="etiqueta">Marta y Jorge · 8 de mayo de 2027</p>
+    <h1 class="titulo admin__titulo">Confirmaciones</h1>
+  </header>
+
+  <noscript><p class="admin-aviso">Este panel necesita JavaScript activado.</p></noscript>
+
+  <!-- Acceso -->
+  <section class="admin-acceso" data-acceso aria-labelledby="admin-acceso-titulo">
+    <form class="admin-acceso__form" data-form-acceso novalidate>
+      <h2 class="admin-acceso__titulo" id="admin-acceso-titulo">Panel privado</h2>
+      <label class="admin-label" for="admin-clave">Contraseña</label>
+      <input class="admin-input" id="admin-clave" name="clave" type="password" autocomplete="current-password" required
+        aria-describedby="admin-clave-ayuda admin-clave-error">
+      <p class="admin-ayuda" id="admin-clave-ayuda">Es la que pusisteis en Vercel como <code>ADMIN_TOKEN</code>.</p>
+      <p class="admin-error" id="admin-clave-error" data-error-acceso role="alert"></p>
+      <button class="boton boton--solido admin-acceso__boton" type="submit" data-entrar>Entrar</button>
+    </form>
+  </section>
+
+  <!-- Panel -->
+  <section class="admin-panel" data-panel hidden aria-label="Resumen de confirmaciones">
+    <div class="admin-barra">
+      <p class="admin-actualizado" data-actualizado aria-live="polite"></p>
+      <div class="admin-acciones">
+        <button class="boton" type="button" data-recargar>Actualizar</button>
+        <button class="boton" type="button" data-csv="respuestas">Descargar CSV</button>
+        <button class="boton" type="button" data-csv="personas">CSV por persona</button>
+        <button class="boton admin-salir" type="button" data-salir>Salir</button>
+      </div>
+    </div>
+
+    <p class="admin-aviso" data-aviso role="alert" hidden></p>
+
+    <div class="admin-kpis">
+      <div class="kpi kpi--hero">
+        <p class="kpi__etiqueta">Personas que asisten</p>
+        <p class="kpi__valor" data-kpi="personas_asisten">–</p>
+        <p class="kpi__nota" data-kpi-nota-personas></p>
+      </div>
+      <div class="kpi">
+        <p class="kpi__etiqueta">Respuestas «sí»</p>
+        <p class="kpi__valor" data-kpi="confirman_si">–</p>
+      </div>
+      <div class="kpi">
+        <p class="kpi__etiqueta">No asisten</p>
+        <p class="kpi__valor" data-kpi="no_asisten">–</p>
+      </div>
+      <div class="kpi">
+        <p class="kpi__etiqueta">Autocar · ida</p>
+        <p class="kpi__valor" data-kpi="plazas_ida">–</p>
+        <p class="kpi__nota">San Pablo → La Posada</p>
+      </div>
+      <div class="kpi">
+        <p class="kpi__etiqueta">Autocar · vuelta</p>
+        <p class="kpi__valor" data-kpi="plazas_vuelta">–</p>
+        <p class="kpi__nota">La Posada → Pza. del Poniente</p>
+      </div>
+    </div>
+
+    <section class="admin-bloque" aria-labelledby="admin-t-alergias">
+      <h2 class="admin-bloque__titulo" id="admin-t-alergias">Alergias e intolerancias</h2>
+      <table class="admin-alergias">
+        <caption class="sr-only">Número de personas que asisten con cada alergia o intolerancia</caption>
+        <tbody data-alergias></tbody>
+      </table>
+    </section>
+
+    <section class="admin-bloque" aria-labelledby="admin-t-respuestas">
+      <div class="admin-bloque__cabecera">
+        <h2 class="admin-bloque__titulo" id="admin-t-respuestas">Respuestas</h2>
+        <p class="admin-contador" data-contador></p>
+      </div>
+      <div class="admin-filtros" role="group" aria-label="Filtrar respuestas">
+        <div class="admin-segmentos" role="radiogroup" aria-label="Asistencia">
+          <label><input type="radio" name="filtro" value="todas" checked><span>Todas</span></label>
+          <label><input type="radio" name="filtro" value="si"><span>Asisten</span></label>
+          <label><input type="radio" name="filtro" value="no"><span>No asisten</span></label>
+        </div>
+        <label class="admin-buscar">
+          <span class="sr-only">Buscar por nombre</span>
+          <input class="admin-input" type="search" placeholder="Buscar por nombre…" data-buscar autocomplete="off">
+        </label>
+        <label class="admin-check">
+          <input type="checkbox" data-sustituidas>
+          <span>Ver también respuestas antiguas (sustituidas)</span>
+        </label>
+      </div>
+      <p class="admin-vacio" data-vacio hidden></p>
+      <ol class="admin-lista" data-lista role="list"></ol>
+    </section>
+  </section>
+</main>
+</body>
+</html>

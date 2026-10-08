@@ -31,11 +31,13 @@ TAU = math.tau
 # números y datos de trazado compactos
 # ----------------------------------------------------------------------------
 
-def fnum(v):
-    """Número con 1 decimal como máximo y sin ceros superfluos (.5, -.5, 12)."""
-    v = round(v + 0.0, 1)
+def fnum(v, dec=1):
+    """Número con 1 decimal como máximo (o entero si dec=0) y sin ceros superfluos (.5, -.5, 12)."""
+    v = round(v + 0.0, dec)
     if v == 0:
         return "0"
+    if dec == 0:
+        return "%d" % v
     s = "%.1f" % v
     if s.endswith(".0"):
         s = s[:-2]
@@ -51,14 +53,15 @@ class Datos:
 
     El punto actual se guarda ya redondeado, así el error no se acumula."""
 
-    def __init__(self):
+    def __init__(self, dec=1):
         self.tok = []          # trozos de texto
         self.cmd = None        # último comando escrito
         self.prev = ""         # último número escrito
         self.cur = (0.0, 0.0)
+        self.dec = dec         # decimales (1, o 0 para texturas y aguadas)
 
     def _nums(self, cmd, nums):
-        strs = [fnum(n) for n in nums]
+        strs = [fnum(n, self.dec) for n in nums]
         if cmd != self.cmd or cmd in "Mm":
             self.tok.append(cmd)
             self.prev = ""
@@ -71,7 +74,7 @@ class Datos:
             self.prev = s
 
     def _r(self, p):
-        return (round(p[0], 1), round(p[1], 1))
+        return (round(p[0], self.dec), round(p[1], self.dec))
 
     def M(self, p):
         p = self._r(p)
@@ -81,34 +84,34 @@ class Datos:
         self.cmd = "M"
 
     def _d(self, p):
-        return (round(p[0] - self.cur[0], 1), round(p[1] - self.cur[1], 1))
+        return (round(p[0] - self.cur[0], self.dec), round(p[1] - self.cur[1], self.dec))
 
     def m(self, p):
         """Movimiento relativo (nuevo subtrazo dentro del mismo path)."""
         d = self._d(p)
         self._nums("m", d)
-        self.cur = (round(self.cur[0] + d[0], 1), round(self.cur[1] + d[1], 1))
+        self.cur = (round(self.cur[0] + d[0], self.dec), round(self.cur[1] + d[1], self.dec))
         self.cmd = "m"
 
     def l(self, p):
         d = self._d(p)
         self._nums("l", d)
-        self.cur = (round(self.cur[0] + d[0], 1), round(self.cur[1] + d[1], 1))
+        self.cur = (round(self.cur[0] + d[0], self.dec), round(self.cur[1] + d[1], self.dec))
 
     def c(self, c1, c2, p):
         a, b, d = self._d(c1), self._d(c2), self._d(p)
         self._nums("c", a + b + d)
-        self.cur = (round(self.cur[0] + d[0], 1), round(self.cur[1] + d[1], 1))
+        self.cur = (round(self.cur[0] + d[0], self.dec), round(self.cur[1] + d[1], self.dec))
 
     def s(self, c2, p):
         b, d = self._d(c2), self._d(p)
         self._nums("s", b + d)
-        self.cur = (round(self.cur[0] + d[0], 1), round(self.cur[1] + d[1], 1))
+        self.cur = (round(self.cur[0] + d[0], self.dec), round(self.cur[1] + d[1], self.dec))
 
     def q(self, c1, p):
         a, d = self._d(c1), self._d(p)
         self._nums("q", a + d)
-        self.cur = (round(self.cur[0] + d[0], 1), round(self.cur[1] + d[1], 1))
+        self.cur = (round(self.cur[0] + d[0], self.dec), round(self.cur[1] + d[1], self.dec))
 
     def z(self):
         self.tok.append("z")
@@ -253,7 +256,7 @@ def ondas(rng, amp, l1=(60, 130), l2=(16, 32), l3=(6, 11)):
 
 class Lienzo:
     # familia: (mín, máx, paso de cuantización)
-    PESOS = {"c": (2.2, 2.6, 0.2), "d": (1.2, 1.6, 0.2), "s": (0.8, 1.0, 0.1)}
+    PESOS = {"c": (2.2, 2.4, 0.2), "d": (1.2, 1.4, 0.2), "s": (0.8, 1.0, 0.1)}
     # temblor base, longitud de tramo entre puntos de control
     TEMBLOR = {"c": 0.62, "d": 0.42, "s": 0.3}
     TRAMO = {"c": 34.0, "d": 22.0, "s": 30.0}
@@ -284,7 +287,7 @@ class Lienzo:
         if self._grupo is not None:          # ya estamos dentro de otra textura
             yield
             return
-        self._grupo = {"peso": peso, "d": Datos(), "k": 0, "ancho": ancho}
+        self._grupo = {"peso": peso, "d": Datos(dec=0), "k": 0, "ancho": ancho}
         try:
             yield
         finally:
@@ -651,7 +654,7 @@ class Lienzo:
                 s += dist(denso[i - 1], p)
             d = f(s)
             out.append((p[0] + nrm[0] * d + dx, p[1] + nrm[1] * d + dy))
-        dd = trazado(out, set(), cerrado=True) if suave else _poli_datos(out)
+        dd = trazado(out, set(), cerrado=True, dec=0) if suave else _poli_datos(out)
         self.aguadas.append((color, op, dd))
 
     # ------------------------------------------------------------ salida
@@ -780,9 +783,9 @@ def _cortar(pts, esquinas, s0, s1):
     return a, ea, b, eb
 
 
-def trazado(P, esquinas, cerrado=False):
+def trazado(P, esquinas, cerrado=False, dec=1):
     """Datos «d» compactos: Catmull-Rom (c + s) entre esquinas; rectas si solo hay 2 puntos."""
-    d = Datos()
+    d = Datos(dec)
     n = len(P)
     if n < 2:
         return ""
@@ -822,8 +825,8 @@ def trazado(P, esquinas, cerrado=False):
     return d.texto()
 
 
-def _poli_datos(P):
-    d = Datos()
+def _poli_datos(P, dec=0):
+    d = Datos(dec)
     d.M(P[0])
     for p in P[1:]:
         d.l(p)

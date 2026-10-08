@@ -193,6 +193,7 @@
         const fijar = prepararRuta(svg); // primero se prepara (busca #ruta y #avion)…
         const sufijo = caja.className || 'x';
         ruta.id = 'ruta-' + sufijo;      // …y después se hacen únicos los ids (hay una ruta horizontal y otra vertical)
+        ruta.classList.add('ruta__linea'); // el color terracota lo pone el CSS
         const avion = $('#avion', svg);
         if (avion) avion.id = 'avion-' + sufijo;
         if (!fijar) return;

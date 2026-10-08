@@ -152,10 +152,10 @@ def avion():
 def anillos():
     L = _L(52)
     c1, c2, r = (18.5, 29.0), (29.5, 29.0), 10.2
-    L.circulo(c1[0], c1[1], r, peso="d", solape=8)
-    # el segundo anillo pasa por detrás del primero en el cruce de arriba (pequeño hueco)
-    pts = arco_pts(c2[0], c2[1], r, r, 128, 128 + 320, n=30)
-    L.trazo(pts, peso="d", suave=True)
+    # entrelazados: cruces en (24, 20.4) y (24, 37.6). El anillo 2 pasa por detrás arriba
+    # (hueco hacia 123 grados) y el anillo 1 por detrás abajo (hueco hacia -57 grados).
+    L.trazo(arco_pts(c1[0], c1[1], r, r, -45, -45 + 336, n=30), peso="d", suave=True)
+    L.trazo(arco_pts(c2[0], c2[1], r, r, 136, 136 + 336, n=30), peso="d", suave=True)
     # brillante sobre el primer anillo
     L.linea((15.2, 18.6), (18.5, 13.4), (21.8, 18.6), (18.5, 20.2), (15.2, 18.6), peso="d")
     return _sim("anillos", L)

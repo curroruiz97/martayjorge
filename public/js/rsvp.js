@@ -21,7 +21,7 @@
     nombreVacio: 'Escribe tu nombre y apellidos.',
     nombreNoValido: 'Escribe un nombre válido.',
     nombreLargo: 'Es demasiado largo (máximo 120 caracteres).',
-    acompananteVacio: (i) => `Escribe el nombre y apellidos del acompañante ${i}.`,
+    acompananteVacio: 'Escribe su nombre y apellidos.', // va justo debajo de «…del acompañante N»
     asistencia: 'Indica si podrás asistir.',
     enviar: 'Enviar confirmación',
     enviando: 'Enviando…',
@@ -203,7 +203,7 @@
     estado.acompanantes.push({ envoltorio, input, error, numero });
     input.addEventListener('input', () => {
       ponerTituloPersona(numero);
-      revalidarNombre(input, `acompanantes.${numero - 1}.nombre`, TXT.acompananteVacio(numero));
+      revalidarNombre(input, `acompanantes.${numero - 1}.nombre`, TXT.acompananteVacio);
     });
     crearPersona(`acompanante_${numero}`, numero);
   }
@@ -401,7 +401,7 @@
     if (!asistencia) e.asistencia = TXT.asistencia;
     if (asistencia === 'si') {
       for (let i = 0; i < estado.n; i++) {
-        const msg = errorNombre(estado.acompanantes[i].input.value, TXT.acompananteVacio(i + 1));
+        const msg = errorNombre(estado.acompanantes[i].input.value, TXT.acompananteVacio);
         if (msg) e[`acompanantes.${i}.nombre`] = msg;
       }
     }

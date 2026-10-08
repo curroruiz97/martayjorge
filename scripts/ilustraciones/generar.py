@@ -12,6 +12,8 @@ Determinista: con las mismas semillas sale exactamente el mismo SVG.
 import os
 import sys
 
+sys.dont_write_bytecode = True   # no dejar __pycache__ en el repo
+
 AQUI = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, AQUI)
 RAIZ = os.path.abspath(os.path.join(AQUI, "..", ".."))
@@ -32,15 +34,15 @@ def escribir(carpeta, nombre, texto):
 def pieza_san_pablo(carpeta):
     import san_pablo
     L = san_pablo.dibujar()
-    escribir(carpeta, "san-pablo.svg", L.svg(titulo=san_pablo.TITULO))
-    escribir(carpeta, "san-pablo-linea.svg", L.svg(titulo=san_pablo.TITULO, con_color=False))
+    escribir(carpeta, "san-pablo.svg", L.svg())
+    escribir(carpeta, "san-pablo-linea.svg", L.svg(con_color=False))
 
 
 def pieza_palomar(carpeta):
     import palomar
     L = palomar.dibujar()
-    escribir(carpeta, "palomar.svg", L.svg(titulo=palomar.TITULO))
-    escribir(carpeta, "palomar-linea.svg", L.svg(titulo=palomar.TITULO, con_color=False))
+    escribir(carpeta, "palomar.svg", L.svg())
+    escribir(carpeta, "palomar-linea.svg", L.svg(con_color=False))
 
 
 def pieza_rutas(carpeta):

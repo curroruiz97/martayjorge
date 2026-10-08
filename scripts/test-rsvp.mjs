@@ -287,7 +287,7 @@ describe('validación (400 con mensajes en español)', () => {
     assert.equal(r.status, 400);
     assert.equal(r.json.ok, false);
     assert.equal(r.json.errores.nombre, 'Escribe tu nombre y apellidos.');
-    assert.equal(r.json.errores['acompanantes.1.nombre'], 'Escribe el nombre y apellidos del acompañante 2.');
+    assert.equal(r.json.errores['acompanantes.1.nombre'], 'Escribe su nombre y apellidos.');
   });
 
   test('nombre sin letras o de una sola letra', async () => {

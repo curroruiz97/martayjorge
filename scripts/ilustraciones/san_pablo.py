@@ -107,10 +107,6 @@ def torre(L, x0, x1, ytop, lado, reloj=False):
                 a = math.radians(k * 30)
                 L.raya((xc + 7.8 * math.cos(a), cy + 7.8 * math.sin(a)),
                        (xc + 9.3 * math.cos(a), cy + 9.3 * math.sin(a)), curv=0)
-    else:
-        L.linea((xc - 1.7, 222), (xc - 1.7, 250), peso="d")
-        L.linea((xc + 1.7, 222), (xc + 1.7, 250), peso="d")
-        L.rayado(rect(xc - 1.5, 222.5, xc + 1.5, 249.5), ang=80, sep=1.2, margen=(0, 0.2))
 
 
 def ventana_arco(L, x, yb, w, h):

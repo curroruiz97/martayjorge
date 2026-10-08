@@ -15,19 +15,20 @@ from pluma import Lienzo, arco_pts, rect, lerp, dist, OCRE, TERRACOTA, OLIVA
 from motivos import copa, arco_3p
 
 W, H = 700, 440
-CX, R = 350.0, 212.0
+ESC = 1.12           # escala del edificio dentro del encuadre
+CX, R = 350.0, 212.0 * ESC
 Y0 = 393.0           # base del muro en el eje
-HEYE = 30.0          # altura del ojo sobre la base
+HEYE = 30.0 * ESC    # altura del ojo sobre la base
 ALFA = 0.15          # curvatura de las elipses
 
-H_ZOC = 8.0          # zócalo de ladrillo
-BANDAS = (44.0, 88.0)
-H_MURO = 130.0       # coronación del muro (bajo las ventanas)
-H_VENT = 158.0       # dintel de las ventanas
-H_ALERO = 172.0      # borde inferior del alero (en su radio)
+H_ZOC = 8.0 * ESC    # zócalo de ladrillo
+BANDAS = (44.0 * ESC, 88.0 * ESC)
+H_MURO = 130.0 * ESC  # coronación del muro (bajo las ventanas)
+H_VENT = 158.0 * ESC  # dintel de las ventanas
+H_ALERO = 172.0 * ESC  # borde inferior del alero (en su radio)
 R_ALERO = 1.11 * R
-H_LINT = 190.0       # base de la linterna
-R_LINT = 40.0
+H_LINT = 190.0 * ESC  # base de la linterna
+R_LINT = 40.0 * ESC
 PILASTRAS = (-80.0, -31.0, 29.0, 81.0)
 DELTA_P = 4.6        # semiancho angular de las pilastras (grados)
 
@@ -258,7 +259,7 @@ def alero(L):
 
 def linterna(L):
     rng = L.rng
-    h0, h1 = H_LINT, H_LINT + 15.0
+    h0, h1 = H_LINT, H_LINT + 15.0 * ESC
     he = h1 + 2.0
     rle = R_LINT * 1.34
     # montantes en los vértices y marco de ventanas
@@ -282,7 +283,7 @@ def linterna(L):
     L.rayado([P(a, h1 + 0.4, R_LINT) for a in (-90, -45, 0, 45, 90)] +
              [P(a, he - 0.3, rle - 1) for a in (90, 45, 0, -45, -90)], ang=118, sep=1.5, margen=(0.1, 0.4))
     # tejadillo y bola
-    apex = P(0, he + 16.0, 0.01)
+    apex = P(0, he + 16.0 * ESC, 0.01)
     for a in (-90, -45, 0, 45, 90):
         L.linea(P(a, he + 3.5, rle + 0.6), apex, peso="d" if abs(a) < 90 else "c", pasado=(-0.4, 0.4))
     pts = []
@@ -486,8 +487,8 @@ def dibujar(semilla=2017, con_novios=True):
         figuras = novios(L, 292.0, 414.0)
     # arbustos al pie del muro (delante del tambor)
     with L.detras_de(*figuras):
-        arb_i = arbustos(L, 132.0, 205.0, 395.0, 22.0, n=3)
-        arb_d = arbustos(L, 505.0, 572.0, 393.0, 20.0, n=2)
+        arb_i = arbustos(L, 116.0, 190.0, 395.0, 23.0, n=3)
+        arb_d = arbustos(L, 520.0, 586.0, 393.0, 21.0, n=2)
     delante = figuras + arb_i + arb_d
     # edificio
     with L.detras_de(*delante):
@@ -503,11 +504,11 @@ def dibujar(semilla=2017, con_novios=True):
            [P(0, H_LINT + 36, 0.01), P(0, H_LINT + 50, 0.01)] +
            [(2 * CX - px, py) for (px, py) in reversed(der)])
     with L.detras_de(sil, *delante):
-        copa_d = pino(L, (622.0, 398.0), (606.0, 150.0), (612.0, 98.0), 190.0, 92.0, grosor=10.0)
-        copa_i = pino(L, (70.0, 396.0), (80.0, 186.0), (74.0, 148.0), 150.0, 70.0, grosor=8.0)
+        copa_d = pino(L, (642.0, 398.0), (626.0, 146.0), (604.0, 94.0), 166.0, 88.0, grosor=10.0)
+        copa_i = pino(L, (54.0, 396.0), (64.0, 182.0), (68.0, 142.0), 118.0, 62.0, grosor=8.0)
         # línea del césped detrás del edificio y suelo
-        L.trazo([(6.0, 397.0), (60.0, 396.0), (140.0, 394.5)], peso="d", suave=True)
-        L.trazo([(560.0, 393.5), (640.0, 395.5), (694.0, 396.5)], peso="d", suave=True)
+        L.trazo([(6.0, 397.0), (60.0, 396.0), (122.0, 394.5)], peso="d", suave=True)
+        L.trazo([(580.0, 393.5), (640.0, 395.5), (694.0, 396.5)], peso="d", suave=True)
     with L.detras_de(*figuras):
         cesped(L, 20.0, 680.0, 399.0, 432.0, n=46)
         L.trazo([(150.0, 404.0), (300.0, 407.0), (420.0, 406.0), (560.0, 402.0)], peso="s", suave=True,

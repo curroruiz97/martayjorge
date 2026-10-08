@@ -83,7 +83,7 @@
   -webkit-appearance: none; appearance: none;
   transition: border-color .2s var(--ease), background-color .2s var(--ease);
 }
-.rsvp-input::placeholder { color: #7a7466; opacity: 1; }
+.rsvp-input::placeholder { color: var(--tinta-tenue); opacity: 1; } /* ≈ 5:1 sobre --papel-3 */
 .rsvp-input:focus-visible { outline: 2px solid var(--terracota); outline-offset: 2px; border-color: var(--tinta); }
 .rsvp-textarea { min-height: 8.5rem; resize: vertical; line-height: 1.5; }
 @media (hover: hover) { .rsvp-input:hover { border-color: var(--tinta-suave); } }
@@ -196,9 +196,10 @@
   .rsvp-contador__btn:hover { background: var(--tinta); border-color: var(--tinta); color: var(--papel-3); }
 }
 .rsvp-contador__btn:active { transform: scale(.93); }
+/* En el tope: se atenúan borde e icono (no opacity, para que el contorno de foco se vea entero) */
 .rsvp-contador__btn[aria-disabled="true"] {
-  opacity: .32; cursor: default; transform: none;
-  background: var(--papel-3); border-color: var(--linea-fuerte); color: var(--tinta);
+  cursor: default; transform: none;
+  background: transparent; border-color: rgba(43, 42, 40, .18); color: rgba(43, 42, 40, .3);
 }
 .rsvp-contador__valor {
   width: 2.75rem; height: 2.75rem; margin: 0; padding: 0;

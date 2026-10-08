@@ -3,6 +3,7 @@
  * Servidor de desarrollo de la web de Marta y Jorge (sin dependencias).
  *
  *   npm run dev                  → MOCK_SUPABASE=1: base de datos simulada (no hace falta Supabase)
+ *   node scripts/dev.mjs --mock  → lo mismo, también en Windows
  *   node scripts/dev.mjs         → usa el Supabase real de las variables de .env
  *
  * Qué hace:
@@ -290,7 +291,7 @@ async function paginaConFormulario() {
 export async function iniciar({
   puerto = Number(process.env.PORT) || 3000,
   host = process.env.HOST || '127.0.0.1',
-  mock = /^(1|true|si|sí)$/i.test(process.env.MOCK_SUPABASE || ''),
+  mock = /^(1|true|si|sí)$/i.test(process.env.MOCK_SUPABASE || '') || process.argv.includes('--mock'),
   dirDatos = process.env.DEV_DATA_DIR || path.join(RAIZ, '.dev-data'),
   silencioso = false,
 } = {}) {

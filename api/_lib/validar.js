@@ -111,7 +111,7 @@ function validarRsvp(entrada) {
     } else {
       acompanantes = lista.map((a, i) => ({
         nombre: validarNombre(esObjeto(a) ? a.nombre : undefined, `acompanantes.${i}.nombre`, errores,
-          `Escribe el nombre y apellidos del acompañante ${i + 1}.`),
+          'Escribe su nombre y apellidos.'),
       }));
     }
 

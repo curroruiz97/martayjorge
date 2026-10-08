@@ -10,7 +10,7 @@
 
 .icono { width: 1.5rem; height: 1.5rem; flex: none; fill: none; stroke: currentColor; color: var(--tinta); }
 
-.floritura { width: 11rem; height: 1.6rem; color: var(--tinta); margin-inline: auto; }
+.floritura { width: 10rem; height: 2rem; color: var(--tinta); margin-inline: auto; }
 
 /* Marco "impreso": el contorno fino desplazado, como una copia a mano alzada */
 .marco { position: relative; isolation: isolate; }
@@ -69,6 +69,12 @@
 @keyframes entrar { from { opacity: 0; transform: translateY(1rem); } }
 .reveal-fallback .entra { animation: none !important; }
 
+/* La floritura de arriba se traza sola: los trazos del sprite (pathLength=1) heredan el dash del <svg> */
+.js .portada .floritura { stroke-dasharray: 1 2; stroke-dashoffset: 1;
+  animation: entrar .9s var(--ease) both, trazar 2s var(--ease) .15s both; }
+@keyframes trazar { to { stroke-dashoffset: 0; } }
+.reveal-fallback .portada .floritura { stroke-dashoffset: 0 !important; }
+
 /* Escritura de los nombres al cargar */
 .js .nombre { clip-path: inset(-14% 100% -14% -8%); }
 .js.fuentes-listas .nombre { animation: escribir 1.7s var(--ease) both; }
@@ -97,17 +103,19 @@
 .agenda__grid { display: grid; justify-items: center; row-gap: 1.25rem; }
 .ilu { position: relative; width: var(--w, 100%); }
 .ilu > svg { width: 100%; height: auto; overflow: visible; }
-.ilu--san-pablo { --w: min(74vw, 17rem); aspect-ratio: 520 / 620; }
-.ilu--palomar { --w: min(90vw, 22rem); aspect-ratio: 700 / 440; margin-top: .5rem; }
+.ilu--san-pablo { --w: min(84vw, 20rem); aspect-ratio: 520 / 620; }
+.ilu--palomar { --w: min(92vw, 23rem); aspect-ratio: 700 / 440; margin-top: .5rem; }
 
 .evento { display: grid; justify-items: center; gap: .4rem; text-align: center; margin-bottom: clamp(.5rem, 3vw, 1.5rem); }
 .evento .boton { margin-top: 1rem; }
 .evento__lugar { font-family: var(--f-script); font-weight: 600; font-size: var(--fs-h3); line-height: 1.02; margin-top: .3rem; text-wrap: balance; }
 
 .ruta { width: 100%; display: grid; justify-items: center; margin-block: .75rem; }
-.ruta__v { width: 4.5rem; }
+.ruta__v { width: min(6.25rem, 28vw); }
 .ruta__h { display: none; }
 .ruta svg { width: 100%; height: auto; overflow: visible; }
+.ruta__linea { stroke: var(--terracota); }
+.ruta__h .ruta__linea { stroke-width: 3.3; }
 
 @media (min-width: 900px) {
   .agenda__grid {
@@ -182,7 +190,7 @@
 @media (min-width: 900px) { .cierre__foto img { object-position: 50% 62%; } }
 
 .pie { display: grid; justify-items: center; gap: .6rem; padding: 2.25rem var(--gutter) 2.75rem; text-align: center; }
-.pie .floritura { width: 6rem; }
+.pie .floritura { width: 6rem; height: 1.5rem; }
 
 /* ---------- Aviso flotante (copiar IBAN, etc.) ---------- */
 .aviso {

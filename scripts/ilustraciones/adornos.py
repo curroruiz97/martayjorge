@@ -30,8 +30,8 @@ def floritura():
     izq = [(4.0, 16.4), (14.0, 12.6), (26.0, 10.2), (40.0, 12.1), (54.0, 18.4), (64.5, 21.6), (72.5, 20.0), (80.0, 16.0)]
     der = [(160 - x, 32 - y) for (x, y) in reversed(izq)]
     L.curva(izq + der[1:], peso="d", tramo=10.0, pasado=(0, 0.2), hueco=(0, 1e9))
-    L.linea((80.2, 3.6), (73.6, 16.0), (79.8, 28.6), (86.4, 16.2), (80.2, 3.6), (79.2, 2.4), peso="d",
-            pasado=(0, 0.2))
+    L.linea((80.2, 3.6), (73.6, 16.0), (79.8, 28.6), (86.4, 16.2), (80.4, 3.4), peso="d",
+            pasado=(0.2, 0.6))
     return _simbolo("floritura", "0 0 160 32", L, "1.4", _punto(80.0, 16.0, 1.8))
 
 
@@ -40,8 +40,8 @@ def floritura_corta():
     izq = [(4.0, 12.2), (12.0, 9.6), (21.0, 9.0), (31.0, 12.6), (38.5, 14.6), (43.5, 13.8), (48.0, 12.0)]
     der = [(96 - x, 24 - y) for (x, y) in reversed(izq)]
     L.curva(izq + der[1:], peso="d", tramo=8.0, pasado=(0, 0.2), hueco=(0, 1e9))
-    L.linea((48.1, 4.2), (43.6, 12.0), (47.9, 19.8), (52.4, 12.1), (48.1, 4.2), (47.4, 3.2), peso="d",
-            pasado=(0, 0.2))
+    L.linea((48.1, 4.2), (43.6, 12.0), (47.9, 19.8), (52.4, 12.1), (48.2, 4.0), peso="d",
+            pasado=(0.2, 0.5))
     return _simbolo("floritura-corta", "0 0 96 24", L, "1.3", _punto(48.0, 12.0, 1.4))
 
 
@@ -77,23 +77,23 @@ def ramita():
         a = ang - lado * math.radians(42 + rng.uniform(-6, 6))
         ux, uy = math.cos(a), math.sin(a)
         nx, ny = -uy, ux
-        anchoh = lg * 0.2
+        anchoh = lg * 0.13
         base = (bx + ux * 1.5, by + uy * 1.5)
         punta = (bx + ux * (lg + 1.5), by + uy * (lg + 1.5))
-        m1 = (bx + ux * (lg * 0.5) + nx * anchoh, by + uy * (lg * 0.5) + ny * anchoh)
-        m2 = (bx + ux * (lg * 0.5) - nx * anchoh, by + uy * (lg * 0.5) - ny * anchoh)
+        m1 = (bx + ux * (lg * 0.45) + nx * anchoh, by + uy * (lg * 0.45) + ny * anchoh)
+        m2 = (bx + ux * (lg * 0.45) - nx * anchoh, by + uy * (lg * 0.45) - ny * anchoh)
         # hoja en un trazo: base -> lado 1 -> punta -> lado 2 -> base
         L.trazo([base, m1, punta, m2, (base[0] + ux * 0.4, base[1] + uy * 0.4)], peso="d", suave=True,
                 pasado=(0, 0.3), tramo=5.0, hueco=(0, 1e9))
         if lg >= 14:
             L.linea(base, (bx + ux * (lg * 0.78), by + uy * (lg * 0.78)), peso="s", pasado=(0, 0.2))
     # aceitunas
-    for t, lado in ((0.42, 1), (0.63, -1)):
+    for t, lado in ((0.42, 1), (0.8, 1)):
         (bx, by), ang = en_tallo(t)
-        cx, cy = bx + 3.5, by + lado * 6.5
-        L.linea((bx, by), (cx - 0.5, cy - lado * 2.8), peso="s", pasado=(0, 0.2))
-        L.circulo(cx, cy, 2.9, ry=3.6, peso="d", solape=20)
-    return _simbolo("ramita", "0 0 120 48", L, "1.4")
+        cx, cy = bx + 3.0, by + lado * 6.0
+        L.linea((bx, by), (cx - 0.4, cy - lado * 2.6), peso="s", pasado=(0, 0.2))
+        L.circulo(cx, cy, 2.2, ry=2.8, peso="d", solape=25)
+    return _simbolo("ramita", "0 0 120 48", L, "1.2")
 
 
 def sprite():
