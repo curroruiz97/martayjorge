@@ -81,7 +81,7 @@
     curX += (objX - curX) * 0.07;
     curY += (objY - curY) * 0.07;
     // el efecto se detiene pronto (a los 450 px de scroll): así ninguna capa llega a pisar a otra ni a la sección siguiente
-    const y = Math.min(sy, 450);
+    const y = Math.max(0, Math.min(sy, 450)); // iOS: con el rebote al tirar hacia abajo scrollY es negativo
     // texto: sigue al scroll un poco más lento; foto y lo que va debajo (cuenta atrás, botón): aún más, y a la vez, para que no se
     // solapen; imagen dentro de la ventana: contra-movimiento
     texto.style.transform = `translate3d(${(curX * -5).toFixed(2)}px, ${(y * 0.08 + curY * -3).toFixed(2)}px, 0)`;

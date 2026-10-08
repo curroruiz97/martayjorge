@@ -81,7 +81,7 @@
       txt.d.textContent = d === 1 ? 'día' : 'días';
       txt.h.textContent = h === 1 ? 'hora' : 'horas';
       txt.m.textContent = 'min';
-      sr.textContent = `Faltan ${d} ${d === 1 ? 'día' : 'días'}, ${h} ${h === 1 ? 'hora' : 'horas'} y ${m} minutos para la boda.`;
+      sr.textContent = `Faltan ${d} ${d === 1 ? 'día' : 'días'}, ${h} ${h === 1 ? 'hora' : 'horas'} y ${m} ${m === 1 ? 'minuto' : 'minutos'} para la boda.`;
       return true;
     }
     if (pintar()) {

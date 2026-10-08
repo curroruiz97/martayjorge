@@ -28,7 +28,7 @@
   --papel-3: #fbf8f1;          /* crema casi blanco: campos de formulario */
   --tinta: #2b2a28;            /* tinta de ilustraciones y texto principal */
   --tinta-suave: #5a564e;      /* texto secundario (contraste 6:1 sobre papel) */
-  --tinta-tenue: #6f6a5b;      /* etiquetas pequeñas (contraste 4.7:1) */
+  --tinta-tenue: #666152;      /* etiquetas pequeñas (contraste ≥ 5,1:1 incluso en el punto más oscuro del papel) */
   --linea: rgba(43, 42, 40, .22);   /* filetes finos */
   --linea-fuerte: rgba(43, 42, 40, .55);
   /* acentos (usar con mucha mesura) */

@@ -56,7 +56,8 @@ Los envíos de prueba se guardan en `.dev-data/rsvps.json` (ignorado por git). E
 
 ## Publicarla (GitHub + Vercel + Supabase + dominio)
 
-1. **GitHub**: el código ya está en este repositorio.
+1. **GitHub**: el código ya está en este repositorio, en la rama `main`. Conviene que sea también la rama principal
+   (*Settings → Branches → Default branch*).
 2. **Supabase** (guía paso a paso en [`docs/rsvp.md`](docs/rsvp.md) §3):
    crear un proyecto nuevo (por ejemplo `martayjorge`, región europea), abrir **SQL Editor**, pegar todo
    [`supabase/schema.sql`](supabase/schema.sql) y ejecutarlo. Copiar la **URL del proyecto** y la

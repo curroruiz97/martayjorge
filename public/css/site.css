@@ -72,6 +72,15 @@
   }
 }
 
+/* Móvil en vertical con poca altura útil (p. ej. un iPhone con las barras de Safari, ≈ 660 px): los nombres se ajustan para que
+   casi toda la foto entre en la primera pantalla y las puertas se abran a la vista. En pantallas altas no cambia nada. */
+@media (max-width: 599.98px) and (orientation: portrait) {
+  .portada {
+    --n: min(80vw, 22rem, max(11rem, calc((var(--alto) - var(--pad-v) - 7.2rem) / 2.07)));
+    --foto: min(70vw, 20rem, calc(var(--n) * .875));
+  }
+}
+
 /* Apaisado (móvil girado, tablet, portátil, monitor): dos columnas */
 @media (orientation: landscape) and (min-width: 560px) {
   .portada {
@@ -129,7 +138,7 @@
 @keyframes baja { 0% { transform: translateY(0); opacity: 0; } 25% { opacity: 1; } 75% { opacity: 1; } 100% { transform: translateY(2.4rem); opacity: 0; } }
 
 /* ---------- AGENDA ---------- */
-.agenda__grid { display: grid; justify-items: center; row-gap: 1.25rem; }
+.agenda__grid { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; row-gap: 1.25rem; }
 .ilu { position: relative; width: var(--w, 100%); }
 .ilu > svg { width: 100%; height: auto; overflow: visible; }
 .ilu--san-pablo { --w: min(84vw, 20rem); aspect-ratio: 520 / 620; }
@@ -192,6 +201,7 @@
 .alojamiento__mapa { --max: 56.25rem; margin-top: clamp(2.25rem, 6vw, 3.5rem); }
 .alojamiento__mapa .mapa { width: 100%; max-width: 100%; aspect-ratio: 4 / 3; min-height: 19rem; border-radius: var(--radio); background-color: var(--papel-2); }
 .mapa__pie { margin-top: 1.5rem; text-align: center; font: 500 var(--fs-etiqueta)/1.4 var(--f-sans); letter-spacing: .22em; text-transform: uppercase; }
+.mapa__pie a { display: inline-block; padding: .55rem .25rem; }   /* zona táctil de al menos 24 px de alto */
 @media (min-width: 900px) { .alojamiento__mapa .mapa { aspect-ratio: 16 / 9; } }
 
 /* ---------- INTERLUDIO (foto) ---------- */

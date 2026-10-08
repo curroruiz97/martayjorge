@@ -80,6 +80,12 @@
 /* ---- Foto sin llegar todavía (conexión lenta): las puertas y el enfoque esperan (lo activa js/intro.js) ---- */
 .espera-foto .postigo, .espera-foto .postigo__sombra, .espera-foto .ventana img, .espera-foto .portada__foto.marco::before { animation-play-state: paused; }
 
+/* ---- Alto contraste de Windows (forced-colors): el color de los nombres y del adorno va en SVG y no se fuerza solo ---- */
+@media (forced-colors: active) {
+  .nombres__svg, .pal--y { color: CanvasText; }
+  .rz { stroke: CanvasText; }
+}
+
 /* ---- Sin movimiento: la portada sale completa, sin esperar a ningún retardo ---- */
 @media (prefers-reduced-motion: reduce) {
   .portada *, .portada *::before { animation: none !important; }

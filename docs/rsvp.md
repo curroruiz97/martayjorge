@@ -247,8 +247,12 @@ truncate table public.rsvps;
 - **Antispam sin molestar** (sin CAPTCHA): campo trampa oculto (si un robot lo rellena se le responde
   «ok» y no se guarda), tiempo mínimo de 2,5 s entre que se muestra el formulario y se envía (el
   formulario espera solo si hace falta; nunca se finge éxito a una persona), cuerpo de 20 KB como
-  máximo, solo `application/json`, y `submission_id` único. Vercel ya filtra ataques masivos; si
-  llegara spam se puede añadir una regla de *rate limit* en Vercel → Firewall.
+  máximo, solo `application/json`, y `submission_id` único. Estas medidas frenan a los programas
+  que rellenan formularios «a ciegas», pero no a alguien que escriba un script a medida (el tiempo
+  lo envía el propio navegador). La API **no limita cuántos envíos acepta**; si algún día llegara
+  spam, la defensa buena está en Vercel: *Firewall → Add Rule* → «Rate limit» sobre
+  `POST /api/rsvp` (por ejemplo, 10 envíos por minuto y por IP; según el plan puede estar o no
+  disponible). Todas las filas quedan en Supabase aunque el panel solo muestre las 1000 últimas.
 - **Panel**: protegido con `ADMIN_TOKEN` (mín. 12 caracteres), comparación en tiempo constante,
   ~0,8 s de espera tras cada contraseña incorrecta, respuestas `no-store` y `noindex`. La contraseña
   viaja en la cabecera `Authorization`, nunca en la URL. Todo lo que escriben los invitados se pinta
