@@ -4,8 +4,8 @@
   "private": true,
   "description": "Invitación de boda de Marta y Jorge · 8 de mayo de 2027 · Valladolid",
   "scripts": {
-    "dev": "MOCK_SUPABASE=1 node scripts/dev.mjs",
-    "test": "node --test scripts/"
+    "dev": "node scripts/dev.mjs --mock",
+    "test": "node --test scripts/test-*.mjs"
   },
   "engines": {
     "node": "22.x"

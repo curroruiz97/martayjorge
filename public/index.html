@@ -178,9 +178,219 @@
     </div>
   </figure>
 
-  <!-- RSVP:INICIO — pegar aquí public/partials/rsvp.html -->
-  <section class="seccion" id="confirmacion"><div class="contenedor contenedor--estrecho centrado"><p class="etiqueta">S.R.C. · Se ruega confirmación</p><h2 class="titulo">Confirma tu asistencia</h2></div></section>
-  <!-- RSVP:FIN -->
+  <!-- ============ CONFIRMACIÓN DE ASISTENCIA (RSVP) ============
+       Estilos: css/rsvp.css · Lógica: js/rsvp.js · Envía a /api/rsvp → Supabase (docs/rsvp.md).
+       Si el envío falla ofrece WhatsApp/correo con los datos de data-whatsapp / data-email de #alojamiento. -->
+  <section class="seccion rsvp" id="confirmacion" aria-labelledby="t-confirmacion" data-rsvp data-endpoint="/api/rsvp">
+    <div class="contenedor contenedor--estrecho">
+      <header class="cabecera revelar">
+        <p class="etiqueta">S.R.C. · Se ruega confirmación</p>
+        <h2 class="titulo" id="t-confirmacion">Confirma tu asistencia</h2>
+        <p class="cursiva rsvp__entradilla">Cuéntanos si podrás acompañarnos y ayúdanos a organizarlo todo.</p>
+      </header>
+
+      <div class="rsvp__tarjeta">
+        <noscript>
+          <p class="rsvp__sin-js">Para enviar tu confirmación necesitas tener JavaScript activado en el navegador. Si no puedes activarlo, escríbenos y la apuntamos nosotros.</p>
+        </noscript>
+
+        <form class="rsvp__form" data-rsvp-form novalidate aria-labelledby="t-confirmacion">
+          <p class="rsvp__cargando">Preparando el formulario… Si no termina de cargar, recarga la página.</p>
+
+          <p class="rsvp__recuperado" data-rsvp-recuperado hidden>
+            <span>Hemos recuperado lo que habías escrito.</span>
+            <button type="button" class="rsvp__enlace" data-rsvp-vaciar>Empezar de nuevo</button>
+          </p>
+
+          <!-- Nombre -->
+          <div class="rsvp-campo">
+            <label class="rsvp-label" for="rsvp-nombre">Nombre y apellidos <span class="rsvp-req" aria-hidden="true">*</span></label>
+            <input class="rsvp-input" id="rsvp-nombre" name="nombre" type="text" required maxlength="120"
+              autocomplete="name" autocapitalize="words" spellcheck="false" enterkeyhint="next"
+              aria-describedby="rsvp-nombre-error">
+            <p class="rsvp-error" id="rsvp-nombre-error" hidden></p>
+          </div>
+
+          <!-- ¿Podrás asistir? -->
+          <fieldset class="rsvp-campo rsvp-asistencia">
+            <legend class="rsvp-label">¿Podrás asistir? <span class="rsvp-req" aria-hidden="true">*</span></legend>
+            <div class="rsvp-opciones">
+              <label class="rsvp-opcion">
+                <input type="radio" name="asistencia" value="si" required aria-describedby="rsvp-asistencia-error">
+                <span>Sí, asistiré</span>
+              </label>
+              <label class="rsvp-opcion">
+                <input type="radio" name="asistencia" value="no" aria-describedby="rsvp-asistencia-error">
+                <span>No podré asistir</span>
+              </label>
+            </div>
+            <p class="rsvp-error" id="rsvp-asistencia-error" hidden></p>
+          </fieldset>
+
+          <!-- Solo si asiste: acompañantes, autocar y alergias -->
+          <div class="rsvp-plegable rsvp-detalles" data-rsvp-detalles>
+            <div class="rsvp-plegable__interior">
+              <div class="rsvp-plegable__contenido">
+
+                <fieldset class="rsvp-bloque">
+                  <legend class="rsvp-bloque__titulo">Acompañantes</legend>
+                  <div class="rsvp-fila">
+                    <div>
+                      <label class="rsvp-label" for="rsvp-n">Número de acompañantes</label>
+                      <p class="rsvp-ayuda" id="rsvp-n-ayuda">Sin contarte a ti</p>
+                    </div>
+                    <div class="rsvp-contador" data-rsvp-contador>
+                      <button type="button" class="rsvp-contador__btn" data-paso="-1" aria-controls="rsvp-n" aria-label="Quitar un acompañante">
+                        <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8h10"/></svg>
+                      </button>
+                      <input class="rsvp-contador__valor" id="rsvp-n" name="n_acompanantes" type="number"
+                        inputmode="numeric" min="0" max="8" step="1" value="0" enterkeyhint="next"
+                        aria-describedby="rsvp-n-ayuda rsvp-n-error">
+                      <button type="button" class="rsvp-contador__btn" data-paso="1" aria-controls="rsvp-n" aria-label="Añadir un acompañante">
+                        <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8h10M8 3v10"/></svg>
+                      </button>
+                    </div>
+                  </div>
+                  <p class="rsvp-error" id="rsvp-n-error" hidden></p>
+                  <div class="rsvp-acompanantes" data-rsvp-lista-acompanantes></div>
+                </fieldset>
+
+                <fieldset class="rsvp-bloque">
+                  <legend class="rsvp-bloque__titulo">Autocar</legend>
+                  <p class="rsvp-ayuda rsvp-bloque__intro">Indica cuántas plazas necesitarías en cada trayecto (contándote a ti y a tus acompañantes). Más adelante os daremos horarios y paradas.</p>
+                  <div class="rsvp-trayectos">
+                    <div class="rsvp-trayecto">
+                      <div class="rsvp-trayecto__texto">
+                        <span class="rsvp-trayecto__tipo" aria-hidden="true">Ida</span>
+                        <label class="rsvp-trayecto__ruta" for="rsvp-ida"><span class="sr-only">Plazas de ida: </span><span class="rsvp-trayecto__lugar">Iglesia de San&nbsp;Pablo</span> <span class="rsvp-trayecto__lugar"><span aria-hidden="true">→ </span><span class="sr-only">hasta </span>La Posada Real&nbsp;del&nbsp;Pinar</span></label>
+                      </div>
+                      <div class="rsvp-contador" data-rsvp-contador>
+                        <button type="button" class="rsvp-contador__btn" data-paso="-1" aria-controls="rsvp-ida" aria-label="Quitar una plaza de ida">
+                          <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8h10"/></svg>
+                        </button>
+                        <input class="rsvp-contador__valor" id="rsvp-ida" name="transporte_ida" type="number"
+                          inputmode="numeric" min="0" max="1" step="1" value="0" enterkeyhint="next"
+                          aria-describedby="rsvp-ida-error">
+                        <button type="button" class="rsvp-contador__btn" data-paso="1" aria-controls="rsvp-ida" aria-label="Añadir una plaza de ida">
+                          <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8h10M8 3v10"/></svg>
+                        </button>
+                      </div>
+                      <p class="rsvp-error" id="rsvp-ida-error" hidden></p>
+                    </div>
+                    <div class="rsvp-trayecto">
+                      <div class="rsvp-trayecto__texto">
+                        <span class="rsvp-trayecto__tipo" aria-hidden="true">Vuelta</span>
+                        <label class="rsvp-trayecto__ruta" for="rsvp-vuelta"><span class="sr-only">Plazas de vuelta: </span><span class="rsvp-trayecto__lugar">La Posada Real&nbsp;del&nbsp;Pinar</span> <span class="rsvp-trayecto__lugar"><span aria-hidden="true">→ </span><span class="sr-only">hasta </span>Plaza del Poniente</span></label>
+                      </div>
+                      <div class="rsvp-contador" data-rsvp-contador>
+                        <button type="button" class="rsvp-contador__btn" data-paso="-1" aria-controls="rsvp-vuelta" aria-label="Quitar una plaza de vuelta">
+                          <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8h10"/></svg>
+                        </button>
+                        <input class="rsvp-contador__valor" id="rsvp-vuelta" name="transporte_vuelta" type="number"
+                          inputmode="numeric" min="0" max="1" step="1" value="0" enterkeyhint="next"
+                          aria-describedby="rsvp-vuelta-error">
+                        <button type="button" class="rsvp-contador__btn" data-paso="1" aria-controls="rsvp-vuelta" aria-label="Añadir una plaza de vuelta">
+                          <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8h10M8 3v10"/></svg>
+                        </button>
+                      </div>
+                      <p class="rsvp-error" id="rsvp-vuelta-error" hidden></p>
+                    </div>
+                  </div>
+                </fieldset>
+
+                <fieldset class="rsvp-bloque">
+                  <legend class="rsvp-bloque__titulo">Alergias e intolerancias</legend>
+                  <p class="rsvp-ayuda rsvp-bloque__intro">¿Alguna alergia o intolerancia alimentaria? Márcala para cada persona. Si no hay nada, déjalo en blanco.</p>
+                  <div class="rsvp-personas" data-rsvp-lista-personas></div>
+                </fieldset>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Mensaje -->
+          <div class="rsvp-campo rsvp-campo--mensaje">
+            <label class="rsvp-label" for="rsvp-mensaje">¿Algo que decirnos? <span class="rsvp-opcional">(opcional)</span></label>
+            <textarea class="rsvp-input rsvp-textarea" id="rsvp-mensaje" name="mensaje" rows="4" maxlength="1000"
+              placeholder="Cuéntanos lo que quieras…"
+              aria-describedby="rsvp-mensaje-error"></textarea>
+            <p class="rsvp-cuenta" data-rsvp-cuenta aria-hidden="true" hidden></p>
+            <p class="rsvp-error" id="rsvp-mensaje-error" hidden></p>
+          </div>
+
+          <!-- Trampa antispam: invisible para las personas; si un robot la rellena, no se guarda nada -->
+          <div class="rsvp-trampa" aria-hidden="true">
+            <label for="rsvp-hp">Deja este campo vacío</label>
+            <input id="rsvp-hp" name="hp_campo" type="text" tabindex="-1" autocomplete="off">
+          </div>
+
+          <div class="rsvp-envio">
+            <div class="rsvp-envio__aviso" data-rsvp-aviso role="alert" aria-atomic="true"></div>
+            <button type="submit" class="boton boton--solido rsvp-enviar" data-rsvp-enviar disabled>
+              <span class="rsvp-enviar__giro" aria-hidden="true"></span>
+              <span data-rsvp-enviar-texto>Enviar confirmación</span>
+            </button>
+            <p class="rsvp-privacidad">Usaremos estos datos solo para organizar la boda.</p>
+          </div>
+          <p class="sr-only" data-rsvp-anuncio aria-live="polite"></p>
+
+          <!-- Plantillas (las usa js/rsvp.js) -->
+          <template id="rsvp-tpl-acompanante">
+            <div class="rsvp-plegable" data-acompanante>
+              <div class="rsvp-plegable__interior">
+                <div class="rsvp-plegable__contenido rsvp-acompanante">
+                  <label class="rsvp-label" data-ref="etiqueta">Nombre y apellidos del acompañante <span data-ref="numero">1</span> <span class="rsvp-req" aria-hidden="true">*</span></label>
+                  <input class="rsvp-input" data-ref="nombre" type="text" required maxlength="120"
+                    autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="next">
+                  <p class="rsvp-error" data-ref="error" hidden></p>
+                </div>
+              </div>
+            </div>
+          </template>
+
+          <template id="rsvp-tpl-persona">
+            <div class="rsvp-plegable" data-persona>
+              <div class="rsvp-plegable__interior">
+                <div class="rsvp-plegable__contenido">
+                  <fieldset class="rsvp-persona">
+                    <legend class="rsvp-persona__titulo" data-ref="titulo">Tú</legend>
+                    <div class="rsvp-casillas">
+                      <label class="rsvp-casilla"><input type="checkbox" value="sin_gluten"><span>Sin gluten / Celiaquía</span></label>
+                      <label class="rsvp-casilla"><input type="checkbox" value="sin_lactosa"><span>Sin lactosa</span></label>
+                      <label class="rsvp-casilla"><input type="checkbox" value="vegetariano"><span>Vegetariano</span></label>
+                      <label class="rsvp-casilla"><input type="checkbox" value="vegano"><span>Vegano</span></label>
+                      <label class="rsvp-casilla"><input type="checkbox" value="frutos_secos"><span>Alergia a frutos secos</span></label>
+                      <label class="rsvp-casilla"><input type="checkbox" value="marisco"><span>Alergia a marisco</span></label>
+                    </div>
+                    <label class="rsvp-label rsvp-label--sub" data-ref="otras-etiqueta">Otras alergias o restricciones</label>
+                    <input class="rsvp-input" data-ref="otras" type="text" maxlength="300" autocomplete="off"
+                      enterkeyhint="next" placeholder="Ej.: alergia al huevo, intolerancia a la fructosa…"
+                      data-placeholder-corto="Ej.: huevo, fructosa…">
+                    <p class="rsvp-error" data-ref="error" hidden></p>
+                  </fieldset>
+                </div>
+              </div>
+            </div>
+          </template>
+        </form>
+
+        <!-- Agradecimiento (sustituye al formulario tras enviar) -->
+        <div class="rsvp-gracias" data-rsvp-gracias
+          data-texto-si="Hemos recibido tu confirmación. ¡Nos vemos el 8 de mayo!"
+          data-texto-no="Gracias por avisarnos. Te echaremos de menos. Un abrazo enorme." hidden>
+          <svg class="rsvp-gracias__corazon" viewBox="0 0 48 44" aria-hidden="true" focusable="false">
+            <path d="M24.2 40.5C15.4 34.6 4.3 26.7 3.6 15.9 3.1 8.6 8.4 3.4 14.6 3.6c4.6.2 7.8 3.2 9.5 7.1 1.6-4.1 5-7.3 9.9-7.4 6.4-.1 11 5.3 10.3 12.3-1 10-11.6 18.3-20.1 24.9z"/>
+            <path d="M20.4 9.1c-1.4-1.6-3.3-2.5-5.5-2.5"/>
+          </svg>
+          <h3 class="rsvp-gracias__titulo" tabindex="-1" data-rsvp-gracias-titulo>¡Gracias!</h3>
+          <p class="cursiva rsvp-gracias__texto" data-rsvp-gracias-texto></p>
+          <p class="rsvp-gracias__resumen" data-rsvp-gracias-resumen hidden></p>
+          <button type="button" class="boton" data-rsvp-modificar>Modificar mi respuesta</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
 
   <!-- ============ LISTA DE BODAS ============ -->
   <section class="seccion regalo" id="lista-de-bodas" aria-labelledby="t-regalo">
