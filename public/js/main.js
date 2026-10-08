@@ -179,25 +179,52 @@
     requestAnimationFrame(paso);
   }
 
+  /** Tras la ilustración ya incrustada: prepara el trazo o el vuelo del avión. */
+  function montarIlustracion(caja, svg) {
+    const ruta = $('#ruta', svg);
+    if (ruta) {
+      let fijar = null;
+      try { fijar = prepararRuta(svg); } catch (e) { console.warn('Ruta sin animar', e); } // primero se prepara (busca #ruta y #avion)…
+      const sufijo = caja.className || 'x';
+      ruta.id = 'ruta-' + sufijo;      // …y después se hacen únicos los ids (hay una ruta horizontal y otra vertical)
+      ruta.classList.add('ruta__linea'); // el color terracota lo pone el CSS
+      const avion = $('#avion', svg);
+      if (avion) avion.id = 'avion-' + sufijo;
+      if (!fijar) return;
+      alEntrar(caja, () => volar(fijar), { threshold: 0.35 });
+    } else {
+      prepararTrazos(svg);
+      alEntrar(caja, () => caja.classList.add('dibuja'), { threshold: 0.25 });
+    }
+  }
+
+  /** Puerta de carga: mientras suena la entrada de la portada no se descarga ni se procesa nada que esté más abajo
+      (así la animación va fluida y las fuentes y la foto tienen todo el ancho de banda). Se abre cuando termina,
+      en cuanto la persona interactúa o si la entrada no se reproduce (segunda visita, movimiento reducido). */
+  function puertaDeCarga() {
+    return new Promise((abierta) => {
+      if (root.classList.contains('intro-vista') || reducirMovimiento) { abierta(); return; }
+      const eventos = ['wheel', 'touchstart', 'pointerdown', 'keydown', 'scroll'];
+      const abrir = () => { eventos.forEach((e) => window.removeEventListener(e, abrir)); abierta(); };
+      eventos.forEach((e) => window.addEventListener(e, abrir, { passive: true }));
+      setTimeout(abrir, Math.max(0, 4300 - performance.now()));
+    });
+  }
+
+  /** Las ilustraciones se piden cuando quedan a un par de pantallas de distancia (y solo las que se ven en este
+      ancho: la ruta vertical o la horizontal, no las dos). */
   function initIlustraciones() {
-    $$('[data-svg]').forEach(async (caja) => {
+    const cajas = $$('[data-svg]');
+    const cargar = async (caja) => {
       const svg = await cargarSvg(caja);
-      if (!svg) return;
-      const ruta = $('#ruta', svg);
-      if (ruta) {
-        let fijar = null;
-        try { fijar = prepararRuta(svg); } catch (e) { console.warn('Ruta sin animar', e); } // primero se prepara (busca #ruta y #avion)…
-        const sufijo = caja.className || 'x';
-        ruta.id = 'ruta-' + sufijo;      // …y después se hacen únicos los ids (hay una ruta horizontal y otra vertical)
-        ruta.classList.add('ruta__linea'); // el color terracota lo pone el CSS
-        const avion = $('#avion', svg);
-        if (avion) avion.id = 'avion-' + sufijo;
-        if (!fijar) return;
-        alEntrar(caja, () => volar(fijar), { threshold: 0.35 });
-      } else {
-        prepararTrazos(svg);
-        alEntrar(caja, () => caja.classList.add('dibuja'), { threshold: 0.25 });
-      }
+      if (svg) montarIlustracion(caja, svg);
+    };
+    if (!('IntersectionObserver' in window)) { cajas.forEach(cargar); return; }
+    puertaDeCarga().then(() => {
+      const io = new IntersectionObserver((entradas) => {
+        entradas.forEach((e) => { if (e.isIntersecting) { io.unobserve(e.target); cargar(e.target); } });
+      }, { rootMargin: '1500px 0px' });
+      cajas.forEach((c) => io.observe(c)); // un elemento con display:none nunca entra: no se descarga hasta que se muestre
     });
   }
 

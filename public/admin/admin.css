@@ -1,5 +1,9 @@
 /* Panel de confirmaciones (/admin) · usa los tokens de css/base.css */
 
+/* Peso 600 de Inter: solo lo usa el panel (la página pública no lo descarga) */
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 600; font-display: swap;
+  src: url("../assets/fonts/inter-latin-600-normal.woff2") format("woff2"); }
+
 .admin { --max: 960px; padding-block: clamp(2rem, 6vw, 3.5rem) 4rem; font-family: var(--f-sans); font-size: 1rem; line-height: 1.45; }
 .admin [hidden] { display: none !important; }
 .admin code { font: 500 .875em/1 ui-monospace, SFMono-Regular, Menlo, monospace; background: rgba(43, 42, 40, .07); padding: .1em .35em; border-radius: 3px; }

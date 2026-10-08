@@ -8,6 +8,7 @@
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#f3efe4">
   <meta name="color-scheme" content="light">
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
 
   <!-- Al compartir el enlace (WhatsApp, etc.). Cambia SITE_URL por el dominio definitivo (3 sitios: og:url, og:image y twitter:image). -->
   <meta property="og:type" content="website">
@@ -26,7 +27,7 @@
   <link rel="icon" href="assets/ilustraciones/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
   <link rel="preload" href="assets/fonts/inter-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/img/hero-vertical-740.webp" as="image" type="image/webp" imagesrcset="assets/img/hero-vertical-480.webp 480w, assets/img/hero-vertical-740.webp 740w" imagesizes="(min-width: 900px) 460px, 78vw" fetchpriority="high">
+  <link rel="preload" href="assets/img/hero-vertical-740.webp" as="image" type="image/webp" imagesrcset="assets/img/hero-vertical-480.webp 480w, assets/img/hero-vertical-620.webp 620w, assets/img/hero-vertical-740.webp 740w" imagesizes="(min-width: 900px) 460px, 78vw" fetchpriority="high">
 
   <script src="js/boot.js"></script>
   <link rel="stylesheet" href="css/base.css">
@@ -65,7 +66,7 @@
         <div class="ventana__foto">
           <img
             src="assets/img/hero-vertical-740.webp"
-            srcset="assets/img/hero-vertical-480.webp 480w, assets/img/hero-vertical-740.webp 740w"
+            srcset="assets/img/hero-vertical-480.webp 480w, assets/img/hero-vertical-620.webp 620w, assets/img/hero-vertical-740.webp 740w"
             sizes="(min-width: 900px) 460px, 78vw"
             width="739" height="924"
             alt="Marta y Jorge abrazados junto a un fiordo noruego, con una caña de pescar"
@@ -88,6 +89,8 @@
       </div>
       <a class="boton boton--solido portada__cta" href="#confirmacion">Confirmar asistencia</a>
     </div>
+
+    <span class="portada__baja intro" style="--d:4.9s" aria-hidden="true"></span>
   </header>
 
   <!-- ============ AGENDA ============ -->
@@ -127,6 +130,13 @@
           <a class="boton" href="https://www.google.com/maps/search/?api=1&amp;query=La+Posada+Real+del+Pinar+Pozal+de+Gallinas" target="_blank" rel="noopener">¿Cómo llegar?<span class="sr-only"> a La Posada Real del Pinar (se abre en Google Maps)</span></a>
         </article>
       </div>
+
+      <p class="agenda__calendario revelar">
+        <a href="boda-marta-y-jorge.ics">
+          <svg class="icono" aria-hidden="true" focusable="false"><use href="assets/ilustraciones/iconos.svg#calendario"></use></svg>
+          <span>Añadir al calendario</span>
+        </a>
+      </p>
     </div>
   </section>
 
@@ -181,10 +191,10 @@
   <figure class="interludio revelar" aria-hidden="false">
     <div class="interludio__marco marco arco">
       <img
-        src="assets/img/playa-640.webp"
-        srcset="assets/img/playa-640.webp 640w, assets/img/playa-1000.webp 1000w"
+        src="assets/img/playa-600.webp"
+        srcset="assets/img/playa-480.webp 480w, assets/img/playa-600.webp 600w, assets/img/playa-840.webp 840w"
         sizes="(min-width: 900px) 340px, 72vw"
-        width="640" height="853" loading="lazy" decoding="async"
+        width="600" height="800" loading="lazy" decoding="async"
         alt="Marta y Jorge tumbados en una playa de piedras, bajo los pinos, mirando el mar">
     </div>
   </figure>

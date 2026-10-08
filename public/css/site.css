@@ -24,13 +24,22 @@
 .arco img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: inherit; filter: saturate(.93) contrast(.99); }
 
 /* ---------- PORTADA ---------- */
+/* Todo se dimensiona con el ancho (vw) Y con el alto de la pantalla (svh), para que la portada quede bien en
+   móviles bajos, apaisados, tablets y monitores:
+     --n     ancho de los nombres (el adorno de arriba mide lo mismo)
+     --foto  ancho de la foto en arco (proporción 4:5)
+   Móvil en vertical: columna única. Apaisado (≥ 560 px de ancho): dos columnas. */
 .portada {
+  --alto: var(--alto-pantalla, 100vh);   /* 100svh donde existe (ver base.css), 100vh en navegadores antiguos */
+  --pad-v: clamp(1.25rem, 4vh, 3.5rem);
+  --n: min(80vw, 22rem);
   --foto: min(70vw, 20rem);
+  position: relative;
   min-height: 100vh; min-height: 100svh;
   display: grid; justify-items: center; align-content: center;
   grid-template-areas: "texto" "foto" "extra";
   gap: clamp(1.1rem, 3vh, 2.5rem);
-  padding: clamp(1.25rem, 4vh, 3.5rem) var(--gutter) clamp(2.5rem, 7vh, 4.5rem);
+  padding: var(--pad-v) var(--gutter) clamp(2.5rem, 7vh, 4.5rem);
   text-align: center;
 }
 .portada__texto { grid-area: texto; display: grid; justify-items: center; gap: .55rem; }
@@ -38,35 +47,86 @@
 .portada__foto { grid-area: foto; width: var(--foto); margin: 0; }
 .portada__extra { grid-area: extra; display: grid; justify-items: center; gap: 1.75rem; }
 
-.portada__fecha { margin-top: .6rem; display: flex; gap: .75em; align-items: center; justify-content: center; font-size: .8125rem; letter-spacing: .3em; color: var(--tinta-suave); }
+.portada__fecha { margin-top: .6rem; display: flex; flex-wrap: wrap; gap: .25em .75em; align-items: center; justify-content: center; font-size: .8125rem; letter-spacing: min(.3em, 2vw); color: var(--tinta-suave); }
 .portada__punto { color: var(--terracota); }
 
 /* Cuenta atrás: sobria, sin cifras que parpadeen */
 .cuenta { display: none; justify-items: center; gap: .5rem; }
 .js .cuenta { display: grid; }
 .cuenta__fila { display: flex; justify-content: center; }
-.cuenta__item { display: grid; justify-items: center; min-width: 4.4rem; padding-inline: clamp(.5rem, 3vw, 1.1rem); position: relative; }
+.cuenta__item { display: grid; justify-items: center; min-width: min(4.4rem, 27vw); padding-inline: clamp(.5rem, 3vw, 1.1rem); position: relative; }
 .cuenta__item + .cuenta__item::before { content: ""; position: absolute; left: 0; top: 18%; bottom: 18%; border-left: 1px solid var(--linea); }
-.cuenta__num { font-family: var(--f-script); font-weight: 600; font-size: clamp(2.6rem, 1.8rem + 3vw, 3.6rem); line-height: 1; font-variant-numeric: tabular-nums; }
-.cuenta__txt { margin-top: .4rem; font: 500 .6875rem/1 var(--f-sans); letter-spacing: .24em; text-transform: uppercase; color: var(--tinta-tenue); }
+.cuenta__num { font-family: var(--f-script); font-weight: 600; font-size: min(clamp(2.6rem, 1.8rem + 3vw, 3.6rem), 15vw); line-height: 1; font-variant-numeric: tabular-nums; }
+.cuenta__txt { margin-top: .4rem; font: 500 .6875rem/1 var(--f-sans); letter-spacing: min(.24em, 1.3vw); text-transform: uppercase; color: var(--tinta-tenue); }
 .cuenta__estado { font-size: clamp(2rem, 1.5rem + 2vw, 2.75rem); color: var(--terracota); }
 
-@media (min-width: 900px) {
+/* Pista para seguir bajando (solo cuando la portada cabe entera en la pantalla; se apaga al hacer scroll) */
+.portada__baja { display: none; }
+.portada.scrolled .portada__baja { opacity: 0; transition: opacity .4s var(--ease); }
+
+/* Tablet en vertical: la portada crece con el alto disponible (la foto siempre entera en la primera pantalla) */
+@media (min-width: 600px) and (orientation: portrait) {
   .portada {
-    --foto: min(34vw, 28.75rem);
+    --n: min(80vw, 30rem, max(12rem, calc((var(--alto) - 2 * var(--pad-v) - 7.2rem) / 2.23)));
+    --foto: calc(var(--n) * .85);
+  }
+}
+
+/* Apaisado (móvil girado, tablet, portátil, monitor): dos columnas */
+@media (orientation: landscape) and (min-width: 560px) {
+  .portada {
+    --pad-v: clamp(.75rem, calc(var(--alto) * .045), 3.5rem);
+    --n: min(29vw, 23rem, max(12rem, calc((var(--alto) - 2 * var(--pad-v) - 17.6rem) * .85)));
+    --foto: min(34vw, 28.75rem, max(9rem, calc((var(--alto) - 2 * var(--pad-v) - 1.5rem) * .8)));
     grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
     grid-template-areas: "texto foto" "extra foto";
     grid-template-rows: auto auto;
     align-content: center; justify-items: center; align-items: center;
-    column-gap: clamp(2rem, 5vw, 5.5rem);
-    row-gap: clamp(1.75rem, 4vh, 2.75rem);
-    width: min(100%, 1240px); margin-inline: auto;
+    column-gap: clamp(1.25rem, 5vw, 5.5rem);
+    row-gap: clamp(1rem, 4vh, 2.75rem);
+    width: min(100%, 77.5rem); margin-inline: auto;
+    padding-block: var(--pad-v);
     padding-inline: var(--gutter);
   }
   .portada__texto { align-self: end; }
   .portada__extra { align-self: start; }
   .portada__foto { justify-self: center; }
+  .portada__ruta { margin-bottom: .6rem; }
+  /* la columna de texto es más estrecha que la pantalla: la cuenta atrás no puede depender solo del tamaño de letra */
+  .cuenta__item { min-width: min(4.4rem, 9vw); }
+  .cuenta__num { font-size: min(clamp(2.6rem, 1.8rem + 3vw, 3.6rem), 6.5vw); }
 }
+/* Pantallas apaisadas muy bajas (móvil girado, portátiles pequeños): se compacta para que nombres, fecha y foto
+   quepan sin hacer scroll; el adorno de arriba se omite y la cuenta atrás se reduce */
+@media (orientation: landscape) and (min-width: 560px) and (max-height: 620px) {
+  .portada {
+    --pad-v: clamp(.6rem, calc(var(--alto) * .045), 1.5rem);
+    --n: min(34vw, 23rem, max(9rem, calc((var(--alto) - 2 * var(--pad-v) - 9.75rem) * 1.17)));
+    --foto: min(34vw, 28.75rem, max(7rem, calc((var(--alto) - 2 * var(--pad-v)) * .8)));
+    row-gap: .5rem;
+  }
+  .portada__ruta { display: none; }
+  .portada__texto { gap: .3rem; }
+  .portada__fecha { margin-top: .3rem; font-size: .75rem; }
+  .portada__extra { gap: .6rem; }
+  .cuenta { gap: .2rem; }
+  .cuenta__num { font-size: min(1.75rem, 6.5vw); }
+  .cuenta__txt { margin-top: .2rem; font-size: .625rem; }
+  .cuenta__item { min-width: min(3.6rem, 9vw); }
+  .portada__cta { min-height: 2.5rem; padding: .6rem 1.4rem; }
+}
+@media (orientation: landscape) and (min-width: 900px) and (min-height: 640px) {
+  .portada__baja {
+    display: block; position: absolute; left: 50%; bottom: clamp(.75rem, calc(var(--alto) * .026), 1.5rem);
+    width: 1px; height: 2.6rem; margin-left: -.5px; pointer-events: none;
+    background: linear-gradient(var(--linea-fuerte), transparent);
+  }
+  .portada__baja::after {
+    content: ""; position: absolute; left: -2px; top: 0; width: 5px; height: 5px; border-radius: 50%;
+    background: var(--terracota); animation: baja 2.8s var(--ease) infinite;
+  }
+}
+@keyframes baja { 0% { transform: translateY(0); opacity: 0; } 25% { opacity: 1; } 75% { opacity: 1; } 100% { transform: translateY(2.4rem); opacity: 0; } }
 
 /* ---------- AGENDA ---------- */
 .agenda__grid { display: grid; justify-items: center; row-gap: 1.25rem; }
@@ -77,10 +137,10 @@
 
 .evento { display: grid; justify-items: center; gap: .4rem; text-align: center; margin-bottom: clamp(.5rem, 3vw, 1.5rem); }
 .evento .boton { margin-top: 1rem; }
-.evento__lugar { font-family: var(--f-script); font-weight: 600; font-size: var(--fs-h3); line-height: 1.02; margin-top: .3rem; text-wrap: balance; }
+.evento__lugar { font-family: var(--f-script); font-weight: 600; font-size: min(var(--fs-h3), 15vw); overflow-wrap: anywhere; line-height: 1.02; margin-top: .3rem; text-wrap: balance; }
 
 .ruta { width: 100%; display: grid; justify-items: center; margin-block: .75rem; }
-.ruta__v { width: min(6.25rem, 28vw); }
+.ruta__v { width: min(6.25rem, 28vw); aspect-ratio: 170 / 560; }
 .ruta__h { display: none; }
 .ruta svg { width: 100%; height: auto; overflow: visible; }
 .ruta__linea { stroke: var(--terracota); }
@@ -96,11 +156,19 @@
   .ilu--palomar { grid-area: i2; --w: 100%; max-width: 27rem; justify-self: center; margin-top: 0; }
   .ruta { grid-area: r; align-self: center; margin: 0 0 4.5rem; }
   .ruta__v { display: none; }
-  .ruta__h { display: block; width: 100%; }
+  .ruta__h { display: block; width: 100%; aspect-ratio: 480 / 150; }
   .evento { margin-top: 2rem; margin-bottom: 0; align-self: start; }
   .evento--ceremonia { grid-area: t1; }
   .evento--celebracion { grid-area: t2; }
 }
+
+/* Añadir al calendario (archivo .ics) */
+.agenda__calendario { margin-top: clamp(2.5rem, 6vw, 3.5rem); text-align: center; }
+.agenda__calendario a {
+  display: inline-flex; align-items: center; gap: .7em; padding: .5rem .25rem;
+  font: 500 var(--fs-etiqueta)/1.4 var(--f-sans); letter-spacing: .22em; text-transform: uppercase;
+}
+.agenda__calendario .icono { width: 1.5rem; height: 1.5rem; }
 
 /* Ilustraciones que "se dibujan" al entrar en pantalla (js/main.js añade .dibuja) */
 .js .ilu svg .l { stroke-dasharray: 1 2; stroke-dashoffset: 1; }
@@ -115,13 +183,13 @@
 .transporte__lista { display: grid; gap: clamp(2rem, 6vw, 3rem); }
 .medio { display: grid; grid-template-columns: 3rem 1fr; column-gap: 1.35rem; align-items: start; }
 .medio__icono { width: 3rem; height: 3rem; margin-top: .15rem; }
-.medio__titulo { font-family: var(--f-script); font-weight: 600; font-size: clamp(2.1rem, 1.7rem + 1.8vw, 2.7rem); line-height: 1.05; }
+.medio__titulo { font-family: var(--f-script); font-weight: 600; font-size: min(clamp(2.1rem, 1.7rem + 1.8vw, 2.7rem), 13vw); line-height: 1.05; }
 .medio p { margin-top: .3rem; }
 
 /* ---------- ALOJAMIENTO ---------- */
 .alojamiento__texto { max-width: 36ch; margin-inline: auto; text-align: center; text-wrap: pretty; }
 .alojamiento__contacto { display: flex; justify-content: center; margin-top: 1.5rem; }
-.alojamiento__mapa { --max: 900px; margin-top: clamp(2.25rem, 6vw, 3.5rem); }
+.alojamiento__mapa { --max: 56.25rem; margin-top: clamp(2.25rem, 6vw, 3.5rem); }
 .alojamiento__mapa .mapa { width: 100%; max-width: 100%; aspect-ratio: 4 / 3; min-height: 19rem; border-radius: var(--radio); background-color: var(--papel-2); }
 .mapa__pie { margin-top: 1.5rem; text-align: center; font: 500 var(--fs-etiqueta)/1.4 var(--f-sans); letter-spacing: .22em; text-transform: uppercase; }
 @media (min-width: 900px) { .alojamiento__mapa .mapa { aspect-ratio: 16 / 9; } }
@@ -135,19 +203,19 @@
 .regalo__texto { max-width: 36ch; margin-inline: auto; text-wrap: pretty; }
 .iban { display: grid; justify-items: center; gap: 1.1rem; margin: 2rem auto 0; }
 .iban__numero {
-  display: flex; flex-wrap: wrap; justify-content: center; gap: .35rem .85rem;
-  padding: 1.05rem 1.5rem; max-width: 100%;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: .35rem min(.85rem, 3vw);
+  padding: 1.05rem min(1.5rem, 4vw); max-width: 100%;
   border: 1px dashed var(--linea-fuerte); border-radius: var(--radio); background: rgba(251, 248, 241, .55);
-  font: 500 clamp(1.05rem, .9rem + 1vw, 1.3rem)/1.25 var(--f-sans); letter-spacing: .08em; font-variant-numeric: tabular-nums;
+  font: 500 min(clamp(1.05rem, .9rem + 1vw, 1.3rem), 6.3vw)/1.25 var(--f-sans); letter-spacing: .08em; font-variant-numeric: tabular-nums;
 }
 @media (max-width: 30em) { .iban__numero { display: grid; grid-template-columns: repeat(3, auto); justify-content: center; } }
 .iban__copiar .icono { width: 1.15rem; height: 1.15rem; color: currentColor; }
 .iban__copiar.copiado { background: var(--tinta); color: var(--papel); }
-.regalo__gracias { font-size: clamp(2.2rem, 1.7rem + 2.2vw, 3rem); margin-top: 2.25rem; color: var(--terracota); }
+.regalo__gracias { font-size: min(clamp(2.2rem, 1.7rem + 2.2vw, 3rem), 13vw); margin-top: 2.25rem; color: var(--terracota); }
 
 /* ---------- CIERRE ---------- */
 .cierre {
-  position: relative; display: grid; justify-items: center; align-content: start;
+  position: relative; display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; align-content: start;
   min-height: min(100vh, 62rem); min-height: min(100svh, 62rem); text-align: center; overflow: hidden;
   padding: clamp(2.5rem, 9vh, 5.5rem) var(--gutter) 0;
 }
@@ -155,8 +223,8 @@
 .cierre__foto img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 78%;
   -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 30%); mask-image: linear-gradient(to bottom, transparent 0, #000 30%); }
 .cierre__texto { position: relative; z-index: 1; display: grid; justify-items: center; gap: .9rem; }
-.cierre__titulo { font-weight: 700; font-size: clamp(4rem, 2.4rem + 8vw, 8.5rem); line-height: .95; }
-.cierre__firma { color: var(--tinta); letter-spacing: .28em; text-shadow: 0 0 .9em rgba(245, 240, 228, .9); }
+.cierre__titulo { font-weight: 700; -webkit-text-stroke: .008em currentColor; font-size: min(clamp(4rem, 2.4rem + 8vw, 8.5rem), 19vw); line-height: .95; overflow-wrap: anywhere; }
+.cierre__firma { max-width: 100%; color: var(--tinta); letter-spacing: .28em; text-shadow: 0 0 .9em rgba(245, 240, 228, .9); }
 @media (min-width: 900px) { .cierre__foto img { object-position: 50% 62%; } }
 
 .pie { display: grid; justify-items: center; gap: .6rem; padding: 2.25rem var(--gutter) 2.75rem; text-align: center; }
@@ -174,7 +242,7 @@
 
 /* Tablet: la maqueta móvil llega hasta 900 px, así que las ilustraciones crecen un poco */
 @media (min-width: 600px) and (max-width: 899.98px) {
-  .ilu--san-pablo { --w: 24rem; }
-  .ilu--palomar { --w: 30rem; }
-  .ruta__v { width: 7.5rem; }
+  .ilu--san-pablo { --w: min(24rem, 84vw); }
+  .ilu--palomar { --w: min(30rem, 92vw); }
+  .ruta__v { width: min(7.5rem, 28vw); }
 }

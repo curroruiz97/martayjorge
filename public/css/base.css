@@ -5,23 +5,19 @@
    Todo son variables: para retocar el estilo basta con tocar :root.
    ========================================================================== */
 
-/* ---------- Fuentes (autoalojadas, subconjunto latino) ---------- */
-@font-face { font-family: "Caveat"; font-style: normal; font-weight: 400 700; font-display: swap;
-  src: url("../assets/fonts/caveat-latin-wght-normal.woff2") format("woff2"); }
-@font-face { font-family: "Cormorant Garamond"; font-style: normal; font-weight: 400; font-display: swap;
-  src: url("../assets/fonts/cormorant-garamond-latin-400-normal.woff2") format("woff2"); }
-@font-face { font-family: "Cormorant Garamond"; font-style: normal; font-weight: 600; font-display: swap;
-  src: url("../assets/fonts/cormorant-garamond-latin-600-normal.woff2") format("woff2"); }
+/* ---------- Fuentes (autoalojadas y recortadas a lo que usa la página: ~80 KB en total) ----------
+   · Caveat solo en peso 600 (títulos y cifras). El peso 700 del cierre se refuerza con un trazo finísimo.
+   · Cormorant solo en cursiva: todo el texto serif de la página es cursivo (si algún día se necesitara redonda,
+     añadir el fichero y su @font-face; mientras tanto el texto «normal» saldría también en cursiva).
+   · Inter 400/500 para etiquetas y formulario. Todas con subconjunto latino (español y lenguas vecinas). */
+@font-face { font-family: "Caveat"; font-style: normal; font-weight: 600; font-display: swap;
+  src: url("../assets/fonts/caveat-latin-600-normal.woff2") format("woff2"); }
 @font-face { font-family: "Cormorant Garamond"; font-style: italic; font-weight: 400; font-display: swap;
   src: url("../assets/fonts/cormorant-garamond-latin-400-italic.woff2") format("woff2"); }
-@font-face { font-family: "Cormorant Garamond"; font-style: italic; font-weight: 500; font-display: swap;
-  src: url("../assets/fonts/cormorant-garamond-latin-500-italic.woff2") format("woff2"); }
 @font-face { font-family: "Inter"; font-style: normal; font-weight: 400; font-display: swap;
   src: url("../assets/fonts/inter-latin-400-normal.woff2") format("woff2"); }
 @font-face { font-family: "Inter"; font-style: normal; font-weight: 500; font-display: swap;
   src: url("../assets/fonts/inter-latin-500-normal.woff2") format("woff2"); }
-@font-face { font-family: "Inter"; font-style: normal; font-weight: 600; font-display: swap;
-  src: url("../assets/fonts/inter-latin-600-normal.woff2") format("woff2"); }
 
 /* ---------- Tokens ---------- */
 :root {
@@ -53,19 +49,27 @@
   --fs-h3: clamp(2rem, 1.6rem + 1.8vw, 2.75rem);
 
   /* espaciado y layout */
-  --gutter: clamp(1.25rem, 6vw, 3rem);
-  --max: 1080px;
+  --gutter: clamp(min(1.25rem, 5.5vw), 6vw, 3rem);   /* con la letra muy ampliada el margen no se come la pantalla */
+  --max: 67.5rem;
   --sp-1: .5rem; --sp-2: 1rem; --sp-3: 1.5rem; --sp-4: 2.5rem; --sp-5: 4rem; --sp-6: 6rem;
   --seccion: clamp(4.5rem, 11vw, 9rem);
   --radio: 6px;
 
   /* movimiento */
   --ease: cubic-bezier(.22, .61, .36, 1);
+
+  /* alto de pantalla: 100svh (sin la barra del navegador) donde se entiende; 100vh si no */
+  --alto-pantalla: 100vh;
 }
+@supports (height: 100svh) { :root { --alto-pantalla: 100svh; } }
 
 /* ---------- Reset mínimo ---------- */
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-behavior: smooth; }
+/* Pantallas grandes: todo (que está en rem) crece un poco, respetando el tamaño de letra que haya elegido la persona */
+@media (min-width: 1800px) { html { font-size: 112.5%; } }
+@media (min-width: 2300px) { html { font-size: 125%; } }
+@media (min-width: 3000px) { html { font-size: 150%; } }
 body, h1, h2, h3, h4, p, figure, blockquote, dl, dd { margin: 0; }
 img, svg, picture, video { display: block; max-width: 100%; height: auto; }
 button, input, select, textarea { font: inherit; color: inherit; }
@@ -96,7 +100,7 @@ a:hover { text-decoration-thickness: 2px; }
 
 /* ---------- Layout ---------- */
 .contenedor { width: min(100% - 2 * var(--gutter), var(--max)); margin-inline: auto; }
-.contenedor--estrecho { --max: 680px; }
+.contenedor--estrecho { --max: 42.5rem; }
 .seccion { padding-block: var(--seccion); position: relative; }
 .seccion[id] { scroll-margin-top: 1rem; }
 
@@ -112,8 +116,8 @@ a:hover { text-decoration-thickness: 2px; }
   font-family: var(--f-script); font-weight: 600; line-height: 1;
   letter-spacing: .005em; color: var(--tinta);
 }
-.titulo { font-size: var(--fs-h2); text-wrap: balance; }
-.titulo--m { font-size: var(--fs-h3); }
+.titulo { font-size: min(var(--fs-h2), 21vw); text-wrap: balance; overflow-wrap: anywhere; }   /* el tope en vw evita que una palabra larga se salga con la letra muy ampliada */
+.titulo--m { font-size: min(var(--fs-h3), 15vw); }
 /* Texto en cursiva serif, como en las capturas de referencia */
 .cursiva { font-style: italic; font-weight: 400; }
 .suave { color: var(--tinta-suave); }
@@ -122,11 +126,11 @@ a:hover { text-decoration-thickness: 2px; }
 /* ---------- Botones: píldora de línea fina ---------- */
 .boton {
   display: inline-flex; align-items: center; justify-content: center; gap: .65em;
-  min-height: 3rem; padding: .85rem 1.9rem;
+  min-height: 3rem; padding: .85rem min(1.9rem, 5vw); max-width: 100%; text-align: center;
   border: 1px solid var(--tinta); border-radius: 999px;
   background: transparent; color: var(--tinta);
   font-family: var(--f-sans); font-weight: 500; font-size: var(--fs-etiqueta);
-  letter-spacing: .22em; text-transform: uppercase; line-height: 1; text-decoration: none;
+  letter-spacing: min(.22em, 1.4vw); text-transform: uppercase; line-height: 1.15; text-decoration: none;
   transition: background-color .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease), transform .3s var(--ease);
 }
 .boton:hover { background: var(--tinta); color: var(--papel); text-decoration: none; }
@@ -145,7 +149,8 @@ a:hover { text-decoration-thickness: 2px; }
 
 /* ---------- Utilidades ---------- */
 [hidden] { display: none !important; }
-.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  font-family: system-ui, sans-serif; font-weight: 400; } /* fuente del sistema: así este texto invisible no hace descargar tipografías web */
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

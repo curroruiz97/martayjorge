@@ -10,6 +10,29 @@
   const vista = root.classList.contains('intro-vista');
   const DURACION_MS = 6200; // pasado este tiempo la entrada ya ha terminado
 
+  /* Pista para seguir bajando: se apaga en cuanto la persona hace scroll */
+  const alBajar = () => hero.classList.toggle('scrolled', window.scrollY > 24);
+  window.addEventListener('scroll', alBajar, { passive: true });
+  alBajar();
+
+  /* ---------- 0. Conexión lenta: las puertas no se abren hasta que la foto esté lista ---------- */
+  const fotoHero = hero.querySelector('.ventana img');
+  if (!reducir && !vista && fotoHero && !fotoHero.complete) {
+    // tiempo que lleva sonando la entrada (todas las animaciones arrancan en el primer fotograma)
+    const transcurrido = () => {
+      try { return hero.getAnimations({ subtree: true }).reduce((m, a) => Math.max(m, a.currentTime || 0), 0); } catch (e) { return 0; }
+    };
+    // a los 2,6 s, justo antes de que empiecen las puertas (3,0 s), si la foto aún no ha llegado se espera a que llegue
+    setTimeout(() => {
+      if (fotoHero.complete) return;
+      hero.classList.add('espera-foto');
+      const seguir = () => hero.classList.remove('espera-foto');
+      fotoHero.addEventListener('load', seguir, { once: true });
+      fotoHero.addEventListener('error', seguir, { once: true });
+      setTimeout(seguir, 9000); // pase lo que pase, no se espera más de 9 s
+    }, Math.max(0, 2600 - transcurrido()));
+  }
+
   /* ---------- 1. Avance rápido: si la persona hace scroll/toca/teclea durante la entrada, se acelera ---------- */
   let acelerada = false;
   const eventos = ['wheel', 'touchstart', 'pointerdown', 'keydown'];
@@ -41,6 +64,7 @@
   if (reducir) return;
   const texto = hero.querySelector('.portada__texto');
   const foto = hero.querySelector('.portada__foto');
+  const extra = hero.querySelector('.portada__extra');   // cuenta atrás y botón: se mueve igual que la foto para que esta no los pise
   const dentro = hero.querySelector('.ventana__foto');
   if (!texto || !foto || !dentro) return;
 
@@ -56,10 +80,13 @@
     pendiente = false;
     curX += (objX - curX) * 0.07;
     curY += (objY - curY) * 0.07;
-    const y = Math.min(sy, window.innerHeight * 1.1);
-    // texto: sigue al scroll un poco más lento; foto: aún más; imagen dentro de la ventana: contra-movimiento
-    texto.style.transform = `translate3d(${(curX * -5).toFixed(2)}px, ${(y * 0.1 + curY * -3).toFixed(2)}px, 0)`;
-    foto.style.transform = `translate3d(${(curX * 7).toFixed(2)}px, ${(y * 0.2 + curY * 5).toFixed(2)}px, 0)`;
+    // el efecto se detiene pronto (a los 450 px de scroll): así ninguna capa llega a pisar a otra ni a la sección siguiente
+    const y = Math.min(sy, 450);
+    // texto: sigue al scroll un poco más lento; foto y lo que va debajo (cuenta atrás, botón): aún más, y a la vez, para que no se
+    // solapen; imagen dentro de la ventana: contra-movimiento
+    texto.style.transform = `translate3d(${(curX * -5).toFixed(2)}px, ${(y * 0.08 + curY * -3).toFixed(2)}px, 0)`;
+    foto.style.transform = `translate3d(${(curX * 7).toFixed(2)}px, ${(y * 0.16 + curY * 5).toFixed(2)}px, 0)`;
+    if (extra) extra.style.transform = `translate3d(0, ${(y * 0.16).toFixed(2)}px, 0)`;
     dentro.style.transform = `translate3d(${limite(curX * -9, 15).toFixed(2)}px, ${limite(y * 0.05 - curY * 7, 15).toFixed(2)}px, 0) scale(1.1)`;
     if (Math.abs(objX - curX) > 0.002 || Math.abs(objY - curY) > 0.002) solicitar();
   }

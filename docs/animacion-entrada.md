@@ -13,7 +13,7 @@ rebotes; todo es lento, suave y se puede saltar en cualquier momento.
 | 1,2 – 2,8 | Se dibujan a línea las **puertas en arco** (contorno, costura, marcos y pomos) y después se rellenan de papel |
 | 3,0 – 4,5 | Las puertas **se abren en 3D**, con su sombra, y la foto aparece «enfocándose» (de borrosa a nítida, con un leve acercamiento) |
 | 3,5 – 4,6 | Fecha, cuenta atrás y botón entran con un fundido |
-| después | La foto «respira» (≈ 3 % de zoom en 32 s) y las capas tienen un parallax muy sutil con el scroll y, en escritorio, con el ratón |
+| después | La foto «respira» (≈ 3 % de zoom en 32 s), las capas tienen un parallax muy sutil con el scroll y, en escritorio, con el ratón, y aparece una pista discreta (una línea con un punto que baja) para seguir bajando |
 
 ## Cómo está hecha
 
@@ -21,10 +21,14 @@ rebotes; todo es lento, suave y se puede saltar en cualquier momento.
   el estado normal de cada elemento es el **final**. Por eso, sin animaciones la portada sale completa al instante.
 - **Se salta**: si la persona hace scroll, toca o pulsa una tecla durante la entrada, todo se acelera ×7 y termina
   en menos de un segundo ([`public/js/intro.js`](../public/js/intro.js)).
-- **Solo la primera vez por sesión**: al recargar o volver a abrir la página en la misma pestaña, la portada sale
-  completa sin repetir ([`public/js/boot.js`](../public/js/boot.js)).
+- **Una vez cada 12 horas por dispositivo**: quien vuelva a abrir el enlace ese mismo día (por ejemplo, para rellenar
+  el formulario) ve la portada completa al instante, sin repetir la entrada
+  ([`public/js/boot.js`](../public/js/boot.js); se guarda la hora en `localStorage`, y si el navegador no lo permite,
+  al menos una vez por pestaña).
   - `?intro=1` en la dirección fuerza que se vea otra vez (útil para enseñarla): `https://tu-dominio/?intro=1`.
   - `?intro=0` la omite.
+- **Conexión lenta**: si a los 2,6 s la foto aún no ha llegado, las puertas esperan a que llegue (como mucho 9 s) en
+  lugar de abrirse sobre un hueco vacío.
 - **Accesibilidad**: con «reducir movimiento» activado en el sistema no hay animación (portada completa
   al instante) y tampoco parallax. Los nombres siguen siendo texto para lectores de pantalla (`<h1>` con el texto
   «Marta y Jorge»; el SVG va oculto para ellos).
@@ -38,6 +42,8 @@ rebotes; todo es lento, suave y se puede saltar en cualquier momento.
 | Que fecha/cuenta atrás/botón entren antes o después | `style="--d:…"` de esos elementos en `public/index.html` |
 | Escribir los nombres más rápido o despacio | `VELOCIDAD=9000 scripts/intro/generar.sh` (por defecto 7600 unidades/s) y volver a pegar el SVG |
 | Quitar la foto «respirando» | borrar `respira …` de `.ventana img` en `intro.css` |
+| Que la entrada se repita con más o menos frecuencia | `12 * 36e5` (12 horas) en `public/js/boot.js` |
+| Quitar la pista para seguir bajando | borrar `<span class="portada__baja …">` de `public/index.html` |
 | Desactivar toda la entrada | añadir la clase `intro-vista` a `<html>` en `index.html` (o quitar el `<link>` a `intro.css`) |
 
 ## Las dos piezas generadas
@@ -65,6 +71,17 @@ En la consola del navegador (con `?intro=1`), para congelar la animación en el 
 ```js
 document.getAnimations().forEach(a => { a.pause(); a.currentTime = 3200; });
 ```
+
+## Rendimiento: lo que hay que saber
+
+La entrada **no retrasa la carga real**: la primera pantalla aparece enseguida y la foto se descarga con prioridad
+alta mientras se escriben los nombres. Mientras suena, no se descarga ni se procesa nada que esté más abajo
+(las ilustraciones de la agenda esperan a que termine la entrada o a que la persona haga scroll).
+
+Un detalle para quien mida con herramientas de laboratorio (PageSpeed, Lighthouse): la foto se revela a propósito
+hacia los 3 s, así que en móvil con 4G lento simulado el «Largest Contentful Paint» sale hacia los 3,5 s y la
+puntuación de rendimiento ronda 90 (en escritorio, 100; sin entrada, ≈ 93 en móvil). No es lentitud de carga:
+la página está cargada y es usable desde el primer momento.
 
 ## Qué no se ha podido probar
 

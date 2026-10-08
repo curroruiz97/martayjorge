@@ -1,7 +1,7 @@
 /* ==========================================================================
    Marta & Jorge · formulario de confirmación de asistencia (RSVP)
    Solo usa los tokens de base.css y las fuentes que ya usa la página (Inter 400/500,
-   Cormorant 400 normal/cursiva, Caveat): no añade descargas de fuentes. Todo cuelga de .rsvp / .rsvp-* para no
+   Cormorant cursiva, Caveat): no añade descargas de fuentes. Todo cuelga de .rsvp / .rsvp-* para no
    chocar con site.css. Mobile-first: pensado para el pulgar (objetivos ≥ 44 px,
    texto de los campos ≥ 16 px para que iOS no haga zoom).
    ========================================================================== */
@@ -181,13 +181,14 @@
 .rsvp-bloque__titulo + * { clear: both; }
 .rsvp-bloque__intro { margin-bottom: 1.15rem; max-width: 40rem; }
 
-.rsvp-fila { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+.rsvp-fila { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem .75rem; }
+.rsvp-fila > div:first-child { flex: 1 1 11rem; min-width: 0; }
 .rsvp-fila .rsvp-label { margin-bottom: .1rem; }
 
 /* Contador −/+ */
-.rsvp-contador { display: inline-flex; align-items: center; gap: .15rem; flex: none; }
+.rsvp-contador { display: inline-flex; align-items: center; gap: .15rem; flex: 0 1 auto; max-width: 100%; }
 .rsvp-contador__btn {
-  display: grid; place-items: center; width: 2.75rem; height: 2.75rem; padding: 0;
+  display: grid; place-items: center; flex: 0 1 2.75rem; width: 2.75rem; min-width: 2rem; aspect-ratio: 1; height: auto; padding: 0;
   border: 1px solid var(--linea-fuerte); border-radius: 50%;
   background: var(--papel-3); color: var(--tinta);
   transition: background-color .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease), transform .15s var(--ease);
@@ -203,7 +204,7 @@
   background: transparent; border-color: rgba(43, 42, 40, .18); color: rgba(43, 42, 40, .3);
 }
 .rsvp-contador__valor {
-  width: 2.75rem; height: 2.75rem; margin: 0; padding: 0;
+  flex: 0 1 2.75rem; width: 2.75rem; min-width: 1.75rem; height: 2.75rem; margin: 0; padding: 0;
   border: 0; border-radius: var(--radio); background: transparent;
   font: 500 1.3rem/1 var(--f-sans); color: var(--tinta); text-align: center;
   font-variant-numeric: tabular-nums;
@@ -220,9 +221,10 @@
 
 /* Trayectos de autocar */
 .rsvp-trayecto {
-  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center;
-  column-gap: 1rem; padding-block: 1rem; border-top: 1px solid var(--linea);
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: .6rem 1rem; padding-block: 1rem; border-top: 1px solid var(--linea);
 }
+.rsvp-trayecto__texto { flex: 1 1 11rem; min-width: 0; }
 .rsvp-trayecto:last-child { border-bottom: 1px solid var(--linea); }
 .rsvp-trayecto__tipo {
   display: block; margin-bottom: .25rem;
@@ -232,7 +234,7 @@
 .rsvp-trayecto__ruta { display: block; font: 500 .9375rem/1.4 var(--f-sans); color: var(--tinta); }
 .rsvp-trayecto__lugar { display: block; }
 @media (min-width: 640px) { .rsvp-trayecto__lugar { display: inline; } }
-.rsvp-trayecto .rsvp-error { grid-column: 1 / -1; }
+.rsvp-trayecto .rsvp-error { flex-basis: 100%; }
 
 /* Tarjetas de alergias por persona */
 .rsvp-personas > .rsvp-plegable + .rsvp-plegable > .rsvp-plegable__interior > .rsvp-plegable__contenido { padding-top: .9rem; }

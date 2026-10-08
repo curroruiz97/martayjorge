@@ -42,7 +42,7 @@ const TIPOS = {
   '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
   '.webp': 'image/webp', '.avif': 'image/avif', '.gif': 'image/gif', '.ico': 'image/x-icon',
   '.woff2': 'font/woff2', '.woff': 'font/woff', '.xml': 'application/xml',
-  '.webmanifest': 'application/manifest+json', '.pdf': 'application/pdf', '.mp4': 'video/mp4',
+  '.webmanifest': 'application/manifest+json', '.ics': 'text/calendar; charset=utf-8', '.pdf': 'application/pdf', '.mp4': 'video/mp4',
 };
 
 /* ------------------------------------------------------------------ utilidades */
