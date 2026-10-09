@@ -21,7 +21,7 @@
 @media (min-width: 640px) {
   .rsvp__tarjeta {
     padding: clamp(2.25rem, 5vw, 3.25rem) clamp(2rem, 5.5vw, 3.5rem);
-    background: rgba(251, 248, 241, .66);
+    background: var(--campo);
     border: 1px solid var(--linea);
     border-radius: var(--radio);
     box-shadow: 0 1.25rem 2.5rem -2rem rgba(43, 42, 40, .35);
@@ -36,7 +36,7 @@
 .rsvp__sin-js {
   margin-bottom: 1.75rem; padding: 1rem 1.15rem;
   border: 1px dashed var(--linea-fuerte); border-radius: var(--radio);
-  background: rgba(251, 248, 241, .7);
+  background: var(--campo);
   font: 400 .9375rem/1.5 var(--f-sans); color: var(--tinta);
 }
 
@@ -79,17 +79,25 @@
   display: block; width: 100%; min-height: var(--rsvp-alto); margin: 0;
   padding: .8rem 1rem;
   font: 400 1.0625rem/1.4 var(--f-sans); color: var(--tinta);
-  background: var(--papel-3);
+  background: var(--campo);
   border: 1px solid var(--linea-fuerte); border-radius: var(--radio);
   -webkit-appearance: none; appearance: none;
   transition: border-color .2s var(--ease), background-color .2s var(--ease);
 }
-.rsvp-input::placeholder { color: var(--tinta-tenue); opacity: 1; } /* ≈ 5:1 sobre --papel-3 */
+.rsvp-input::placeholder { color: var(--tinta-tenue); opacity: 1; } /* ≈ 5,5:1 sobre el papel (el campo es translúcido) */
 .rsvp-input:focus-visible { outline: 2px solid var(--terracota); outline-offset: 2px; border-color: var(--tinta); }
 .rsvp-textarea { min-height: 8.5rem; resize: vertical; line-height: 1.5; }
 @media (hover: hover) { .rsvp-input:hover { border-color: var(--tinta-suave); } }
 
-.rsvp-input[aria-invalid="true"] { border-color: var(--error); background-color: #fcf5f1; }
+.rsvp-input:focus { background-color: var(--campo-activo); }   /* el campo que se está escribiendo se aclara un poco */
+.rsvp-input[aria-invalid="true"] { border-color: var(--error); background-color: rgba(252, 236, 229, .6); }
+/* Autorrelleno del navegador (Chrome en Android pinta los campos de azul o amarillo): se queda en el crema del papel */
+.rsvp-input:-webkit-autofill,
+.rsvp-input:-webkit-autofill:hover,
+.rsvp-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--tinta); caret-color: var(--tinta);
+  box-shadow: 0 0 0 100vmax rgb(247, 243, 234) inset;
+}
 
 .rsvp-error {
   display: flex; align-items: flex-start; gap: .5rem; margin-top: .55rem;
@@ -108,12 +116,12 @@
 @media (min-width: 30rem) { .rsvp-opciones { grid-template-columns: 1fr 1fr; } }
 .rsvp-opcion {
   display: flex; align-items: center; gap: .85rem; min-height: 3.5rem; padding: .85rem 1.1rem;
-  background: var(--papel-3); border: 1px solid var(--linea-fuerte); border-radius: var(--radio);
+  background: var(--campo); border: 1px solid var(--linea-fuerte); border-radius: var(--radio);
   font: 500 1.0625rem/1.3 var(--f-sans); color: var(--tinta); cursor: pointer;
   transition: border-color .2s var(--ease), box-shadow .2s var(--ease), background-color .2s var(--ease);
 }
 @media (hover: hover) { .rsvp-opcion:hover { border-color: var(--tinta); } }
-.rsvp-opcion--activa { border-color: var(--tinta); box-shadow: inset 0 0 0 1px var(--tinta); background: #fffdf9; }
+.rsvp-opcion--activa { border-color: var(--tinta); box-shadow: inset 0 0 0 1px var(--tinta); background: var(--campo-activo); }
 .rsvp-opcion:has(input[aria-invalid="true"]) { border-color: var(--error); }
 
 /* Radios y casillas propios: tinta + marca terracota */
@@ -122,7 +130,7 @@
   -webkit-appearance: none; appearance: none; flex: none; margin: 0;
   display: grid; place-content: center;
   width: 1.375rem; height: 1.375rem;
-  border: 1.5px solid var(--tinta); background: var(--papel-3); color: var(--terracota);
+  border: 1.5px solid var(--tinta); background: var(--campo); color: var(--terracota);
   cursor: pointer;
 }
 .rsvp-opcion input { border-radius: 50%; }
@@ -190,7 +198,7 @@
 .rsvp-contador__btn {
   display: grid; place-items: center; flex: 0 1 2.75rem; width: 2.75rem; min-width: 2rem; aspect-ratio: 1; height: auto; padding: 0;
   border: 1px solid var(--linea-fuerte); border-radius: 50%;
-  background: var(--papel-3); color: var(--tinta);
+  background: var(--campo); color: var(--tinta);
   transition: background-color .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease), transform .15s var(--ease);
 }
 .rsvp-contador__btn svg { width: 1rem; height: 1rem; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
@@ -292,14 +300,14 @@
 .rsvp-aviso--info { border-color: rgba(79, 107, 69, .45); background: rgba(79, 107, 69, .07); }
 .rsvp-aviso--info .rsvp-aviso__titulo { color: var(--ok); }
 .rsvp-aviso__acciones { display: flex; flex-wrap: wrap; gap: .5rem; }
-.rsvp-aviso__acciones .boton { min-height: 2.75rem; padding: .7rem 1.2rem; font-size: .6875rem; background: var(--papel-3); }
+.rsvp-aviso__acciones .boton { min-height: 2.75rem; padding: .7rem 1.2rem; font-size: .6875rem; background: var(--campo); }
 @media (hover: hover) { .rsvp-aviso__acciones .boton:hover { background: var(--tinta); color: var(--papel); } }
 
 /* ---------- Agradecimiento ---------- */
 .rsvp-gracias {
   display: grid; justify-items: center; gap: .9rem; text-align: center;
   padding: clamp(2.5rem, 9vw, 3.5rem) clamp(1.25rem, 6vw, 2.5rem);
-  background: rgba(251, 248, 241, .7);
+  background: var(--campo);
   border: 1px solid var(--linea); border-radius: var(--radio);
   animation: rsvp-aparecer .7s var(--ease) both;
 }

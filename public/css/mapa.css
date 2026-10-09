@@ -41,23 +41,23 @@
 /* ---------- Botones +/− (44 px mínimo para el dedo) ---------- */
 .mapa .leaflet-container .leaflet-bar {
   border: 1px solid var(--tinta); border-radius: 8px; overflow: hidden;
-  background: var(--papel-3); box-shadow: 2px 2px 0 rgba(43, 42, 40, .16);
+  background: var(--campo-mapa); box-shadow: 2px 2px 0 rgba(43, 42, 40, .16);
 }
 .mapa .leaflet-container .leaflet-bar a {
   width: 44px; height: 44px; line-height: 42px;
-  background: var(--papel-3); color: var(--tinta);
+  background: transparent; color: var(--tinta);
   font: 500 1.625rem/42px var(--f-sans); text-decoration: none;
   border-bottom: 1px solid var(--linea);
 }
 .mapa .leaflet-container .leaflet-bar a:last-child { border-bottom: 0; }
 .mapa .leaflet-container .leaflet-bar a:hover { background: var(--papel-2); color: var(--tinta); }
 .mapa .leaflet-container .leaflet-bar a:focus-visible { outline: 3px solid var(--terracota); outline-offset: -3px; border-radius: 0; }
-.mapa .leaflet-container .leaflet-bar a.leaflet-disabled { background: var(--papel-3); color: var(--tinta-tenue); opacity: .55; cursor: default; }
+.mapa .leaflet-container .leaflet-bar a.leaflet-disabled { background: transparent; color: var(--tinta-tenue); opacity: .55; cursor: default; }
 
 /* ---------- Atribución (obligatoria: OpenStreetMap y CARTO) ---------- */
 .mapa .leaflet-container .leaflet-control-attribution {
   margin: 0; padding: 2px 7px;
-  background: rgba(251, 248, 241, .9); color: var(--tinta-suave);
+  background: var(--campo-mapa); color: var(--tinta-suave);
   font: 400 .6875rem/1.5 var(--f-sans);
 }
 .mapa .leaflet-container .leaflet-control-attribution a { color: var(--tinta); text-decoration: underline; text-decoration-color: var(--terracota); text-underline-offset: .18em; }
@@ -85,11 +85,11 @@
 
 /* ---------- Ventanas (nombre + «¿Cómo llegar?») ---------- */
 .mapa .leaflet-popup-content-wrapper {
-  background: var(--papel-3); color: var(--tinta);
+  background: var(--campo-mapa); color: var(--tinta);
   border: 1px solid var(--tinta); border-radius: 8px;
   box-shadow: 3px 3px 0 rgba(43, 42, 40, .18);
 }
-.mapa .leaflet-popup-tip { background: var(--papel-3); box-shadow: none; border: 1px solid var(--tinta); }
+.mapa .leaflet-popup-tip { background: var(--campo-mapa); box-shadow: none; border: 1px solid var(--tinta); }
 .mapa .leaflet-popup-content { margin: .9rem 2.75rem .95rem 1.1rem; font: 400 1rem/1.25 var(--f-serif); }
 .mapa .mapa-popup { display: grid; justify-items: start; gap: .3rem; }
 .mapa .mapa-popup__titulo { font: 600 1.5rem/1.05 var(--f-script); color: var(--tinta); }

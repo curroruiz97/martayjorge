@@ -25,7 +25,11 @@
   /* papel y tinta */
   --papel: #fdf8ec;            /* crema base: la textura lo oscurece ~4 % hasta ≈ #f3efe4 */
   --papel-2: #ece4d2;          /* crema más oscuro: tarjetas, bandas */
-  --papel-3: #fbf8f1;          /* crema casi blanco: campos de formulario */
+  --papel-3: #fbf8f1;          /* crema casi blanco (textos claros sobre tinta, sombras de rótulos) */
+  /* superficies translúcidas: dejan asomar la textura del papel en vez de un blanco liso */
+  --campo: rgba(251, 248, 241, .5);           /* campos, opciones y botones claros sobre el papel */
+  --campo-activo: rgba(251, 248, 241, .8);    /* opción elegida */
+  --campo-mapa: rgba(251, 248, 241, .86);     /* controles sobre el mapa: legibles encima de las calles */
   --tinta: #2b2a28;            /* tinta de ilustraciones y texto principal */
   --tinta-suave: #5a564e;      /* texto secundario (contraste 6:1 sobre papel) */
   --tinta-tenue: #666152;      /* etiquetas pequeñas (contraste ≥ 5,1:1 incluso en el punto más oscuro del papel) */

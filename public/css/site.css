@@ -17,7 +17,7 @@
 .marco::before {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   border: 1px solid var(--linea-fuerte); border-radius: inherit;
-  transform: translate(.65rem, .65rem);
+  transform: translate(min(.65rem, 3vw), min(.65rem, 3vw));   /* con la letra muy ampliada el desfase no pasa del margen */
 }
 /* Arco (ventana de iglesia) */
 .arco { border-radius: 999px 999px .5rem .5rem; }
@@ -37,48 +37,59 @@
   position: relative;
   min-height: 100vh; min-height: 100svh;
   display: grid; justify-items: center; align-content: center;
+  grid-template-columns: minmax(0, 1fr);   /* la columna nunca se ensancha más que la pantalla (letra muy ampliada) */
   grid-template-areas: "texto" "foto" "extra";
   gap: clamp(1.1rem, 3vh, 2.5rem);
   padding: var(--pad-v) var(--gutter) clamp(2.5rem, 7vh, 4.5rem);
   text-align: center;
 }
-.portada__texto { grid-area: texto; display: grid; justify-items: center; gap: .55rem; }
+.portada__texto { grid-area: texto; display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; gap: .55rem; max-width: 100%; }
 .portada__aviso { letter-spacing: .32em; }
 .portada__foto { grid-area: foto; width: var(--foto); margin: 0; }
-.portada__extra { grid-area: extra; display: grid; justify-items: center; gap: 1.75rem; }
+.portada__extra { grid-area: extra; display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 1.75rem; max-width: 100%; }
 
 .portada__fecha { margin-top: .6rem; display: flex; flex-wrap: wrap; gap: .25em .75em; align-items: center; justify-content: center; font-size: .8125rem; letter-spacing: min(.3em, 2vw); color: var(--tinta-suave); }
 .portada__punto { color: var(--terracota); }
 
 /* Cuenta atrás: sobria, sin cifras que parpadeen */
-.cuenta { display: none; justify-items: center; gap: .5rem; }
+.cuenta { display: none; grid-template-columns: minmax(0, 1fr); justify-items: center; gap: .5rem; max-width: 100%; }
 .js .cuenta { display: grid; }
-.cuenta__fila { display: flex; justify-content: center; }
-.cuenta__item { display: grid; justify-items: center; min-width: min(4.4rem, 27vw); padding-inline: clamp(.5rem, 3vw, 1.1rem); position: relative; }
+.cuenta__fila { display: flex; justify-content: center; max-width: 100%; }
+.cuenta__item { display: grid; justify-items: center; min-width: min(4.4rem, 27vw); padding-inline: min(clamp(.5rem, 3vw, 1.1rem), 3vw); position: relative; }
 .cuenta__item + .cuenta__item::before { content: ""; position: absolute; left: 0; top: 18%; bottom: 18%; border-left: 1px solid var(--linea); }
 .cuenta__num { font-family: var(--f-script); font-weight: 600; font-size: min(clamp(2.6rem, 1.8rem + 3vw, 3.6rem), 15vw); line-height: 1; font-variant-numeric: tabular-nums; }
-.cuenta__txt { margin-top: .4rem; font: 500 .6875rem/1 var(--f-sans); letter-spacing: min(.24em, 1.3vw); text-transform: uppercase; color: var(--tinta-tenue); }
+.cuenta__txt { margin-top: .4rem; font: 500 min(.6875rem, 3.6vw)/1 var(--f-sans); letter-spacing: min(.24em, 1.3vw); text-transform: uppercase; color: var(--tinta-tenue); }
 .cuenta__estado { font-size: clamp(2rem, 1.5rem + 2vw, 2.75rem); color: var(--terracota); }
 
 /* Pista para seguir bajando (solo cuando la portada cabe entera en la pantalla; se apaga al hacer scroll) */
 .portada__baja { display: none; }
 .portada.scrolled .portada__baja { opacity: 0; transition: opacity .4s var(--ease); }
 
-/* Tablet en vertical: la portada crece con el alto disponible (la foto siempre entera en la primera pantalla) */
-@media (min-width: 600px) and (orientation: portrait) {
+/* Vertical (móvil y tablet): la portada ocupa EXACTAMENTE la pantalla; sin hacer scroll se ve todo (nombres, fecha, foto,
+   cuenta atrás y botón). Los tamaños salen de repartir el alto disponible (--alto) entre lo que escala con la pantalla
+   (adorno, nombres y foto) y lo que es fijo (etiquetas, cuenta atrás, botón y huecos, ≈ 7 rem más cifras y botón).
+     --D  alto de las cifras de la cuenta atrás      --C  alto del botón
+   Lo que sobre (pantallas muy altas) se reparte entre los tres bloques. */
+@media (orientation: portrait) {
   .portada {
-    --n: min(80vw, 30rem, max(12rem, calc((var(--alto) - 2 * var(--pad-v) - 7.2rem) / 2.23)));
-    --foto: calc(var(--n) * .85);
+    --pad-t: max(.6rem, calc(var(--alto) * .022));
+    --pad-b: max(.75rem, calc(var(--alto) * .026));
+    --D: min(clamp(1.6rem, calc(var(--alto) * .052), 2.8rem), 11vw);   /* tope por ancho: con la letra al 200 % las cifras no se salen */
+    --C: clamp(2.4rem, calc(var(--alto) * .062), 3rem);
+    --n: min(80vw, 30rem, max(9rem, calc((var(--alto) - var(--pad-t) - var(--pad-b) - 7rem - var(--D) - var(--C)) / 2.15)));
+    --foto: min(70vw, 26rem, calc(var(--n) * .85));
+    align-content: space-between;
+    gap: .5rem;
+    padding: var(--pad-t) var(--gutter) var(--pad-b);
   }
-}
-
-/* Móvil en vertical con poca altura útil (p. ej. un iPhone con las barras de Safari, ≈ 660 px): los nombres se ajustan para que
-   casi toda la foto entre en la primera pantalla y las puertas se abran a la vista. En pantallas altas no cambia nada. */
-@media (max-width: 599.98px) and (orientation: portrait) {
-  .portada {
-    --n: min(80vw, 22rem, max(11rem, calc((var(--alto) - var(--pad-v) - 7.2rem) / 2.07)));
-    --foto: min(70vw, 20rem, calc(var(--n) * .875));
-  }
+  .portada__texto { gap: .3rem; }
+  .portada .portada__ruta { width: calc(var(--n) * .8); margin: calc(var(--n) * -.04) auto 0; }
+  .portada__fecha { margin-top: .15rem; }
+  .portada__extra { gap: .6rem; }
+  .cuenta { gap: .3rem; }
+  .cuenta__num { font-size: var(--D); }
+  .cuenta__txt { margin-top: .2rem; }
+  .portada__cta { min-height: var(--C); padding-block: 0; }
 }
 
 /* Apaisado (móvil girado, tablet, portátil, monitor): dos columnas */
@@ -211,14 +222,16 @@
 /* ---------- LISTA DE BODAS ---------- */
 .regalo__icono { width: 3.25rem; height: 3.25rem; margin: 0 auto 1.25rem; }
 .regalo__texto { max-width: 36ch; margin-inline: auto; text-wrap: pretty; }
-.iban { display: grid; justify-items: center; gap: 1.1rem; margin: 2rem auto 0; }
+.iban { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 1.1rem; margin: 2rem auto 0; container-type: inline-size; }
+/* Siempre en una sola línea: la letra se ajusta al ancho que haya (de 240 px a 2560 px y con la letra del sistema ampliada) */
 .iban__numero {
-  display: flex; flex-wrap: wrap; justify-content: center; gap: .35rem min(.85rem, 3vw);
-  padding: 1.05rem min(1.5rem, 4vw); max-width: 100%;
-  border: 1px dashed var(--linea-fuerte); border-radius: var(--radio); background: rgba(251, 248, 241, .55);
-  font: 500 min(clamp(1.05rem, .9rem + 1vw, 1.3rem), 6.3vw)/1.25 var(--f-sans); letter-spacing: .08em; font-variant-numeric: tabular-nums;
+  display: block; max-width: 100%; padding: .9em .6em;
+  white-space: nowrap; text-align: center; word-spacing: .22em;
+  border: 1px dashed var(--linea-fuerte); border-radius: var(--radio); background: var(--campo);
+  font: 500 min(clamp(1.05rem, .9rem + 1vw, 1.3rem), 4.2vw)/1.25 var(--f-sans); letter-spacing: .04em; font-variant-numeric: tabular-nums;
+  -webkit-user-select: all; user-select: all;   /* un toque selecciona el IBAN entero */
 }
-@media (max-width: 30em) { .iban__numero { display: grid; grid-template-columns: repeat(3, auto); justify-content: center; } }
+@supports (width: 1cqi) { .iban__numero { font-size: min(clamp(1.05rem, .9rem + 1vw, 1.3rem), 4.8cqi); } }
 .iban__copiar .icono { width: 1.15rem; height: 1.15rem; color: currentColor; }
 .iban__copiar.copiado { background: var(--tinta); color: var(--papel); }
 .regalo__gracias { font-size: min(clamp(2.2rem, 1.7rem + 2.2vw, 3rem), 13vw); margin-top: 2.25rem; color: var(--terracota); }

@@ -59,7 +59,7 @@ Los envíos de prueba se guardan en `.dev-data/rsvps.json` (ignorado por git). E
 > **Estado actual** · El WhatsApp de contacto ya está puesto (`data-whatsapp` en `public/index.html`). Pendiente:
 > conectar **Supabase** (hasta entonces, si alguien pulsa «Enviar confirmación», la web le ofrece mandar la respuesta
 > por WhatsApp, ya escrita, y no se guarda nada) y elegir el **dominio** definitivo (mientras tanto sirve el
-> `*.vercel.app` que da Vercel; las metaetiquetas `og:` de `index.html` llevan un dominio provisional).
+> `martayjorge-eta.vercel.app` que da Vercel; las metaetiquetas `og:` de `index.html` llevan ese mismo dominio temporal).
 
 1. **GitHub**: el código ya está en este repositorio, en la rama `main`. Conviene que sea también la rama principal
    (*Settings → Branches → Default branch*).
@@ -82,9 +82,9 @@ Los envíos de prueba se guardan en `.dev-data/rsvps.json` (ignorado por git). E
    Después, *Redeploy* (las variables solo se aplican a despliegues nuevos). La **rama de producción** debe ser
    `main` (*Settings → Git → Production Branch*).
 4. **Dominio**: *Settings → Domains* → añadir el dominio elegido (p. ej. `martayjorge.com`) y crear en el
-   registrador los registros DNS que indique Vercel. Después, sustituir `https://martayjorge.com` por el dominio
-   definitivo en las 3 metaetiquetas de `public/index.html` (`og:url`, `og:image`, `twitter:image`); sin eso la
-   vista previa al compartir el enlace por WhatsApp no mostrará la imagen.
+   registrador los registros DNS que indique Vercel. Después, sustituir `https://martayjorge-eta.vercel.app` por el
+   dominio definitivo en las 3 metaetiquetas de `public/index.html` (`og:url`, `og:image`, `twitter:image`); si no,
+   la vista previa al compartir el enlace por WhatsApp seguirá apuntando al dominio temporal.
 5. **Probar antes de repartir la invitación**: abrir la web, enviar una confirmación como «Prueba Marta»,
    comprobarla en `/admin`, borrar las pruebas (`docs/rsvp.md` §5) y compartir el enlace en un chat para ver la
    vista previa.
@@ -114,8 +114,8 @@ boda y, después, exportad lo que queráis conservar y vaciad la tabla. Guía co
 | Quitar la cuenta atrás | borrar el bloque `<div class="cuenta" …>` de la portada |
 | Textos, horarios, enlaces «¿Cómo llegar?» | `public/index.html` |
 | Teléfono (WhatsApp) o correo de contacto | atributos `data-whatsapp` / `data-email` de `<section id="alojamiento">`: aparece el botón de contacto y, si falla un envío, el formulario ofrece mandar la respuesta por ahí |
-| IBAN | `public/index.html`, sección *Lista de bodas* (texto visible y atributo `data-copiar`) |
-| Colores y tipografías | variables de `:root` en `public/css/base.css` |
+| IBAN | `public/index.html`, sección *Lista de bodas* (texto visible y atributo `data-copiar`). Se ve siempre en una sola línea: el tamaño de la letra se adapta al ancho disponible (`.iban__numero` en `site.css`) |
+| Colores y tipografías | variables de `:root` en `public/css/base.css`. Los fondos claros de campos, opciones, tarjeta e IBAN son translúcidos (`--campo`, `--campo-activo`, `--campo-mapa`) para que se vea la textura del papel; subid o bajad su opacidad ahí |
 | Fotos | `public/assets/img/` (WebP; la de la portada es un recorte 4:5) |
 | Ilustraciones | `public/assets/ilustraciones/` (guía en [`docs/ilustraciones.md`](docs/ilustraciones.md)); se regeneran con `python3 scripts/ilustraciones/generar.py` |
 | Mensajes del formulario | arriba de `public/js/rsvp.js` y atributos `data-texto-si` / `data-texto-no` en `index.html` |
@@ -130,9 +130,10 @@ boda y, después, exportad lo que queráis conservar y vaciad la tabla. Guía co
   elige el que necesita su pantalla) y las ilustraciones, el mapa y la foto del cierre se piden solo al
   acercarse. Las fuentes están recortadas al español: de ≈ 190 KB a ≈ 80 KB.
   Si añadís fuentes o fotos, comprimidlas igual (WebP, anchos de 480/600/840 px) para no perder esto.
-- **Pantallas**: la portada se dimensiona con el ancho **y el alto** de la pantalla, así que entra entera en
-  móviles apaisados, portátiles bajos y monitores grandes (probada de 240 a 3440 px de ancho). Con la letra del
-  sistema ampliada al 200 % no se sale nada de la pantalla.
+- **Pantallas**: la portada se dimensiona con el ancho **y el alto** de la pantalla. En el móvil en vertical ocupa
+  exactamente la pantalla (nombres, fecha, foto, cuenta atrás y botón se ven sin hacer scroll, de 320×548 a tablets) y
+  también entra entera en móviles apaisados, portátiles bajos y monitores grandes (probada de 240 a 3440 px de ancho).
+  Con la letra del sistema ampliada no se sale nada de la pantalla en ≥ 320 px de ancho.
 - **Entrada animada**: se reproduce una vez cada 12 h por dispositivo; ver [`docs/animacion-entrada.md`](docs/animacion-entrada.md).
 
 ## Notas de diseño
