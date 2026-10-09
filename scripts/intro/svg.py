@@ -20,10 +20,10 @@ import os
 def _e(n, d): return float(os.environ.get(n, d))
 ESCALA_Y = _e("ESCALA_Y", 0.6)   # tamaño de la «y» respecto a las palabras
 ROT_Y = _e("ROT_Y", -8)           # grados
-SANGRIA_J = _e("SANGRIA_J", 150)  # «Jorge» queda alineado a la derecha de «Marta», recogido esta cantidad
-X_Y = _e("X_Y", 120)              # centro de la «y» respecto al centro de «Marta»
-HUECO_1 = _e("HUECO_1", 90)       # aire entre la base de «Marta» y lo más alto de la «y»
-HUECO_2 = _e("HUECO_2", -90)       # aire entre lo más bajo de la «y» y lo más alto de «Jorge»
+SANGRIA_J = _e("SANGRIA_J", 120)  # «Jorge» queda alineado a la derecha de «Marta», recogido esta cantidad
+X_Y = _e("X_Y", 420)              # centro de la «y» respecto al centro de «Marta»
+HUECO_1 = _e("HUECO_1", 70)       # aire entre la base de «Marta» y lo más alto de la «y»
+HUECO_2 = _e("HUECO_2", -120)       # aire entre lo más bajo de la «y» y lo más alto de «Jorge»
 MARGEN = _e("MARGEN", 40)         # margen de la caja de dibujo alrededor de la tinta
 
 

@@ -17,15 +17,15 @@ N8 = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
 # Preferencias de inicio por glifo: (u, v) en [0,1] dentro de la caja del glifo (0,0 = arriba-izquierda).
 # Se afinan a ojo viendo debug_trazos.png (cada trazo va numerado y con un círculo en su punto de partida).
 INICIO = {
-    "M": (0.0, 0.42),
-    "a": (0.65, 0.08),
-    "r": (0.0, 0.72),
-    "t": (0.95, 0.0),
+    "M": (0.19, 0.49),
+    "a": (0.78, 0.02),
+    "r": (0.0, 0.95),
+    "t": (0.98, 0.0),
     "y": (0.1, 0.05),
-    "J": (0.48, 0.33),
-    "o": (0.6, 0.0),
-    "g": (0.65, 0.08),
-    "e": (0.0, 0.5),
+    "J": (0.0, 0.05),
+    "o": (0.1, 0.05),
+    "g": (0.85, 0.05),
+    "e": (0.0, 0.45),
 }
 
 

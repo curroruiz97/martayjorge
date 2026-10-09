@@ -12,12 +12,22 @@ from PIL import Image, ImageDraw
 ESC = 0.6
 PAD = 40
 
-# ---- Ajustes manuales de sentido y fusión (índices 1-based de trazo dentro del glifo) ----
-# Con Corinthia casi todos los trazos salen ya en el sentido natural; solo hay que invertir los que el esqueleto recorre
-# al revés (la subida de la M, el remate de la a, el empalme de la o y los dos trazos de la g).
-INVERTIR = {"M": [2], "a": [1], "o": [2], "g": [1, 2]}
-FUSIONES = {}
-
+# ---- Ajustes manuales (índices de trazo 1-based dentro de cada glifo, tal como salen numerados en debug_trazos.png) ----
+#   ("inv", k)           invierte el sentido del trazo k (para que se escriba como lo haría una mano)
+#   ("fus", i, j, inv)   pega al final del trazo i el trazo j (invertido si inv) y elimina el j
+#   ("partir", k, ref)   parte el trazo k por el punto más cercano al último punto del trazo ref: queda en dos (k y k+1)
+# Los índices valen en el estado actual: tras un «partir», los trazos siguientes se desplazan una posición.
+AJUSTES = {
+    "M": [("inv", 2), ("inv", 3)],                     # las dos subidas finas se escriben de abajo arriba y luego bajan
+    "a": [("inv", 2)],                                 # el cierre baja por el palo y sale hacia la derecha
+    "r": [("inv", 2)],                                 # el hombro parte del palo
+    "t": [("fus", 3, 2, True)],                        # el travesaño de izquierda a derecha, de una vez
+    "y": [("inv", 3)],
+    "J": [("partir", 1, 2), ("fus", 1, 3, True)],      # primero la barra de arriba entera, luego el palo con su gancho
+    "o": [("inv", 1), ("inv", 2)],                     # el óvalo en sentido antihorario y el empalme hacia la derecha
+    "g": [("inv", 2)],
+    "e": [("inv", 1)],                                 # empieza dentro del ojo y sale por la derecha
+}
 # (la velocidad de escritura, las pausas y la composición de las tres palabras están en svg.py)
 GRUESO_K = 1.0           # factor sobre el grosor de cobertura calculado
 
@@ -157,19 +167,28 @@ def completar_huecos(tr, mask, w_px, umbral=50, max_iter=60):
     return tr
 
 
+def aplicar_ajustes(nombre, tr):
+    tr = [np.array(t, dtype=float) for t in tr]
+    for op in AJUSTES.get(nombre, []):
+        if op[0] == "inv":
+            tr[op[1] - 1] = tr[op[1] - 1][::-1]
+        elif op[0] == "fus":
+            _, i, j, inv = op
+            a, b = tr[i - 1], tr[j - 1]
+            if inv:
+                b = b[::-1]
+            tr[i - 1] = np.vstack([a, b[1:]])
+            tr[j - 1] = None
+        elif op[0] == "partir":
+            _, k, ref = op
+            t, p = tr[k - 1], tr[ref - 1][-1]
+            idx = int(np.argmin(np.linalg.norm(t - p, axis=1)))
+            tr[k - 1:k] = [t[: idx + 1], t[idx:]]
+    return [t for t in tr if t is not None]
+
+
 def procesar_glifo(g):
-    tr = [np.array(t) for t in g["trazos_px"]]
-    # fusiones
-    for (i, j, inv) in FUSIONES.get(g["name"], ()):
-        a, b = tr[i - 1], tr[j - 1]
-        if inv:
-            b = b[::-1]
-        tr[i - 1] = np.vstack([a, b[1:]])
-        tr[j - 1] = None
-    tr = [t for t in tr if t is not None]
-    # sentidos
-    for k in INVERTIR.get(g["name"], []):
-        tr[k - 1] = tr[k - 1][::-1]
+    tr = aplicar_ajustes(g["name"], g["trazos_px"])
     # ancho base proporcional al trazo típico; se completan ápices/extremos; si falta cobertura se engorda
     w = 2 * g["r_med"] * 1.25
     tr2 = completar_huecos(tr, g["mask"], w)

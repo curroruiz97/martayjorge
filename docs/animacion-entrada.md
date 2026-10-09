@@ -9,7 +9,7 @@ rebotes; todo es lento, suave y se puede saltar en cualquier momento.
 |---|---|
 | 0,2 – 2,3 | Un avión de papel cruza la parte alta dejando su estela de rayas terracota y hace un lazo en forma de corazón (la misma ruta que luego recorre en la Agenda) |
 | 0,75 | «¡Nos casamos!» aparece con un fundido suave |
-| 0,85 – 4,0 | **«Marta y Jorge» se escriben a pluma** con una caligrafía fina (Corinthia), trazo a trazo y en el orden en que se escribe cada letra (la M empieza por su lazo, la J baja y cierra en un bucle…). La «y», en terracota |
+| 0,85 – 4,0 | **«Marta y Jorge» se escriben a pluma** con una caligrafía fina de pluma (Ephesis), trazo a trazo y en el orden en que se escribe cada letra (la M empieza por su lazo, la J lleva primero su barra y luego baja en un gancho…). La «y», en terracota |
 | 1,2 – 2,8 | Se dibujan a línea las **puertas en arco** (contorno, costura, marcos y pomos) y después se rellenan de papel |
 | 3,0 – 4,5 | Las puertas **se abren en 3D**, con su sombra, y la foto aparece «enfocándose» (de borrosa a nítida, con un leve acercamiento) |
 | 3,5 – 4,6 | Fecha, cuenta atrás y botón entran con un fundido |
@@ -50,16 +50,17 @@ rebotes; todo es lento, suave y se puede saltar en cualquier momento.
 Los nombres escritos y el ornamento no están dibujados a mano: salen de scripts reproducibles en
 [`scripts/intro/`](../scripts/intro/).
 
-1. **Nombres** (`glifos.py` → `trazos.py` → `ensamblar.py` → `svg.py`): se toma la Corinthia
-   (`public/assets/fonts/corinthia-latin-400-normal.woff2`, licencia OFL), se calcula el
+1. **Nombres** (`glifos.py` → `trazos.py` → `ensamblar.py` → `svg.py`): se toma la Ephesis
+   (`public/assets/fonts/ephesis-latin-400-normal.woff2`, licencia OFL), se calcula el
    **esqueleto** de cada letra, se convierte en trazos de pluma ordenados (con sentido de escritura, ápices y
    extremos cubiertos) y se emite un SVG donde cada trazo grueso, **recortado por el contorno real de la letra**
    (`clipPath`), se «dibuja» con `stroke-dashoffset`. Al terminar cada letra entra su relleno exacto, así que el
    resultado final es idéntico a la tipografía. La composición (Marta arriba, la «y» pequeña y girada, Jorge
    recogido a la derecha) se calcula con las medidas reales de la tinta: se retoca en las constantes de `svg.py`
    (`ESCALA_Y`, `X_Y`, `HUECO_1`, `HUECO_2`, `SANGRIA_J`) o con variables de entorno del mismo nombre.
-   Si se cambia de tipografía hay que revisar `debug_trazos.png` (en `.tmp/`: cada trazo va numerado y con su punto de
-   partida) y ajustar `INICIO` en `trazos.py` e `INVERTIR` en `ensamblar.py`.
+   Para probar otra tipografía: `FUENTE=/ruta/a/otra.woff2 scripts/intro/generar.sh`; después hay que revisar
+   `debug_trazos.png` (en `.tmp/`: cada trazo va numerado y con su punto de partida) y ajustar `INICIO` en `trazos.py` y
+   `AJUSTES` en `ensamblar.py` (sentido de cada trazo, uniones y cortes) para que la escritura siga el orden natural.
 2. **Ornamento** (`ornamento.cjs`): muestrea la ruta de la ilustradora, parte la línea en sus 48 rayas, hace que
    cada una aparezca en la estela del avión y genera los 56 fotogramas CSS del vuelo con **la misma curva de
    easing**, para que avión y rayas vayan perfectamente sincronizados sin JavaScript.

@@ -1,7 +1,7 @@
 /* ==========================================================================
    Marta & Jorge · formulario de confirmación de asistencia (RSVP)
    Solo usa los tokens de base.css y las fuentes que ya usa la página (Inter 400/500,
-   Cormorant cursiva, Corinthia): no añade descargas de fuentes. Todo cuelga de .rsvp / .rsvp-* para no
+   Cormorant cursiva, Ephesis): no añade descargas de fuentes. Todo cuelga de .rsvp / .rsvp-* para no
    chocar con site.css. Mobile-first: pensado para el pulgar (objetivos ≥ 44 px,
    texto de los campos ≥ 16 px para que iOS no haga zoom).
    ========================================================================== */
@@ -317,8 +317,7 @@
   fill: rgba(164, 86, 58, .12); stroke: var(--terracota); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
 }
 .rsvp-gracias__titulo {
-  /* lleva el nombre que escribió cada persona: en cursiva serif, que se lee bien con cualquier inicial (las mayúsculas de la caligrafía son muy floridas) */
-  font-family: var(--f-serif); font-style: italic; font-weight: 400; font-size: clamp(2.6rem, 2rem + 2.8vw, 3.6rem);
+  font-family: var(--f-script); font-weight: 400; font-size: clamp(2.75rem, 2.1rem + 3vw, 3.75rem);
   line-height: 1.08; color: var(--tinta); overflow-wrap: anywhere; text-wrap: balance;
 }
 .rsvp-gracias__titulo:focus { outline: none; }

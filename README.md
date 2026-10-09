@@ -31,7 +31,7 @@ public/                 ← lo que se publica
   boda-marta-y-jorge.ics   «Añadir al calendario» (ceremonia y celebración)
   css/                  base.css (diseño: colores, fuentes) · site.css (secciones) · intro.css (entrada de la portada) · rsvp.css · mapa.css
   js/                   boot.js · main.js (animaciones, cuenta atrás, copiar IBAN) · intro.js (saltar la entrada, parallax) · rsvp.js · mapa.js
-  assets/fonts/         tipografías autoalojadas y recortadas (Corinthia, Cormorant cursiva, Inter 400/500: ~60 KB)
+  assets/fonts/         tipografías autoalojadas y recortadas (Ephesis, Cormorant cursiva, Inter 400/500: ~60 KB)
   assets/img/           fotos optimizadas (WebP), textura de papel, imagen para compartir (og.jpg)
   assets/ilustraciones/ SVG a pluma: San Pablo, Palomar, ruta, adornos, iconos, favicon (guía: docs/ilustraciones.md)
   admin/                panel de respuestas

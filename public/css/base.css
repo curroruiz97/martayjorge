@@ -1,20 +1,20 @@
 /* ==========================================================================
    Marta & Jorge · sistema de diseño compartido
-   Papel crema + tinta + caligrafía fina (Corinthia) + serif cursiva
+   Papel crema + tinta + caligrafía fina (Ephesis) + serif cursiva
    (Cormorant Garamond) + etiquetas en versalitas (Inter).
    Todo son variables: para retocar el estilo basta con tocar :root.
    ========================================================================== */
 
 /* ---------- Fuentes (autoalojadas y recortadas a lo que usa la página: ~60 KB en total) ----------
-   · Corinthia (caligrafía fina) en un solo peso: títulos. Los nombres de la portada no son texto sino un SVG con la
-     misma tipografía (ver scripts/intro). Su altura de letra es menor que la de una letra normal, así que se agranda
-     con size-adjust: los tamaños de los títulos (rem/vw) se leen como si fuera una letra de tamaño corriente.
+   · Ephesis (caligrafía fina de pluma) en un solo peso: títulos. Los nombres de la portada no son texto sino un SVG con
+     la misma tipografía (ver scripts/intro). Se ajusta con size-adjust para que los tamaños de los títulos (rem/vw)
+     se lean como los de una letra de tamaño corriente.
      El rango de pesos 100–900 evita que el navegador la «engorde» artificialmente si algún estilo pide negrita.
    · Cormorant solo en cursiva: todo el texto serif de la página es cursivo (si algún día se necesitara redonda,
      añadir el fichero y su @font-face; mientras tanto el texto «normal» saldría también en cursiva). También las cifras.
    · Inter 400/500 para etiquetas y formulario. Todas con subconjunto latino (español y lenguas vecinas). */
-@font-face { font-family: "Corinthia"; font-style: normal; font-weight: 100 900; font-display: swap; size-adjust: 145%;
-  src: url("../assets/fonts/corinthia-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Ephesis"; font-style: normal; font-weight: 100 900; font-display: swap; size-adjust: 110%;
+  src: url("../assets/fonts/ephesis-latin-400-normal.woff2") format("woff2"); }
 @font-face { font-family: "Cormorant Garamond"; font-style: italic; font-weight: 400; font-display: swap;
   src: url("../assets/fonts/cormorant-garamond-latin-400-italic.woff2") format("woff2"); }
 @font-face { font-family: "Inter"; font-style: normal; font-weight: 400; font-display: swap;
@@ -46,7 +46,7 @@
   --ok: #4f6b45;
 
   /* tipografía */
-  --f-script: "Corinthia", "Snell Roundhand", "Apple Chancery", "Segoe Script", "Lucida Handwriting", cursive;
+  --f-script: "Ephesis", "Snell Roundhand", "Apple Chancery", "Segoe Script", "Lucida Handwriting", cursive;
   --f-serif: "Cormorant Garamond", "Iowan Old Style", Georgia, "Times New Roman", serif;
   --f-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 

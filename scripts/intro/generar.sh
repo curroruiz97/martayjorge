@@ -11,13 +11,13 @@ TMP="$AQUI/.tmp"
 PY="${PYTHON:-python3}"
 mkdir -p "$TMP" && cd "$TMP"
 
-echo "1/5 Corinthia (la caligrafía de los nombres) en TTF, desde la fuente autoalojada"
-"$PY" - "$RAIZ/public/assets/fonts/corinthia-latin-400-normal.woff2" <<'PY'
+echo "1/5 Ephesis (la caligrafía de los nombres) en TTF, desde la fuente autoalojada"
+"$PY" - "${FUENTE:-$RAIZ/public/assets/fonts/ephesis-latin-400-normal.woff2}" <<'PY'
 import sys
 from fontTools.ttLib import TTFont
 f = TTFont(sys.argv[1])
 f.flavor = None
-f.save("corinthia400.ttf")
+f.save("fuente.ttf")
 PY
 echo "2/5 Glifos y esqueletos";            "$PY" "$AQUI/glifos.py" >/dev/null
 echo "3/5 Trazos de pluma ordenados";      "$PY" "$AQUI/trazos.py" >/dev/null
