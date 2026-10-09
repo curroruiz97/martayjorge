@@ -56,8 +56,15 @@ Los envíos de prueba se guardan en `.dev-data/rsvps.json` (ignorado por git). E
 
 ## Publicarla (GitHub + Vercel + Supabase + dominio)
 
+> **Estado actual** · El WhatsApp de contacto ya está puesto (`data-whatsapp` en `public/index.html`). Pendiente:
+> conectar **Supabase** (hasta entonces, si alguien pulsa «Enviar confirmación», la web le ofrece mandar la respuesta
+> por WhatsApp, ya escrita, y no se guarda nada) y elegir el **dominio** definitivo (mientras tanto sirve el
+> `*.vercel.app` que da Vercel; las metaetiquetas `og:` de `index.html` llevan un dominio provisional).
+
 1. **GitHub**: el código ya está en este repositorio, en la rama `main`. Conviene que sea también la rama principal
    (*Settings → Branches → Default branch*).
+   El repositorio es **público**: cualquiera puede ver en GitHub lo que hay en `public/` (el IBAN y el teléfono).
+   Si preferís que no sea así, ponedlo privado (*Settings → General → Change visibility*); Vercel lo importa igual.
 2. **Supabase** (guía paso a paso en [`docs/rsvp.md`](docs/rsvp.md) §3):
    crear un proyecto nuevo (por ejemplo `martayjorge`, región europea), abrir **SQL Editor**, pegar todo
    [`supabase/schema.sql`](supabase/schema.sql) y ejecutarlo. Copiar la **URL del proyecto** y la
