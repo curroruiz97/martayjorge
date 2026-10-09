@@ -70,7 +70,7 @@
 .mapa .mapa-pin:focus-visible { outline: 3px solid var(--terracota); outline-offset: 2px; border-radius: 10px; }
 .mapa .mapa-pin__nombre {
   position: absolute; left: calc(100% - 6px); top: 9px; white-space: nowrap; cursor: pointer;
-  font: 600 1.375rem/1 var(--f-script); color: var(--tinta);
+  font: italic 400 1.5rem/1 var(--f-serif); color: var(--tinta);
   text-shadow: 0 0 2px var(--papel-3), 0 0 3px var(--papel-3), 0 0 6px var(--papel-3), 0 0 9px var(--papel-3);
 }
 
@@ -79,7 +79,7 @@
 .mapa .mapa-rotulo span {
   position: absolute; left: 0; top: 0; transform: translate(-50%, -50%) rotate(-5deg);
   white-space: nowrap; text-align: center; pointer-events: none;
-  font: 600 clamp(1.3rem, 1.05rem + 1.2vw, 1.9rem)/1.02 var(--f-script); color: var(--terracota);
+  font: italic 400 clamp(1.4rem, 1.1rem + 1.3vw, 2.05rem)/1.05 var(--f-serif); color: var(--terracota);
   text-shadow: 0 0 2px var(--papel-3), 0 0 4px var(--papel-3), 0 0 8px var(--papel-3), 0 0 12px var(--papel-3);
 }
 
@@ -92,7 +92,7 @@
 .mapa .leaflet-popup-tip { background: var(--campo-mapa); box-shadow: none; border: 1px solid var(--tinta); }
 .mapa .leaflet-popup-content { margin: .9rem 2.75rem .95rem 1.1rem; font: 400 1rem/1.25 var(--f-serif); }
 .mapa .mapa-popup { display: grid; justify-items: start; gap: .3rem; }
-.mapa .mapa-popup__titulo { font: 600 1.5rem/1.05 var(--f-script); color: var(--tinta); }
+.mapa .mapa-popup__titulo { font: italic 400 1.7rem/1.05 var(--f-serif); color: var(--tinta); }
 .mapa .mapa-popup__detalle { font-style: italic; color: var(--tinta-suave); }
 .mapa .leaflet-container a.boton { margin-top: .5rem; min-height: 2.75rem; padding: .6rem 1.15rem; letter-spacing: .16em; color: var(--tinta); }
 .mapa .leaflet-container a.boton:hover { color: var(--papel); }

@@ -1,4 +1,4 @@
-"""Etapa 1: glifos de «Marta», «y», «Jorge» en Caveat 700 -> contornos (unidades de fuente),
+"""Etapa 1: glifos de «Marta», «y», «Jorge» en Corinthia -> contornos (unidades de fuente),
 máscara raster y esqueleto. Salida: pickle con todo + imagen de depuración."""
 import pickle
 import sys
@@ -12,7 +12,7 @@ from fontTools.ttLib import TTFont
 from PIL import Image, ImageChops, ImageDraw
 from skimage.morphology import skeletonize
 
-TTF = "caveat700.ttf"
+TTF = "corinthia400.ttf"   # lo deja generar.sh a partir de public/assets/fonts/corinthia-latin-400-normal.woff2
 ESC = 0.6  # píxeles por unidad de fuente para el raster (em = 600 px)
 PAD = 40   # margen del raster en px
 

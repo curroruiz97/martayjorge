@@ -31,13 +31,13 @@ public/                 ← lo que se publica
   boda-marta-y-jorge.ics   «Añadir al calendario» (ceremonia y celebración)
   css/                  base.css (diseño: colores, fuentes) · site.css (secciones) · intro.css (entrada de la portada) · rsvp.css · mapa.css
   js/                   boot.js · main.js (animaciones, cuenta atrás, copiar IBAN) · intro.js (saltar la entrada, parallax) · rsvp.js · mapa.js
-  assets/fonts/         tipografías autoalojadas y recortadas (Caveat 600, Cormorant cursiva, Inter 400/500: ~80 KB)
+  assets/fonts/         tipografías autoalojadas y recortadas (Corinthia, Cormorant cursiva, Inter 400/500: ~60 KB)
   assets/img/           fotos optimizadas (WebP), textura de papel, imagen para compartir (og.jpg)
   assets/ilustraciones/ SVG a pluma: San Pablo, Palomar, ruta, adornos, iconos, favicon (guía: docs/ilustraciones.md)
   admin/                panel de respuestas
 api/                    funciones serverless de Vercel (rsvp, admin, ping)
 supabase/               schema.sql (tabla y vistas) · consultas.sql (consultas listas para pegar)
-scripts/                dev.mjs (servidor local) · test-rsvp.mjs · ilustraciones/ (generador de los SVG) · intro/ (generador de los nombres a pluma)
+scripts/                dev.mjs (servidor local) · test-rsvp.mjs · ilustraciones/ (generador de los SVG) · intro/ (generador de los nombres a pluma) · og/ (imagen para compartir el enlace)
 docs/                   rsvp.md (guía completa del formulario y los datos) · animacion-entrada.md · ilustraciones.md · contenido-original.md (brief)
 vercel.json             salida en public/, cabeceras de seguridad, cron diario
 ```
@@ -121,20 +121,20 @@ boda y, después, exportad lo que queráis conservar y vaciad la tabla. Guía co
 | Mensajes del formulario | arriba de `public/js/rsvp.js` y atributos `data-texto-si` / `data-texto-no` en `index.html` |
 | Horas del «Añadir al calendario» | `public/boda-marta-y-jorge.ics` (texto plano; las horas están en UTC: 12:00 de Madrid en mayo = `10:00Z`. La ceremonia dura 1 h y la celebración está marcada hasta las 23:00: cambiad `DTEND` si queréis otra hora) |
 | Tamaño de la portada según la pantalla | variables `--n` (nombres) y `--foto` en el bloque `.portada` de `public/css/site.css` |
-| Entrada de la portada | tiempos en `public/css/intro.css`; ver [`docs/animacion-entrada.md`](docs/animacion-entrada.md). Solo se reproduce la primera vez por sesión: para verla otra vez, añadid `?intro=1` a la dirección |
+| Entrada de la portada | tiempos en `public/css/intro.css`; ver [`docs/animacion-entrada.md`](docs/animacion-entrada.md). Se reproduce en cada carga (se acelera con un toque o un scroll); `?intro=0` en la dirección la omite |
 
 ## Rendimiento y pantallas
 
-- **Carga ligera**: la primera visita descarga ≈ 210–230 KB en un móvil (comprimido; antes ≈ 360 KB) y ≈ 400–470 KB
+- **Carga ligera**: la primera visita descarga ≈ 190–210 KB en un móvil (comprimido; antes ≈ 360 KB) y ≈ 380–450 KB
   si se recorre la página entera (antes ≈ 550–650 KB). Las fotos van en WebP con varios tamaños (el navegador
   elige el que necesita su pantalla) y las ilustraciones, el mapa y la foto del cierre se piden solo al
-  acercarse. Las fuentes están recortadas al español: de ≈ 190 KB a ≈ 80 KB.
+  acercarse. Las fuentes están recortadas al español: de ≈ 190 KB a ≈ 60 KB.
   Si añadís fuentes o fotos, comprimidlas igual (WebP, anchos de 480/600/840 px) para no perder esto.
 - **Pantallas**: la portada se dimensiona con el ancho **y el alto** de la pantalla. En el móvil en vertical ocupa
   exactamente la pantalla (nombres, fecha, foto, cuenta atrás y botón se ven sin hacer scroll, de 320×548 a tablets) y
   también entra entera en móviles apaisados, portátiles bajos y monitores grandes (probada de 240 a 3440 px de ancho).
   Con la letra del sistema ampliada no se sale nada de la pantalla en ≥ 320 px de ancho.
-- **Entrada animada**: se reproduce una vez cada 12 h por dispositivo; ver [`docs/animacion-entrada.md`](docs/animacion-entrada.md).
+- **Entrada animada**: se reproduce en cada carga y se puede saltar con un toque o un scroll; ver [`docs/animacion-entrada.md`](docs/animacion-entrada.md).
 
 ## Notas de diseño
 

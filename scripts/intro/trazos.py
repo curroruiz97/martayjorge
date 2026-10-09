@@ -15,18 +15,17 @@ ESC = 0.6
 N8 = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
 
 # Preferencias de inicio por glifo: (u, v) en [0,1] dentro de la caja del glifo (0,0 = arriba-izquierda).
-# Se afinan a ojo viendo debug_trazos.png.
+# Se afinan a ojo viendo debug_trazos.png (cada trazo va numerado y con un círculo en su punto de partida).
 INICIO = {
-    "M": (0.0, 1.0),
-    "a": (0.9, 0.1),
-    "r": (0.1, 0.0),
-    "t.ss01": (0.5, 0.0),
-    "a.ss01": (0.9, 0.1),
-    "y": (0.0, 0.1),
-    "J": (0.0, 0.0),
+    "M": (0.0, 0.42),
+    "a": (0.65, 0.08),
+    "r": (0.0, 0.72),
+    "t": (0.95, 0.0),
+    "y": (0.1, 0.05),
+    "J": (0.48, 0.33),
     "o": (0.6, 0.0),
-    "g.ss01": (0.9, 0.1),
-    "e.ss01": (0.0, 0.5),
+    "g": (0.65, 0.08),
+    "e": (0.0, 0.5),
 }
 
 

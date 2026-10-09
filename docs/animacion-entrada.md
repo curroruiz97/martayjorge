@@ -9,7 +9,7 @@ rebotes; todo es lento, suave y se puede saltar en cualquier momento.
 |---|---|
 | 0,2 – 2,3 | Un avión de papel cruza la parte alta dejando su estela de rayas terracota y hace un lazo en forma de corazón (la misma ruta que luego recorre en la Agenda) |
 | 0,75 | «¡Nos casamos!» aparece con un fundido suave |
-| 0,85 – 3,7 | **«Marta y Jorge» se escriben a pluma**, trazo a trazo y en el orden en que se escribe cada letra (la M en un zigzag, la J de arriba abajo, el travesaño de la t al final…). La «y», en terracota |
+| 0,85 – 4,0 | **«Marta y Jorge» se escriben a pluma** con una caligrafía fina (Corinthia), trazo a trazo y en el orden en que se escribe cada letra (la M empieza por su lazo, la J baja y cierra en un bucle…). La «y», en terracota |
 | 1,2 – 2,8 | Se dibujan a línea las **puertas en arco** (contorno, costura, marcos y pomos) y después se rellenan de papel |
 | 3,0 – 4,5 | Las puertas **se abren en 3D**, con su sombra, y la foto aparece «enfocándose» (de borrosa a nítida, con un leve acercamiento) |
 | 3,5 – 4,6 | Fecha, cuenta atrás y botón entran con un fundido |
@@ -21,12 +21,11 @@ rebotes; todo es lento, suave y se puede saltar en cualquier momento.
   el estado normal de cada elemento es el **final**. Por eso, sin animaciones la portada sale completa al instante.
 - **Se salta**: si la persona hace scroll, toca o pulsa una tecla durante la entrada, todo se acelera ×7 y termina
   en menos de un segundo ([`public/js/intro.js`](../public/js/intro.js)).
-- **Una vez cada 12 horas por dispositivo**: quien vuelva a abrir el enlace ese mismo día (por ejemplo, para rellenar
-  el formulario) ve la portada completa al instante, sin repetir la entrada
-  ([`public/js/boot.js`](../public/js/boot.js); se guarda la hora en `localStorage`, y si el navegador no lo permite,
-  al menos una vez por pestaña).
-  - `?intro=1` en la dirección fuerza que se vea otra vez (útil para enseñarla): `https://tu-dominio/?intro=1`.
-  - `?intro=0` la omite.
+- **Se reproduce siempre**, en cada carga de la página ([`public/js/boot.js`](../public/js/boot.js)): quien abra el
+  enlace —o recargue— la ve, y quien tenga prisa la acelera con un toque o un scroll. No hay memoria entre visitas.
+  - `?intro=0` en la dirección la omite (portada completa al instante).
+  - Si el enlace lleva un ancla (por ejemplo `https://tu-dominio/#confirmacion`) tampoco se reproduce, porque la persona
+    aterriza directamente en esa parte de la página y la portada ni se ve.
 - **Conexión lenta**: si a los 2,6 s la foto aún no ha llegado, las puertas esperan a que llegue (como mucho 9 s) en
   lugar de abrirse sobre un hueco vacío.
 - **Accesibilidad**: con «reducir movimiento» activado en el sistema no hay animación (portada completa
@@ -40,9 +39,9 @@ rebotes; todo es lento, suave y se puede saltar en cualquier momento.
 |---|---|
 | Que empiece antes/después una fase | variables `--escritura`, `--lineas`, `--abre` al principio de `intro.css` |
 | Que fecha/cuenta atrás/botón entren antes o después | `style="--d:…"` de esos elementos en `public/index.html` |
-| Escribir los nombres más rápido o despacio | `VELOCIDAD=9000 scripts/intro/generar.sh` (por defecto 7600 unidades/s) y volver a pegar el SVG |
+| Escribir los nombres más rápido o despacio | `VELOCIDAD=12000 scripts/intro/generar.sh` (por defecto 10000 unidades/s) y volver a pegar el SVG |
+| Cambiar la caligrafía de los nombres | poner otra fuente en `scripts/intro/` (ver abajo), ajustar las salidas de `trazos.py`/`ensamblar.py` y regenerar |
 | Quitar la foto «respirando» | borrar `respira …` de `.ventana img` en `intro.css` |
-| Que la entrada se repita con más o menos frecuencia | `12 * 36e5` (12 horas) en `public/js/boot.js` |
 | Quitar la pista para seguir bajando | borrar `<span class="portada__baja …">` de `public/index.html` |
 | Desactivar toda la entrada | añadir la clase `intro-vista` a `<html>` en `index.html` (o quitar el `<link>` a `intro.css`) |
 
@@ -51,11 +50,16 @@ rebotes; todo es lento, suave y se puede saltar en cualquier momento.
 Los nombres escritos y el ornamento no están dibujados a mano: salen de scripts reproducibles en
 [`scripts/intro/`](../scripts/intro/).
 
-1. **Nombres** (`glifos.py` → `trazos.py` → `ensamblar.py` → `svg.py`): se toma la Caveat en peso 700, se calcula el
+1. **Nombres** (`glifos.py` → `trazos.py` → `ensamblar.py` → `svg.py`): se toma la Corinthia
+   (`public/assets/fonts/corinthia-latin-400-normal.woff2`, licencia OFL), se calcula el
    **esqueleto** de cada letra, se convierte en trazos de pluma ordenados (con sentido de escritura, ápices y
    extremos cubiertos) y se emite un SVG donde cada trazo grueso, **recortado por el contorno real de la letra**
    (`clipPath`), se «dibuja» con `stroke-dashoffset`. Al terminar cada letra entra su relleno exacto, así que el
-   resultado final es idéntico a la tipografía.
+   resultado final es idéntico a la tipografía. La composición (Marta arriba, la «y» pequeña y girada, Jorge
+   recogido a la derecha) se calcula con las medidas reales de la tinta: se retoca en las constantes de `svg.py`
+   (`ESCALA_Y`, `X_Y`, `HUECO_1`, `HUECO_2`, `SANGRIA_J`) o con variables de entorno del mismo nombre.
+   Si se cambia de tipografía hay que revisar `debug_trazos.png` (en `.tmp/`: cada trazo va numerado y con su punto de
+   partida) y ajustar `INICIO` en `trazos.py` e `INVERTIR` en `ensamblar.py`.
 2. **Ornamento** (`ornamento.cjs`): muestrea la ruta de la ilustradora, parte la línea en sus 48 rayas, hace que
    cada una aparezca en la estela del avión y genera los 56 fotogramas CSS del vuelo con **la misma curva de
    easing**, para que avión y rayas vayan perfectamente sincronizados sin JavaScript.
@@ -66,7 +70,7 @@ de dónde pegarlos.
 
 ## Probarla fotograma a fotograma
 
-En la consola del navegador (con `?intro=1`), para congelar la animación en el segundo 3,2:
+En la consola del navegador (recién cargada la página), para congelar la animación en el segundo 3,2:
 
 ```js
 document.getAnimations().forEach(a => { a.pause(); a.currentTime = 3200; });

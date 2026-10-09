@@ -11,20 +11,18 @@ TMP="$AQUI/.tmp"
 PY="${PYTHON:-python3}"
 mkdir -p "$TMP" && cd "$TMP"
 
-echo "1/5 Caveat estática en peso 700 (desde la fuente variable autoalojada)"
-"$PY" - "$RAIZ/public/assets/fonts/caveat-latin-wght-normal.woff2" <<'PY'
+echo "1/5 Corinthia (la caligrafía de los nombres) en TTF, desde la fuente autoalojada"
+"$PY" - "$RAIZ/public/assets/fonts/corinthia-latin-400-normal.woff2" <<'PY'
 import sys
 from fontTools.ttLib import TTFont
-from fontTools.varLib import instancer
 f = TTFont(sys.argv[1])
-g = instancer.instantiateVariableFont(f, {"wght": 700})
-g.flavor = None
-g.save("caveat700.ttf")
+f.flavor = None
+f.save("corinthia400.ttf")
 PY
 echo "2/5 Glifos y esqueletos";            "$PY" "$AQUI/glifos.py" >/dev/null
 echo "3/5 Trazos de pluma ordenados";      "$PY" "$AQUI/trazos.py" >/dev/null
 echo "4/5 Grosor de cobertura y ajustes";  "$PY" "$AQUI/ensamblar.py"
-echo "5/5 SVG de los nombres y ornamento"; "$PY" "$AQUI/svg.py" "${VELOCIDAD:-7600}" | head -1
+echo "5/5 SVG de los nombres y ornamento"; "$PY" "$AQUI/svg.py" "${VELOCIDAD:-10000}" | head -1
 node "$AQUI/ornamento.cjs" "$RAIZ/public/assets/ilustraciones/ruta-horizontal.svg" "$TMP/orn" 2.1 0.2
 echo
 echo "Listo. Salidas en $TMP:"

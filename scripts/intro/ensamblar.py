@@ -13,16 +13,12 @@ ESC = 0.6
 PAD = 40
 
 # ---- Ajustes manuales de sentido y fusión (índices 1-based de trazo dentro del glifo) ----
-INVERTIR = {"a": [1], "a.ss01": [1], "g.ss01": [1], "e.ss01": [1], "r": [2], "y": [2]}
-# 't': fundir trazo 2 + trazo 3 invertido => travesaño de izquierda a derecha en un solo gesto
-FUSIONES = {"t.ss01": ((2, 3, True),)}
+# Con Corinthia casi todos los trazos salen ya en el sentido natural; solo hay que invertir los que el esqueleto recorre
+# al revés (la subida de la M, el remate de la a, el empalme de la o y los dos trazos de la g).
+INVERTIR = {"M": [2], "a": [1], "o": [2], "g": [1, 2]}
+FUSIONES = {}
 
-# ---- Layout (unidades de fuente; em = 1000) ----
-VELOCIDAD = 5600.0       # unidades/s de la punta de la pluma
-GAP_TRAZO = 0.05         # s entre trazos de una letra
-GAP_LETRA = 0.07         # s entre letras
-GAP_PALABRA = 0.16       # s entre palabras
-DUR_MIN = 0.11
+# (la velocidad de escritura, las pausas y la composición de las tres palabras están en svg.py)
 GRUESO_K = 1.0           # factor sobre el grosor de cobertura calculado
 
 

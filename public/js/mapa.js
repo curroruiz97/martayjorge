@@ -384,7 +384,7 @@
     el.classList.add('mapa--lista');
     el.setAttribute('data-mapa', 'listo');
     el.mapaLeaflet = map;
-    // Una pasada más cuando ya están las fuentes (Caveat) y el layout asentado.
+    // Una pasada más cuando ya están las fuentes (Cormorant) y el layout asentado.
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (!tocado) encuadrar(); });
     el.dispatchEvent(new CustomEvent('mapa:listo', { detail: { map: map, capaTeselas: capa } }));
   }

@@ -1,17 +1,20 @@
 /* ==========================================================================
    Marta & Jorge · sistema de diseño compartido
-   Papel crema + tinta + caligrafía de pincel (Caveat) + serif cursiva
+   Papel crema + tinta + caligrafía fina (Corinthia) + serif cursiva
    (Cormorant Garamond) + etiquetas en versalitas (Inter).
    Todo son variables: para retocar el estilo basta con tocar :root.
    ========================================================================== */
 
-/* ---------- Fuentes (autoalojadas y recortadas a lo que usa la página: ~80 KB en total) ----------
-   · Caveat solo en peso 600 (títulos y cifras). El peso 700 del cierre se refuerza con un trazo finísimo.
+/* ---------- Fuentes (autoalojadas y recortadas a lo que usa la página: ~60 KB en total) ----------
+   · Corinthia (caligrafía fina) en un solo peso: títulos. Los nombres de la portada no son texto sino un SVG con la
+     misma tipografía (ver scripts/intro). Su altura de letra es menor que la de una letra normal, así que se agranda
+     con size-adjust: los tamaños de los títulos (rem/vw) se leen como si fuera una letra de tamaño corriente.
+     El rango de pesos 100–900 evita que el navegador la «engorde» artificialmente si algún estilo pide negrita.
    · Cormorant solo en cursiva: todo el texto serif de la página es cursivo (si algún día se necesitara redonda,
-     añadir el fichero y su @font-face; mientras tanto el texto «normal» saldría también en cursiva).
+     añadir el fichero y su @font-face; mientras tanto el texto «normal» saldría también en cursiva). También las cifras.
    · Inter 400/500 para etiquetas y formulario. Todas con subconjunto latino (español y lenguas vecinas). */
-@font-face { font-family: "Caveat"; font-style: normal; font-weight: 600; font-display: swap;
-  src: url("../assets/fonts/caveat-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Corinthia"; font-style: normal; font-weight: 100 900; font-display: swap; size-adjust: 145%;
+  src: url("../assets/fonts/corinthia-latin-400-normal.woff2") format("woff2"); }
 @font-face { font-family: "Cormorant Garamond"; font-style: italic; font-weight: 400; font-display: swap;
   src: url("../assets/fonts/cormorant-garamond-latin-400-italic.woff2") format("woff2"); }
 @font-face { font-family: "Inter"; font-style: normal; font-weight: 400; font-display: swap;
@@ -43,7 +46,7 @@
   --ok: #4f6b45;
 
   /* tipografía */
-  --f-script: "Caveat", "Segoe Print", "Bradley Hand", "Comic Sans MS", cursive;
+  --f-script: "Corinthia", "Snell Roundhand", "Apple Chancery", "Segoe Script", "Lucida Handwriting", cursive;
   --f-serif: "Cormorant Garamond", "Iowan Old Style", Georgia, "Times New Roman", serif;
   --f-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
@@ -117,7 +120,7 @@ a:hover { text-decoration-thickness: 2px; }
 }
 /* Títulos caligráficos */
 .titulo, .script {
-  font-family: var(--f-script); font-weight: 600; line-height: 1;
+  font-family: var(--f-script); font-weight: 400; line-height: 1.1;
   letter-spacing: .005em; color: var(--tinta);
 }
 .titulo { font-size: min(var(--fs-h2), 21vw); text-wrap: balance; overflow-wrap: anywhere; }   /* el tope en vw evita que una palabra larga se salga con la letra muy ampliada */

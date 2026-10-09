@@ -34,6 +34,7 @@
   --pad-v: clamp(1.25rem, 4vh, 3.5rem);
   --n: min(80vw, 22rem);
   --foto: min(70vw, 20rem);
+  --k: 1.3;                              /* las cifras de la cuenta atrás (cursiva serif) se agrandan esto respecto a --D */
   position: relative;
   min-height: 100vh; min-height: 100svh;
   display: grid; justify-items: center; align-content: center;
@@ -57,7 +58,8 @@
 .cuenta__fila { display: flex; justify-content: center; max-width: 100%; }
 .cuenta__item { display: grid; justify-items: center; min-width: min(4.4rem, 27vw); padding-inline: min(clamp(.5rem, 3vw, 1.1rem), 3vw); position: relative; }
 .cuenta__item + .cuenta__item::before { content: ""; position: absolute; left: 0; top: 18%; bottom: 18%; border-left: 1px solid var(--linea); }
-.cuenta__num { font-family: var(--f-script); font-weight: 600; font-size: min(clamp(2.6rem, 1.8rem + 3vw, 3.6rem), 15vw); line-height: 1; font-variant-numeric: tabular-nums; }
+/* Cifras en cursiva serif (cifras de estilo antiguo, muy legibles): --k las agranda respecto al tamaño pensado para una letra caligráfica */
+.cuenta__num { font-family: var(--f-serif); font-style: italic; font-weight: 400; font-size: calc(var(--k) * min(clamp(2.6rem, 1.8rem + 3vw, 3.6rem), 15vw)); line-height: 1; }
 .cuenta__txt { margin-top: .4rem; font: 500 min(.6875rem, 3.6vw)/1 var(--f-sans); letter-spacing: min(.24em, 1.3vw); text-transform: uppercase; color: var(--tinta-tenue); }
 .cuenta__estado { font-size: clamp(2rem, 1.5rem + 2vw, 2.75rem); color: var(--terracota); }
 
@@ -76,7 +78,7 @@
     --pad-b: max(.75rem, calc(var(--alto) * .026));
     --D: min(clamp(1.6rem, calc(var(--alto) * .052), 2.8rem), 11vw);   /* tope por ancho: con la letra al 200 % las cifras no se salen */
     --C: clamp(2.4rem, calc(var(--alto) * .062), 3rem);
-    --n: min(80vw, 30rem, max(9rem, calc((var(--alto) - var(--pad-t) - var(--pad-b) - 7rem - var(--D) - var(--C)) / 2.15)));
+    --n: min(80vw, 30rem, max(9rem, calc((var(--alto) - var(--pad-t) - var(--pad-b) - 7rem - var(--k) * var(--D) - var(--C)) / 2.15)));
     --foto: min(70vw, 26rem, calc(var(--n) * .85));
     align-content: space-between;
     gap: .5rem;
@@ -87,7 +89,7 @@
   .portada__fecha { margin-top: .15rem; }
   .portada__extra { gap: .6rem; }
   .cuenta { gap: .3rem; }
-  .cuenta__num { font-size: var(--D); }
+  .cuenta__num { font-size: calc(var(--k) * var(--D)); }
   .cuenta__txt { margin-top: .2rem; }
   .portada__cta { min-height: var(--C); padding-block: 0; }
 }
@@ -96,7 +98,7 @@
 @media (orientation: landscape) and (min-width: 560px) {
   .portada {
     --pad-v: clamp(.75rem, calc(var(--alto) * .045), 3.5rem);
-    --n: min(29vw, 23rem, max(12rem, calc((var(--alto) - 2 * var(--pad-v) - 17.6rem) * .85)));
+    --n: min(31vw, 26rem, max(12rem, calc((var(--alto) - 2 * var(--pad-v) - 17.6rem) * .85)));
     --foto: min(34vw, 28.75rem, max(9rem, calc((var(--alto) - 2 * var(--pad-v) - 1.5rem) * .8)));
     grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
     grid-template-areas: "texto foto" "extra foto";
@@ -114,7 +116,7 @@
   .portada__ruta { margin-bottom: .6rem; }
   /* la columna de texto es más estrecha que la pantalla: la cuenta atrás no puede depender solo del tamaño de letra */
   .cuenta__item { min-width: min(4.4rem, 9vw); }
-  .cuenta__num { font-size: min(clamp(2.6rem, 1.8rem + 3vw, 3.6rem), 6.5vw); }
+  .cuenta__num { font-size: calc(var(--k) * min(clamp(2.6rem, 1.8rem + 3vw, 3.6rem), 6.5vw)); }
 }
 /* Pantallas apaisadas muy bajas (móvil girado, portátiles pequeños): se compacta para que nombres, fecha y foto
    quepan sin hacer scroll; el adorno de arriba se omite y la cuenta atrás se reduce */
@@ -130,7 +132,7 @@
   .portada__fecha { margin-top: .3rem; font-size: .75rem; }
   .portada__extra { gap: .6rem; }
   .cuenta { gap: .2rem; }
-  .cuenta__num { font-size: min(1.75rem, 6.5vw); }
+  .cuenta__num { font-size: calc(var(--k) * min(1.75rem, 6.5vw)); }
   .cuenta__txt { margin-top: .2rem; font-size: .625rem; }
   .cuenta__item { min-width: min(3.6rem, 9vw); }
   .portada__cta { min-height: 2.5rem; padding: .6rem 1.4rem; }
@@ -157,7 +159,7 @@
 
 .evento { display: grid; justify-items: center; gap: .4rem; text-align: center; margin-bottom: clamp(.5rem, 3vw, 1.5rem); }
 .evento .boton { margin-top: 1rem; }
-.evento__lugar { font-family: var(--f-script); font-weight: 600; font-size: min(var(--fs-h3), 15vw); overflow-wrap: anywhere; line-height: 1.02; margin-top: .3rem; text-wrap: balance; }
+.evento__lugar { font-family: var(--f-script); font-weight: 400; font-size: min(var(--fs-h3), 15vw); overflow-wrap: anywhere; line-height: 1.02; margin-top: .3rem; text-wrap: balance; }
 
 .ruta { width: 100%; display: grid; justify-items: center; margin-block: .75rem; }
 .ruta__v { width: min(6.25rem, 28vw); aspect-ratio: 170 / 560; }
@@ -203,7 +205,7 @@
 .transporte__lista { display: grid; gap: clamp(2rem, 6vw, 3rem); }
 .medio { display: grid; grid-template-columns: 3rem 1fr; column-gap: 1.35rem; align-items: start; }
 .medio__icono { width: 3rem; height: 3rem; margin-top: .15rem; }
-.medio__titulo { font-family: var(--f-script); font-weight: 600; font-size: min(clamp(2.1rem, 1.7rem + 1.8vw, 2.7rem), 13vw); line-height: 1.05; }
+.medio__titulo { font-family: var(--f-script); font-weight: 400; font-size: min(clamp(2.1rem, 1.7rem + 1.8vw, 2.7rem), 13vw); line-height: 1.05; }
 .medio p { margin-top: .3rem; }
 
 /* ---------- ALOJAMIENTO ---------- */
@@ -246,7 +248,7 @@
 .cierre__foto img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 78%;
   -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 30%); mask-image: linear-gradient(to bottom, transparent 0, #000 30%); }
 .cierre__texto { position: relative; z-index: 1; display: grid; justify-items: center; gap: .9rem; }
-.cierre__titulo { font-weight: 700; -webkit-text-stroke: .008em currentColor; font-size: min(clamp(4rem, 2.4rem + 8vw, 8.5rem), 19vw); line-height: .95; overflow-wrap: anywhere; }
+.cierre__titulo { font-size: min(clamp(4rem, 2.4rem + 8vw, 8.5rem), 19vw); line-height: 1.02; margin-bottom: .22em; overflow-wrap: anywhere; }   /* el margen deja sitio a los rabillos de la caligrafía */
 .cierre__firma { max-width: 100%; color: var(--tinta); letter-spacing: .28em; text-shadow: 0 0 .9em rgba(245, 240, 228, .9); }
 @media (min-width: 900px) { .cierre__foto img { object-position: 50% 62%; } }
 
