@@ -43,7 +43,7 @@ const fs = require('fs');
   await icono.setContent(`<!doctype html><style>
     html, body { margin: 0; width: 180px; height: 180px; overflow: hidden; }
     body { background-color: #fbf9f1;
-      background-image: url("${lino}"), linear-gradient(90deg, transparent 0, transparent 39%, rgba(238,200,190,.78) 40.6%, rgba(238,200,190,.78) 47.6%, rgba(246,226,218,.55) 49%, rgba(246,226,218,.55) 51%, rgba(238,200,190,.78) 52.4%, rgba(238,200,190,.78) 59.4%, transparent 61%, transparent 100%);
+      background-image: url("${lino}"), linear-gradient(90deg, transparent 0, transparent 39%, rgba(238,200,190,.18) 40.6%, rgba(238,200,190,.18) 47.6%, rgba(246,226,218,.07) 49%, rgba(246,226,218,.07) 51%, rgba(238,200,190,.18) 52.4%, rgba(238,200,190,.18) 59.4%, transparent 61%, transparent 100%);
       background-size: 128px 128px, 180px 100%; background-position: 0 0, 50% 0; background-repeat: repeat, no-repeat; background-blend-mode: multiply, normal; }
     svg { position: absolute; left: 24px; top: 24px; width: 132px; height: 132px; }
   </style>${favicon}`);

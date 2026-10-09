@@ -28,8 +28,8 @@
   --papel: #fbf9f1;            /* crema del lino: la textura (multiply) lo deja en ≈ #f4f2e9 */
   --papel-2: #f4e1d9;          /* crema rosado: puertas de la portada, tarjetas, fondo del mapa */
   --papel-3: #fbf8f1;          /* crema casi blanco (textos claros sobre rojo, halos de los rótulos del mapa) */
-  --rosa: rgba(238, 200, 190, .78);       /* rayas del lino */
-  --rosa-hueco: rgba(246, 226, 218, .55); /* línea clara entre las dos rayas de cada pareja */
+  --rosa: rgba(238, 200, 190, .18);       /* rayas del lino: muy suaves, apenas se notan (el último número es la intensidad) */
+  --rosa-hueco: rgba(246, 226, 218, .07); /* línea clara entre las dos rayas de cada pareja */
   --rojo: #a3121d;             /* tinta roja: nombres, títulos, botones y subrayados */
   --rojo-hover: #7f0d16;
   --tinta: #4b3c37;            /* marrón grisáceo oscuro: iconos y texto fuerte */
