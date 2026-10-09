@@ -1,15 +1,15 @@
 /* ==========================================================================
    Entrada de la portada · «se escribe y se abre»
    Línea de tiempo (s): 0.2 vuela el avión y se traza la ruta · 0.75 etiqueta ·
-   0.85 los nombres se escriben a pluma · 1.2 se dibujan las puertas del arco ·
-   3.0 las puertas se abren y la foto se «enfoca» · 3.5 fecha · 3.85 cuenta atrás y botón.
+   0.85 los nombres se escriben a pluma (≈ 3 s) · 1.2 se dibujan las puertas del arco ·
+   3.5 las puertas se abren y la foto se «enfoca» · 3.9 fecha · 4.25 cuenta atrás y botón.
    Todas las animaciones son de tipo «desde»: el estado normal de cada elemento es el FINAL.
    Así, sin animaciones (prefers-reduced-motion, ya vista, avance rápido) la portada sale completa.
    ========================================================================== */
 .portada {
   --escritura: .85s;
   --lineas: 1.2s;
-  --abre: 3s;
+  --abre: 3.5s;
   --ev: cubic-bezier(.22, .61, .36, 1);
   --ev-pluma: cubic-bezier(.5, .08, .3, 1);
   --ev-postigo: cubic-bezier(.62, .02, .2, 1);
@@ -17,7 +17,7 @@
 }
 
 /* ---- Ornamento: ruta con corazón; las rayas aparecen en la estela del avión (ver intro.generado) ---- */
-.portada__ruta { width: var(--n); margin: 0 auto .25rem; }
+.portada__ruta { width: calc(var(--n) * .55); margin: 0 auto .25rem; }
 .portada__ruta-svg { display: block; width: 100%; height: auto; overflow: visible; }
 .rz { fill: none; stroke: var(--terracota); stroke-width: 2.7; stroke-linecap: round; stroke-dasharray: 1 2; stroke-dashoffset: 0; animation: raya .26s ease-out var(--d) backwards; }
 @keyframes raya { from { stroke-dashoffset: 1; } }
@@ -28,8 +28,7 @@
 
 /* ---- Nombres escritos a pluma ---- */
 .nombres { display: block; margin: 0; line-height: 0; }
-.nombres__svg { display: block; width: var(--n); height: auto; margin-inline: auto; overflow: visible; color: var(--tinta); }
-.pal--y { color: var(--terracota); }
+.nombres__svg { display: block; width: var(--n); height: auto; margin-inline: auto; overflow: visible; color: var(--rojo); }
 .tz {
   fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round;
   stroke-dasharray: 1 2; stroke-dashoffset: 0;
@@ -64,13 +63,13 @@
 .postigo__cara { position: absolute; inset: 0; background: var(--papel-2); animation: velo 1.1s ease calc(var(--lineas) + 1.05s) backwards; }
 @keyframes velo { from { opacity: 0; } }
 .postigo svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.po { fill: none; stroke: var(--tinta); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 2; stroke-dashoffset: 0; opacity: .85;
+.po { fill: none; stroke: var(--rojo); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 2; stroke-dashoffset: 0; opacity: .85;
   animation: trazo-po 1.3s var(--ev-pluma) calc(var(--lineas) + var(--k, 0s)) backwards; }
 .po--f { stroke-width: 1.3; opacity: .55; }
 @keyframes trazo-po { from { stroke-dashoffset: 1; } }
 .po-pomo { fill: var(--terracota); animation: velo .6s ease calc(var(--lineas) + 1.5s) backwards; }
-.postigo__sombra { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(43, 42, 40, 0), rgba(43, 42, 40, .34)); opacity: 0; animation: sombra 1.5s ease var(--abre) both; }
-.postigo--der .postigo__sombra { background: linear-gradient(270deg, rgba(43, 42, 40, 0), rgba(43, 42, 40, .34)); animation-delay: calc(var(--abre) + .08s); }
+.postigo__sombra { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(70, 22, 26, 0), rgba(70, 22, 26, .3)); opacity: 0; animation: sombra 1.5s ease var(--abre) both; }
+.postigo--der .postigo__sombra { background: linear-gradient(270deg, rgba(70, 22, 26, 0), rgba(70, 22, 26, .3)); animation-delay: calc(var(--abre) + .08s); }
 @keyframes sombra { 0% { opacity: 0; } 55% { opacity: 1; } 100% { opacity: 1; } }
 
 /* contorno desplazado del marco: «se corre» al abrirse la ventana */
@@ -82,7 +81,7 @@
 
 /* ---- Alto contraste de Windows (forced-colors): el color de los nombres y del adorno va en SVG y no se fuerza solo ---- */
 @media (forced-colors: active) {
-  .nombres__svg, .pal--y { color: CanvasText; }
+  .nombres__svg { color: CanvasText; }
   .rz { stroke: CanvasText; }
 }
 

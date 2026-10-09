@@ -9,22 +9,20 @@ import math
 import pickle
 import sys
 
-VELOCIDAD = float(sys.argv[1]) if len(sys.argv) > 1 else 10000.0  # unidades/s de la punta de la pluma
-GAP_TRAZO = 0.02
-GAP_LETRA = 0.02
-GAP_PALABRA = 0.10
+VELOCIDAD = float(sys.argv[1]) if len(sys.argv) > 1 else 11000.0   # unidades/s de la punta de la pluma
+GAP_TRAZO = 0.03
+GAP_LETRA = 0.045
+GAP_PALABRA = 0.12
 DUR_MIN = 0.08
 
-# ---- Composición (unidades de fuente, em = 1000; en el SVG la «y» va hacia abajo) ----
+# ---- Composición: una sola línea «MARTA   Y   JORGE», con las palabras muy separadas (como en la referencia) ----
+# (unidades de fuente, em = 1024; cada constante se puede cambiar con una variable de entorno del mismo nombre)
 import os
 def _e(n, d): return float(os.environ.get(n, d))
-ESCALA_Y = _e("ESCALA_Y", 0.6)   # tamaño de la «y» respecto a las palabras
-ROT_Y = _e("ROT_Y", -8)           # grados
-SANGRIA_J = _e("SANGRIA_J", 120)  # «Jorge» queda alineado a la derecha de «Marta», recogido esta cantidad
-X_Y = _e("X_Y", 420)              # centro de la «y» respecto al centro de «Marta»
-HUECO_1 = _e("HUECO_1", 70)       # aire entre la base de «Marta» y lo más alto de la «y»
-HUECO_2 = _e("HUECO_2", -120)       # aire entre lo más bajo de la «y» y lo más alto de «Jorge»
-MARGEN = _e("MARGEN", 40)         # margen de la caja de dibujo alrededor de la tinta
+TRACK = _e("TRACK", 55)              # espacio añadido entre letras (la letra de referencia va algo abierta)
+GAP_PAL = _e("GAP_PAL", 330)         # hueco entre palabras
+ESCALA_Y = _e("ESCALA_Y", 1.0)       # tamaño de la «Y» respecto a las palabras
+MARGEN = _e("MARGEN", 40)            # margen de la caja de dibujo alrededor de la tinta
 
 
 def largo(poly):
@@ -50,46 +48,34 @@ def tinta(G, palabra):
 def main():
     P = pickle.load(open("palabras.pkl", "rb"))
     G = pickle.load(open("glifos.pkl", "rb"))
-    bm = tinta(G, "Marta"); by = tinta(G, "y"); bj = tinta(G, "Jorge")
-    ancho_m = bm[1] - bm[0]; ancho_j = bj[1] - bj[0]
+    orden = ("Marta", "y", "Jorge")
+    escala = {"Marta": 1.0, "y": ESCALA_Y, "Jorge": 1.0}
+    caja = {k: tinta(G, k) for k in orden}                    # (x0, x1, y0, y1) con la y hacia arriba
+    ancho_tinta = {k: (caja[k][1] - caja[k][0]) * escala[k] + TRACK * (len(P[k]) - 1) * escala[k] for k in orden}
 
-    # --- Marta: línea base en 0; centrada en x = 0 ---
-    base_m = 0.0
-    tx_m = -(bm[0] + bm[1]) / 2
-    # --- y: reducida y girada, entre las dos líneas ---
-    arriba_y = base_m + (-bm[2]) + HUECO_1             # parte alta de la tinta de la «y» (en el SVG, y hacia abajo)
-    base_y = arriba_y + by[3] * ESCALA_Y               # su línea base
-    abajo_y = base_y - by[2] * ESCALA_Y
-    tx_y = X_Y - (by[0] + by[1]) / 2 * ESCALA_Y
-    # --- Jorge: alineado a la derecha de Marta (con sangría) ---
-    base_j = abajo_y + HUECO_2 + bj[3]
-    der_j = ancho_m / 2 - SANGRIA_J
-    tx_j = der_j - bj[1]
+    # x donde empieza la tinta de cada palabra (a la izquierda del todo = 0); luego se centra el conjunto
+    x_ini, cursor_x = {}, 0.0
+    for k in orden:
+        x_ini[k] = cursor_x
+        cursor_x += ancho_tinta[k] + GAP_PAL
+    total_ancho = cursor_x - GAP_PAL
+    desp = -total_ancho / 2
 
-    posiciones = {
-        "Marta": (tx_m, base_m, 1.0, 0),
-        "y": (tx_y, base_y, ESCALA_Y, ROT_Y),
-        "Jorge": (tx_j, base_j, 1.0, 0),
-    }
     defs, cuerpo, detalle = [], [], []
     cursor = 0.0
     cid = 0
-    for palabra in ("Marta", "y", "Jorge"):
-        tx, ty, sc, rot = posiciones[palabra]
+    extremos = {"x0": 1e9, "x1": -1e9, "y0": 1e9, "y1": -1e9}
+    for palabra in orden:
+        sc = escala[palabra]
+        x0 = caja[palabra][0]
+        tx = desp + x_ini[palabra] - x0 * sc                   # la tinta de la palabra arranca en x_ini
         cls = {"Marta": "marta", "y": "y", "Jorge": "jorge"}[palabra]
-        if rot:
-            # se gira alrededor del centro de la tinta de la «y»
-            cx = tx + (by[0] + by[1]) / 2 * sc
-            cy = ty - (by[2] + by[3]) / 2 * sc
-            tr = "rotate(%s %.0f %.0f) translate(%.0f %.0f) scale(%s %s)" % (rot, cx, cy, tx, ty, sc, -sc)
-        else:
-            tr = "translate(%.0f %.0f) scale(1 -1)" % (tx, ty)
-        cuerpo.append('<g class="pal pal--%s" transform="%s">' % (cls, tr))
-        for g in P[palabra]:
+        cuerpo.append('<g class="pal pal--%s" transform="translate(%.0f 0) scale(%s %s)">' % (cls, tx, sc, -sc))
+        for i, g in enumerate(P[palabra]):
             cid += 1
             cp = "cp%d" % cid
             defs.append('<path id="g%d" d="%s"/><clipPath id="%s"><use href="#g%d"/></clipPath>' % (cid, g["d"], cp, cid))
-            cuerpo.append('<g transform="translate(%d 0)">' % g["x"])
+            cuerpo.append('<g transform="translate(%d 0)">' % (g["x"] + TRACK * i))
             cuerpo.append('<g clip-path="url(#%s)">' % cp)
             fin_glifo = cursor
             for t in g["trazos"]:
@@ -105,22 +91,15 @@ def main():
             cursor += GAP_LETRA - GAP_TRAZO
         cuerpo.append("</g>")
         cursor += GAP_PALABRA - GAP_LETRA
-    total = cursor
 
-    # caja de dibujo = tinta de las tres palabras (con la «y» girada) + margen
-    def caja_y():
-        c = math.cos(math.radians(ROT_Y)); s = math.sin(math.radians(ROT_Y))
-        x0 = tx_y + by[0] * ESCALA_Y; x1 = tx_y + by[1] * ESCALA_Y
-        y0 = base_y - by[3] * ESCALA_Y; y1 = base_y - by[2] * ESCALA_Y
-        cx = tx_y + (by[0] + by[1]) / 2 * ESCALA_Y; cy = base_y - (by[2] + by[3]) / 2 * ESCALA_Y
-        pts = [(x, y) for x in (x0, x1) for y in (y0, y1)]
-        rot = [(cx + (x - cx) * c - (y - cy) * s, cy + (x - cx) * s + (y - cy) * c) for x, y in pts]
-        return min(p[0] for p in rot), max(p[0] for p in rot), min(p[1] for p in rot), max(p[1] for p in rot)
-    cy_ = caja_y()
-    xmin = min(tx_m + bm[0], tx_j + bj[0], cy_[0]) - MARGEN
-    xmax = max(tx_m + bm[1], tx_j + bj[1], cy_[1]) + MARGEN
-    ymin = min(base_m - bm[3], cy_[2], base_j - bj[3]) - MARGEN
-    ymax = max(base_m - bm[2], cy_[3], base_j - bj[2]) + MARGEN
+    total = cursor
+    # caja de dibujo = la tinta de toda la línea (alto de las tres palabras) + margen
+    y_arriba = max(caja[k][3] * escala[k] for k in orden)
+    y_abajo = min(caja[k][2] * escala[k] for k in orden)
+    xmin = desp - MARGEN
+    xmax = desp + total_ancho + MARGEN
+    ymin = -y_arriba - MARGEN                                  # en el SVG la y va hacia abajo
+    ymax = -y_abajo + MARGEN
     vb = (round(xmin), round(ymin), round(xmax - xmin), round(ymax - ymin))
     svg = ('<svg class="nombres__svg" viewBox="%d %d %d %d" aria-hidden="true" focusable="false">'
            "<defs>%s</defs>%s</svg>") % (vb + ("".join(defs), "".join(cuerpo)))

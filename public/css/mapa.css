@@ -40,17 +40,17 @@
 
 /* ---------- Botones +/− (44 px mínimo para el dedo) ---------- */
 .mapa .leaflet-container .leaflet-bar {
-  border: 1px solid var(--tinta); border-radius: 8px; overflow: hidden;
-  background: var(--campo-mapa); box-shadow: 2px 2px 0 rgba(43, 42, 40, .16);
+  border: 1.5px solid var(--rojo); border-radius: 8px; overflow: hidden;
+  background: var(--campo-mapa); box-shadow: 2px 2px 0 rgba(163, 18, 29, .16);
 }
 .mapa .leaflet-container .leaflet-bar a {
   width: 44px; height: 44px; line-height: 42px;
-  background: transparent; color: var(--tinta);
+  background: transparent; color: var(--rojo);
   font: 500 1.625rem/42px var(--f-sans); text-decoration: none;
   border-bottom: 1px solid var(--linea);
 }
 .mapa .leaflet-container .leaflet-bar a:last-child { border-bottom: 0; }
-.mapa .leaflet-container .leaflet-bar a:hover { background: var(--papel-2); color: var(--tinta); }
+.mapa .leaflet-container .leaflet-bar a:hover { background: var(--papel-2); color: var(--rojo-hover); }
 .mapa .leaflet-container .leaflet-bar a:focus-visible { outline: 3px solid var(--terracota); outline-offset: -3px; border-radius: 0; }
 .mapa .leaflet-container .leaflet-bar a.leaflet-disabled { background: transparent; color: var(--tinta-tenue); opacity: .55; cursor: default; }
 
@@ -86,19 +86,19 @@
 /* ---------- Ventanas (nombre + «¿Cómo llegar?») ---------- */
 .mapa .leaflet-popup-content-wrapper {
   background: var(--campo-mapa); color: var(--tinta);
-  border: 1px solid var(--tinta); border-radius: 8px;
-  box-shadow: 3px 3px 0 rgba(43, 42, 40, .18);
+  border: 1.5px solid var(--rojo); border-radius: 8px;
+  box-shadow: 3px 3px 0 rgba(163, 18, 29, .18);
 }
-.mapa .leaflet-popup-tip { background: var(--campo-mapa); box-shadow: none; border: 1px solid var(--tinta); }
+.mapa .leaflet-popup-tip { background: var(--campo-mapa); box-shadow: none; border: 1.5px solid var(--rojo); }
 .mapa .leaflet-popup-content { margin: .9rem 2.75rem .95rem 1.1rem; font: 400 1rem/1.25 var(--f-serif); }
 .mapa .mapa-popup { display: grid; justify-items: start; gap: .3rem; }
-.mapa .mapa-popup__titulo { font: italic 400 1.7rem/1.05 var(--f-serif); color: var(--tinta); }
+.mapa .mapa-popup__titulo { font: italic 400 1.7rem/1.1 var(--f-serif); color: var(--rojo); }
 .mapa .mapa-popup__detalle { font-style: italic; color: var(--tinta-suave); }
-.mapa .leaflet-container a.boton { margin-top: .5rem; min-height: 2.75rem; padding: .6rem 1.15rem; letter-spacing: .16em; color: var(--tinta); }
+.mapa .leaflet-container a.boton { margin-top: .5rem; min-height: 2.75rem; padding: .45rem 1.1rem .4rem; font-size: 1.15rem; letter-spacing: .08em; color: var(--rojo); }
 .mapa .leaflet-container a.boton:hover { color: var(--papel); }
 .mapa .leaflet-container a.leaflet-popup-close-button {
   top: 0; right: 0; width: 44px; height: 44px;
-  font: 400 1.75rem/44px var(--f-sans); color: var(--tinta); border-radius: 0 8px 0 0;
+  font: 400 1.75rem/44px var(--f-sans); color: var(--rojo); border-radius: 0 8px 0 0;
 }
 .mapa .leaflet-container a.leaflet-popup-close-button:hover { color: var(--terracota); background: transparent; }
 .mapa .leaflet-container a.leaflet-popup-close-button:focus-visible { outline: 3px solid var(--terracota); outline-offset: -4px; }
@@ -108,7 +108,7 @@
   position: absolute; z-index: 1100; right: .6rem; top: .6rem; max-width: calc(100% - 4.75rem);
   transform: translateY(-.35rem); opacity: 0; pointer-events: none;
   padding: .5rem .9rem; border-radius: 999px;
-  background: var(--tinta); color: var(--papel);
+  background: var(--rojo); color: var(--papel);
   font: 500 .8125rem/1.3 var(--f-sans); letter-spacing: .01em;
   transition: opacity .25s var(--ease), transform .25s var(--ease);
 }

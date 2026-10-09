@@ -1,18 +1,18 @@
 # Animación de entrada de la portada
 
-Está pensada como una invitación hecha a mano: **papel, tinta y un poco de magia**. Nada de destellos ni
+Está pensada como una invitación hecha a mano: **lino, tinta roja y un poco de magia**. Nada de destellos ni
 rebotes; todo es lento, suave y se puede saltar en cualquier momento.
 
-## Qué se ve (≈ 5 s)
+## Qué se ve (≈ 5,5 s)
 
 | t (s) | Qué pasa |
 |---|---|
-| 0,2 – 2,3 | Un avión de papel cruza la parte alta dejando su estela de rayas terracota y hace un lazo en forma de corazón (la misma ruta que luego recorre en la Agenda) |
+| 0,2 – 2,3 | Un avión de papel cruza la parte alta dejando su estela de rayas rojas y hace un lazo en forma de corazón (la misma ruta que luego recorre en la Agenda) |
 | 0,75 | «¡Nos casamos!» aparece con un fundido suave |
-| 0,85 – 4,0 | **«Marta y Jorge» se escriben a pluma** con una caligrafía fina de pluma (Ephesis), trazo a trazo y en el orden en que se escribe cada letra (la M empieza por su lazo, la J lleva primero su barra y luego baja en un gancho…). La «y», en terracota |
-| 1,2 – 2,8 | Se dibujan a línea las **puertas en arco** (contorno, costura, marcos y pomos) y después se rellenan de papel |
-| 3,0 – 4,5 | Las puertas **se abren en 3D**, con su sombra, y la foto aparece «enfocándose» (de borrosa a nítida, con un leve acercamiento) |
-| 3,5 – 4,6 | Fecha, cuenta atrás y botón entran con un fundido |
+| 0,85 – 3,9 | **«MARTA Y JORGE» se escriben a mano** en una sola línea, con un rotulado en mayúsculas (Covered By Your Grace), trazo a trazo y en el orden en que se escribe cada letra (la M en dos palos y una uve, la J de un solo gancho, la O de una vuelta…) |
+| 1,2 – 3,3 | Se dibujan a línea las **puertas en arco** (contorno, costura, marcos y pomos) y después se rellenan de lino rosado |
+| 3,5 – 5,0 | Las puertas **se abren en 3D**, con su sombra, y la foto aparece «enfocándose» (de borrosa a nítida, con un leve acercamiento) |
+| 3,9 – 5,2 | La fecha (en el mismo rotulado), la cuenta atrás y el botón entran con un fundido |
 | después | La foto «respira» (≈ 3 % de zoom en 32 s), las capas tienen un parallax muy sutil con el scroll y, en escritorio, con el ratón, y aparece una pista discreta (una línea con un punto que baja) para seguir bajando |
 
 ## Cómo está hecha
@@ -26,7 +26,7 @@ rebotes; todo es lento, suave y se puede saltar en cualquier momento.
   - `?intro=0` en la dirección la omite (portada completa al instante).
   - Si el enlace lleva un ancla (por ejemplo `https://tu-dominio/#confirmacion`) tampoco se reproduce, porque la persona
     aterriza directamente en esa parte de la página y la portada ni se ve.
-- **Conexión lenta**: si a los 2,6 s la foto aún no ha llegado, las puertas esperan a que llegue (como mucho 9 s) en
+- **Conexión lenta**: si a los 3,1 s la foto aún no ha llegado, las puertas esperan a que llegue (como mucho 9 s) en
   lugar de abrirse sobre un hueco vacío.
 - **Accesibilidad**: con «reducir movimiento» activado en el sistema no hay animación (portada completa
   al instante) y tampoco parallax. Los nombres siguen siendo texto para lectores de pantalla (`<h1>` con el texto
@@ -37,9 +37,9 @@ rebotes; todo es lento, suave y se puede saltar en cualquier momento.
 
 | Quiero… | Dónde |
 |---|---|
-| Que empiece antes/después una fase | variables `--escritura`, `--lineas`, `--abre` al principio de `intro.css` |
+| Que empiece antes/después una fase | variables `--escritura`, `--lineas`, `--abre` al principio de `intro.css` (si cambia `--abre`, ajustad también `DURACION_MS` y los 3100 ms de la espera de la foto en `intro.js`) |
 | Que fecha/cuenta atrás/botón entren antes o después | `style="--d:…"` de esos elementos en `public/index.html` |
-| Escribir los nombres más rápido o despacio | `VELOCIDAD=12000 scripts/intro/generar.sh` (por defecto 10000 unidades/s) y volver a pegar el SVG |
+| Escribir los nombres más rápido o despacio | `VELOCIDAD=13000 scripts/intro/generar.sh` (por defecto 11000 unidades/s) y volver a pegar el SVG |
 | Cambiar la caligrafía de los nombres | poner otra fuente en `scripts/intro/` (ver abajo), ajustar las salidas de `trazos.py`/`ensamblar.py` y regenerar |
 | Quitar la foto «respirando» | borrar `respira …` de `.ventana img` en `intro.css` |
 | Quitar la pista para seguir bajando | borrar `<span class="portada__baja …">` de `public/index.html` |
@@ -50,14 +50,15 @@ rebotes; todo es lento, suave y se puede saltar en cualquier momento.
 Los nombres escritos y el ornamento no están dibujados a mano: salen de scripts reproducibles en
 [`scripts/intro/`](../scripts/intro/).
 
-1. **Nombres** (`glifos.py` → `trazos.py` → `ensamblar.py` → `svg.py`): se toma la Ephesis
-   (`public/assets/fonts/ephesis-latin-400-normal.woff2`, licencia OFL), se calcula el
-   **esqueleto** de cada letra, se convierte en trazos de pluma ordenados (con sentido de escritura, ápices y
-   extremos cubiertos) y se emite un SVG donde cada trazo grueso, **recortado por el contorno real de la letra**
-   (`clipPath`), se «dibuja» con `stroke-dashoffset`. Al terminar cada letra entra su relleno exacto, así que el
-   resultado final es idéntico a la tipografía. La composición (Marta arriba, la «y» pequeña y girada, Jorge
-   recogido a la derecha) se calcula con las medidas reales de la tinta: se retoca en las constantes de `svg.py`
-   (`ESCALA_Y`, `X_Y`, `HUECO_1`, `HUECO_2`, `SANGRIA_J`) o con variables de entorno del mismo nombre.
+1. **Nombres** (`glifos.py` → `trazos.py` → `ensamblar.py` → `svg.py`): se toma la Covered By Your Grace
+   (`public/assets/fonts/covered-by-your-grace-latin-400-normal.woff2`, licencia OFL) y se componen en mayúsculas
+   «MARTA Y JORGE»; se calcula el **esqueleto** de cada letra, se convierte en trazos de pluma ordenados (con sentido de
+   escritura, ápices y extremos cubiertos; la O, que es un anillo cerrado, se recorre entera) y se emite un SVG donde cada
+   trazo grueso, **recortado por el contorno real de la letra** (`clipPath`), se «dibuja» con `stroke-dashoffset`. Al
+   terminar cada letra entra su relleno exacto, así que el resultado final es idéntico a la tipografía. La composición
+   (una sola línea, con las palabras muy separadas) se calcula con las medidas reales de la tinta: se retoca en las
+   constantes de `svg.py` (`TRACK` espacio entre letras, `GAP_PAL` hueco entre palabras, `ESCALA_Y` tamaño de la «Y») o con
+   variables de entorno del mismo nombre.
    Para probar otra tipografía: `FUENTE=/ruta/a/otra.woff2 scripts/intro/generar.sh`; después hay que revisar
    `debug_trazos.png` (en `.tmp/`: cada trazo va numerado y con su punto de partida) y ajustar `INICIO` en `trazos.py` y
    `AJUSTES` en `ensamblar.py` (sentido de cada trazo, uniones y cortes) para que la escritura siga el orden natural.

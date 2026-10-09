@@ -8,7 +8,7 @@
   if (!hero) return;
   const reducir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const vista = root.classList.contains('intro-vista');
-  const DURACION_MS = 6200; // pasado este tiempo la entrada ya ha terminado
+  const DURACION_MS = 6900; // pasado este tiempo la entrada ya ha terminado
 
   /* Pista para seguir bajando: se apaga en cuanto la persona hace scroll */
   const alBajar = () => hero.classList.toggle('scrolled', window.scrollY > 24);
@@ -22,7 +22,7 @@
     const transcurrido = () => {
       try { return hero.getAnimations({ subtree: true }).reduce((m, a) => Math.max(m, a.currentTime || 0), 0); } catch (e) { return 0; }
     };
-    // a los 2,6 s, justo antes de que empiecen las puertas (3,0 s), si la foto aún no ha llegado se espera a que llegue
+    // a los 3,1 s, justo antes de que empiecen las puertas (3,5 s), si la foto aún no ha llegado se espera a que llegue
     setTimeout(() => {
       if (fotoHero.complete) return;
       hero.classList.add('espera-foto');
@@ -30,7 +30,7 @@
       fotoHero.addEventListener('load', seguir, { once: true });
       fotoHero.addEventListener('error', seguir, { once: true });
       setTimeout(seguir, 9000); // pase lo que pase, no se espera más de 9 s
-    }, Math.max(0, 2600 - transcurrido()));
+    }, Math.max(0, 3100 - transcurrido()));
   }
 
   /* ---------- 1. Avance rápido: si la persona hace scroll/toca/teclea durante la entrada, se acelera ---------- */

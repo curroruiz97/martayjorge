@@ -13,20 +13,18 @@ ESC = 0.6
 PAD = 40
 
 # ---- Ajustes manuales (índices de trazo 1-based dentro de cada glifo, tal como salen numerados en debug_trazos.png) ----
-#   ("inv", k)           invierte el sentido del trazo k (para que se escriba como lo haría una mano)
-#   ("fus", i, j, inv)   pega al final del trazo i el trazo j (invertido si inv) y elimina el j
-#   ("partir", k, ref)   parte el trazo k por el punto más cercano al último punto del trazo ref: queda en dos (k y k+1)
+#   ("inv", k)                invierte el sentido del trazo k (para que se escriba como lo haría una mano)
+#   ("fus", i, j, inv)        pega al final del trazo i el trazo j (invertido si inv) y elimina el j
+#   ("partir", k, ref[, "ini"])   parte el trazo k por el punto más cercano al último (o, con "ini", al primer) punto del
+#                             trazo ref: queda en dos (k y k+1)
 # Los índices valen en el estado actual: tras un «partir», los trazos siguientes se desplazan una posición.
 AJUSTES = {
-    "M": [("inv", 2), ("inv", 3)],                     # las dos subidas finas se escriben de abajo arriba y luego bajan
-    "a": [("inv", 2)],                                 # el cierre baja por el palo y sale hacia la derecha
-    "r": [("inv", 2)],                                 # el hombro parte del palo
-    "t": [("fus", 3, 2, True)],                        # el travesaño de izquierda a derecha, de una vez
-    "y": [("inv", 3)],
-    "J": [("partir", 1, 2), ("fus", 1, 3, True)],      # primero la barra de arriba entera, luego el palo con su gancho
-    "o": [("inv", 1), ("inv", 2)],                     # el óvalo en sentido antihorario y el empalme hacia la derecha
-    "g": [("inv", 2)],
-    "e": [("inv", 1)],                                 # empieza dentro del ojo y sale por la derecha
+    "M": [("inv", 2), ("inv", 3), ("fus", 3, 2, False)],     # 1) palo izquierdo; 2) baja a la V, sube y baja por el palo derecho
+    "A": [("partir", 1, 3, "ini"), ("fus", 3, 2, False),     # 1) pata izquierda arriba y derecha abajo
+          ("inv", 4), ("inv", 1), ("fus", 4, 1, False)],     # 2) el travesaño de izquierda a derecha
+    "T": [("inv", 2)],                                       # barra y luego palo, de arriba abajo
+    "G": [("inv", 3), ("fus", 2, 3, False)],                 # 1) el arco; 2) barra interior y palo hacia abajo
+    "E": [("inv", 2)],                                       # la barra del medio sale del palo hacia la derecha
 }
 # (la velocidad de escritura, las pausas y la composición de las tres palabras están en svg.py)
 GRUESO_K = 1.0           # factor sobre el grosor de cobertura calculado
@@ -180,8 +178,9 @@ def aplicar_ajustes(nombre, tr):
             tr[i - 1] = np.vstack([a, b[1:]])
             tr[j - 1] = None
         elif op[0] == "partir":
-            _, k, ref = op
-            t, p = tr[k - 1], tr[ref - 1][-1]
+            _, k, ref = op[:3]
+            t = tr[k - 1]
+            p = tr[ref - 1][0] if len(op) > 3 and op[3] == "ini" else tr[ref - 1][-1]
             idx = int(np.argmin(np.linalg.norm(t - p, axis=1)))
             tr[k - 1:k] = [t[: idx + 1], t[idx:]]
     return [t for t in tr if t is not None]

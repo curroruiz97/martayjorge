@@ -11,8 +11,8 @@ TMP="$AQUI/.tmp"
 PY="${PYTHON:-python3}"
 mkdir -p "$TMP" && cd "$TMP"
 
-echo "1/5 Ephesis (la caligrafía de los nombres) en TTF, desde la fuente autoalojada"
-"$PY" - "${FUENTE:-$RAIZ/public/assets/fonts/ephesis-latin-400-normal.woff2}" <<'PY'
+echo "1/5 La letra de los nombres (Covered By Your Grace) en TTF, desde la fuente autoalojada"
+"$PY" - "${FUENTE:-$RAIZ/public/assets/fonts/covered-by-your-grace-latin-400-normal.woff2}" <<'PY'
 import sys
 from fontTools.ttLib import TTFont
 f = TTFont(sys.argv[1])
@@ -22,7 +22,7 @@ PY
 echo "2/5 Glifos y esqueletos";            "$PY" "$AQUI/glifos.py" >/dev/null
 echo "3/5 Trazos de pluma ordenados";      "$PY" "$AQUI/trazos.py" >/dev/null
 echo "4/5 Grosor de cobertura y ajustes";  "$PY" "$AQUI/ensamblar.py"
-echo "5/5 SVG de los nombres y ornamento"; "$PY" "$AQUI/svg.py" "${VELOCIDAD:-10000}" | head -1
+echo "5/5 SVG de los nombres y ornamento"; "$PY" "$AQUI/svg.py" "${VELOCIDAD:-11000}" | head -1
 node "$AQUI/ornamento.cjs" "$RAIZ/public/assets/ilustraciones/ruta-horizontal.svg" "$TMP/orn" 2.1 0.2
 echo
 echo "Listo. Salidas en $TMP:"

@@ -2,6 +2,44 @@
 
 > **Nota de ubicación:** esta guía vive en `docs/` para no publicarse con la web. Las variantes solo tinta (`san-pablo-linea.svg`, `palomar-linea.svg`) están en `docs/ilustraciones/` por la misma razón; las ilustraciones que usa la web están en `public/assets/ilustraciones/`.
 
+Hay **dos familias** de dibujos:
+
+1. **A pluma** (este documento, §1 en adelante): San Pablo, el Palomar, la ruta con el corazón, adornos, iconos y favicon. SVG vectorial.
+2. **De acuarela** (§0, justo debajo): la guirnalda y la mesa puesta entre la portada y la Agenda, el ramo con las alianzas, la
+   almohada con la llave, la maleta y las granadas del pie. Se dibujan con código y se publican como WebP con transparencia.
+
+
+## 0. Acuarelas (`public/assets/ilustraciones/acuarela/*.webp`)
+
+Son dibujos **propios**, hechos con código (no están calcados ni copiados de ninguna otra web): la misma idea —una mesa puesta, una
+boda, un viaje— con trazo propio. Cada objeto (tomate, vela, copa, gerbera, maleta…) se compone de manchas de color con el borde
+irregular y el pigmento acumulado en el contorno (filtros SVG: desplazamiento, desenfoque, granulado de papel) y unas líneas de tinta
+finas y algo temblorosas, ligeramente «desregistradas» como en una ilustración impresa.
+
+| Fichero | Dónde sale | Tamaños |
+|---|---|---|
+| `guirnalda-630.webp` | tira de banderines que se repite a todo el ancho, sobre la mesa puesta | 630 px (se muestra a 180–300 px) |
+| `bodegon-640/1000.webp` | mesa puesta: narcisos, vela, copa, gerberas, botella, tomates… (entre la portada y la Agenda) | 640 y 1000 px |
+| `ramo-480/760.webp` | ramo de flores rojas con las alianzas (final de la Agenda) | 480 y 760 px |
+| `almohada-460/700.webp` | almohada y llave de habitación (Alojamiento) | 460 y 700 px |
+| `maleta-380/560.webp` | maleta antigua con etiqueta «luna de miel» (Lista de bodas) | 380 y 560 px |
+| `granadas-300/420.webp` | dos granadas con hojas (pie de página) | 300 y 420 px |
+
+- **Regenerar**: `python3 scripts/acuarela/generar.py` (necesita Pillow, Node con Playwright y Chromium; variables
+  `PLAYWRIGHT_PATH` y `CHROME_PATH` si no están instalados globalmente). Es determinista: salen siempre las mismas imágenes.
+  Dibuja cada escena de `escenas.py` como SVG, Chromium lo convierte en PNG transparente (`exportar.cjs`) y Pillow lo guarda como WebP.
+- **Retocar**: los objetos están en `scripts/acuarela/objetos.py` (`tomate`, `vela`, `copa`, `gerbera`, `maleta`…) y su
+  composición en `scripts/acuarela/escenas.py` (posiciones y tamaños, en unidades de lienzo). Los colores salen de `PAL`.
+  La librería de acuarela (manchas, filtros, líneas) está en `lib.py`.
+- **Calidad y peso**: se guardan con calidad 66 y alfa 62 (`generar.py`): pesan la mitad que con 82/90 y no se nota. Con los tamaños
+  pequeños, un móvil se descarga unos 100 KB de acuarelas en total, y todas se piden solo al acercarse (`loading="lazy"`).
+- Son **decorativas** (`alt=""` y `aria-hidden`): no cuentan nada que no esté ya en el texto.
+- El fondo de lino con rayas **no** es una acuarela: la textura (`public/assets/img/lino.webp`) sale de `scripts/fondo/generar.py` y
+  las rayas rosas son un degradado CSS en `base.css` (`--rosa`, `--p`).
+
+---
+
+## A pluma (resto del documento)
 
 Dibujos a pluma propios (no calcados): San Pablo, el Palomar, la ruta con el corazón y el
 avioncito, adornos, iconos y favicon. Todo es SVG vectorial, transparente, sin `<text>`, sin
@@ -10,7 +48,7 @@ imágenes incrustadas, sin `<filter>` y solo con `viewBox` (sin width/height).
 - **Regenerar** (determinista, mismas semillas → mismos SVG):
   `python3 scripts/ilustraciones/generar.py` (o `… generar.py san_pablo palomar rutas adornos iconos favicon`).
   Solo usa la biblioteca estándar de Python 3. El motor del trazo está en `scripts/ilustraciones/pluma.py`.
-- **Tinta**: `#2b2a28` fija en las ilustraciones grandes y en la ruta; `currentColor` en los sprites.
+- **Tinta**: `#4b3c37` (marrón grisáceo oscuro, `TINTA` en `pluma.py`) fija en las ilustraciones grandes; rojo `#a3121d` (`ROJO`) en la ruta, el avión y el favicon; `currentColor` en los sprites.
 - **Aguadas**: ocre `#c3a063` (piedra/revoco), terracota `#a4563a` (teja, ladrillo, puerta), oliva
   `#6c7550` (árboles, césped), con poca opacidad y desplazadas 2–4 unidades del trazo (desregistro).
 
@@ -36,7 +74,7 @@ Estructura (idéntica en ambos y en sus versiones `-linea`):
 ```
 <svg viewBox="…">
   <g class="color" stroke="none"> …manchas de aguada (path con fill y fill-opacity)… </g>   (falta en -linea)
-  <g class="linea" fill="none" stroke="#2b2a28" stroke-linecap="round" stroke-linejoin="round">
+  <g class="linea" fill="none" stroke="#4b3c37" stroke-linecap="round" stroke-linejoin="round">
     <g stroke-width="2.2"> <path class="l" pathLength="1" d="…"/> … </g>    contornos (2,2–2,4)
     <g stroke-width="1.2"> … </g>                                             detalles (1,2–1,4)
     <g stroke-width=".8">  … </g>                                             sombreado (0,8–1)
@@ -143,7 +181,7 @@ document.querySelectorAll('.ilustracion[data-svg]').forEach(async (fig) => {
 - Los extremos de la ruta dejan ~18 unidades de margen para que el morro no se salga del viewBox.
 - Si conviven las dos rutas en el DOM (una oculta por CSS), los ids se repiten: usar
   `contenedor.querySelector('#ruta')` (no `getElementById`).
-- Color: `#ruta { stroke: var(--terracota) }` funciona si va en línea (el CSS gana al atributo).
+- Color: sale ya en rojo (`#a3121d`); `#ruta { stroke: var(--rojo) }` funciona si va en línea (el CSS gana al atributo).
 
 HTML (las dos; el CSS de la web muestra una u otra):
 
@@ -275,7 +313,7 @@ Los sprites externos con `<use>` necesitan servirse por http(s) (no `file://`).
 ## 5. `favicon.svg`
 
 Lazo en forma de corazón (el de la ruta) con la punta del avión, de trazo grueso para que se lea a
-16 px. Tinta `#2b2a28` sobre transparente; con `prefers-color-scheme: dark` pasa a crema para no
+16 px. Rojo `#a3121d` sobre transparente; con `prefers-color-scheme: dark` pasa a rosa claro para no
 desaparecer en pestañas oscuras.
 
 ```html

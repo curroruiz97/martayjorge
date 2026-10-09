@@ -9,7 +9,7 @@ Estructura (la usa el JS de la web):
 """
 import math
 import random
-from pluma import TINTA, trazado, fnum
+from pluma import TINTA, ROJO, trazado, fnum
 
 PAPEL_CLARO = "#fbf8f1"
 GUIONES = "9 6.5 7 7 10.5 6 6.5 7.5 8 6"
@@ -39,7 +39,7 @@ def avion():
     C = (-12.0, 8.4)      # punta trasera del ala de abajo
     K = (-5.6, 4.4)       # quilla
     f = lambda p: "%s %s" % (fnum(p[0]), fnum(p[1]))
-    o = ['<g id="avion" stroke="%s" stroke-linecap="round" stroke-linejoin="round">' % TINTA]
+    o = ['<g id="avion" stroke="%s" stroke-linecap="round" stroke-linejoin="round">' % ROJO]
     o.append('<path fill="%s" stroke="none" d="M%sL%sL%sL%sZ"/>' % (PAPEL_CLARO, f(N), f(A), f(B), f(C)))
     # contorno en un trazo, con un pequeño pasado en el morro
     o.append('<path fill="none" stroke-width="1.9" d="M%sL%sL%sL%sL%s"/>' % (
@@ -56,7 +56,7 @@ def avion():
 def _svg(w, h, d, titulo, grosor=2.1):
     o = ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d">' % (w, h)]
     o.append('<path id="ruta" fill="none" stroke="%s" stroke-width="%s" stroke-linecap="round" '
-             'stroke-linejoin="round" stroke-dasharray="%s" d="%s"/>' % (TINTA, grosor, GUIONES, d))
+             'stroke-linejoin="round" stroke-dasharray="%s" d="%s"/>' % (ROJO, grosor, GUIONES, d))
     o.append(avion())
     o.append("</svg>")
     return "\n".join(o) + "\n"

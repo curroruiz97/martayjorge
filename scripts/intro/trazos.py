@@ -17,15 +17,15 @@ N8 = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
 # Preferencias de inicio por glifo: (u, v) en [0,1] dentro de la caja del glifo (0,0 = arriba-izquierda).
 # Se afinan a ojo viendo debug_trazos.png (cada trazo va numerado y con un círculo en su punto de partida).
 INICIO = {
-    "M": (0.19, 0.49),
-    "a": (0.78, 0.02),
-    "r": (0.0, 0.95),
-    "t": (0.98, 0.0),
-    "y": (0.1, 0.05),
-    "J": (0.0, 0.05),
-    "o": (0.1, 0.05),
-    "g": (0.85, 0.05),
-    "e": (0.0, 0.45),
+    "M": (0.05, 0.12),
+    "A": (0.45, 0.04),
+    "R": (0.0, 0.04),
+    "T": (0.0, 0.12),
+    "Y": (0.02, 0.1),
+    "J": (0.55, 0.0),
+    "O": (0.45, 0.0),
+    "G": (0.88, 0.06),
+    "E": (0.92, 0.05),
 }
 
 
@@ -101,6 +101,47 @@ def construir_grafo(sk):
             en_aristas.add((int(round(pt[0])), int(round(pt[1]))))
     resto = pix - en_aristas - set().union(*[n["pix"] for n in nodos]) if nodos else set(pix)
     return nodos, aristas, nb, resto
+
+
+def recorrer_anillos(resto, nb, pref, caja, sentido_antihorario=True):
+    """Letras con un anillo cerrado (la O): el esqueleto no tiene extremos ni cruces, así que se recorre entero
+    empezando por el punto más cercano al inicio preferido. Devuelve polilíneas cerradas (filas, columnas)."""
+    y0, y1, x0, x1 = caja
+    objetivo = (y0 + pref[1] * (y1 - y0), x0 + pref[0] * (x1 - x0))
+    pendientes = set(resto)
+    anillos = []
+    while pendientes:
+        comp, cola = set(), [next(iter(pendientes))]
+        while cola:                                    # componente conexa (8 vecinos)
+            p = cola.pop()
+            if p in comp:
+                continue
+            comp.add(p)
+            for q in nb.get(p, ()):
+                if q in pendientes and q not in comp:
+                    cola.append(q)
+        pendientes -= comp
+        if len(comp) < 30:
+            continue
+        ini = min(comp, key=lambda p: math.dist(p, objetivo))
+        camino, prev, cur = [ini], None, ini
+        while True:
+            sig = [q for q in nb[cur] if q in comp and q != prev and q not in camino[-2:]]
+            if not sig:
+                break
+            if prev is None and len(sig) > 1:         # primer paso: elegir el sentido
+                cx = sum(p[1] for p in comp) / len(comp)
+                sig.sort(key=lambda q: q[1])          # menor columna = hacia la izquierda
+                nxt = sig[0] if sentido_antihorario else sig[-1]
+            else:
+                nxt = sig[0]
+            if nxt == ini or len(camino) > len(comp) + 2:
+                break
+            camino.append(nxt)
+            prev, cur = cur, nxt
+        camino.append(ini)                             # cierra el anillo
+        anillos.append([(float(p[0]), float(p[1])) for p in camino])
+    return anillos
 
 
 def longitud(pts):
@@ -251,6 +292,8 @@ def main():
             ys, xs = np.nonzero(g["mask"])
             caja = (ys.min(), ys.max(), xs.min(), xs.max())
             trazos = extraer_trazos(nodos, aristas, INICIO.get(g["name"], (0, 0)), caja)
+            if resto and not trazos:
+                trazos = recorrer_anillos(resto, nb, INICIO.get(g["name"], (0, 0)), caja)
             # suavizar + simplificar (en px de raster)
             tr = []
             for t in trazos:

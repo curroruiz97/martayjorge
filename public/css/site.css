@@ -8,9 +8,9 @@
 /* ---------- Piezas comunes ---------- */
 .cabecera { display: grid; justify-items: center; gap: .55rem; text-align: center; margin-bottom: clamp(2.25rem, 6vw, 4rem); }
 
-.icono { width: 1.5rem; height: 1.5rem; flex: none; fill: none; stroke: currentColor; color: var(--tinta); }
+.icono { width: 1.5rem; height: 1.5rem; flex: none; fill: none; stroke: currentColor; color: var(--rojo); }
 
-.floritura { width: 10rem; height: 2rem; color: var(--tinta); margin-inline: auto; }
+.floritura { width: 10rem; height: 2rem; color: var(--rojo); margin-inline: auto; }
 
 /* Marco "impreso": el contorno fino desplazado, como una copia a mano alzada */
 .marco { position: relative; isolation: isolate; }
@@ -26,15 +26,15 @@
 /* ---------- PORTADA ---------- */
 /* Todo se dimensiona con el ancho (vw) Y con el alto de la pantalla (svh), para que la portada quede bien en
    móviles bajos, apaisados, tablets y monitores:
-     --n     ancho de los nombres (el adorno de arriba mide lo mismo)
+     --n     ancho de la línea de nombres (el adorno de arriba mide ≈ la mitad)
      --foto  ancho de la foto en arco (proporción 4:5)
    Móvil en vertical: columna única. Apaisado (≥ 560 px de ancho): dos columnas. */
 .portada {
   --alto: var(--alto-pantalla, 100vh);   /* 100svh donde existe (ver base.css), 100vh en navegadores antiguos */
   --pad-v: clamp(1.25rem, 4vh, 3.5rem);
-  --n: min(80vw, 22rem);
+  --n: min(88vw, 28rem);
   --foto: min(70vw, 20rem);
-  --k: 1.3;                              /* las cifras de la cuenta atrás (cursiva serif) se agrandan esto respecto a --D */
+  --k: 1;                                /* tamaño de las cifras de la cuenta atrás respecto a --D */
   position: relative;
   min-height: 100vh; min-height: 100svh;
   display: grid; justify-items: center; align-content: center;
@@ -44,49 +44,48 @@
   padding: var(--pad-v) var(--gutter) clamp(2.5rem, 7vh, 4.5rem);
   text-align: center;
 }
-.portada__texto { grid-area: texto; display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; gap: .55rem; max-width: 100%; }
-.portada__aviso { letter-spacing: .32em; }
+.portada__texto { grid-area: texto; display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; gap: .3rem; max-width: 100%; }
+.portada__aviso { font-size: 1.0625rem; letter-spacing: .02em; color: var(--tinta-suave); }
 .portada__foto { grid-area: foto; width: var(--foto); margin: 0; }
 .portada__extra { grid-area: extra; display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 1.75rem; max-width: 100%; }
 
-.portada__fecha { margin-top: .6rem; display: flex; flex-wrap: wrap; gap: .25em .75em; align-items: center; justify-content: center; font-size: .8125rem; letter-spacing: min(.3em, 2vw); color: var(--tinta-suave); }
-.portada__punto { color: var(--terracota); }
+/* Fecha en rotulado a mano (como en la referencia) y la ciudad debajo en cursiva */
+.portada__fecha { margin-top: .35rem; display: grid; justify-items: center; gap: .05rem; }
+.portada__fecha time { font: 400 clamp(1.3rem, 1.05rem + 1.2vw, 1.75rem)/1.2 var(--f-mano); letter-spacing: .12em; text-transform: uppercase; color: var(--rojo); }
+.portada__ciudad { font: italic 400 1.0625rem/1.3 var(--f-serif); color: var(--tinta-suave); }
 
-/* Cuenta atrás: sobria, sin cifras que parpadeen */
+/* Cuenta atrás: sobria, sin cifras que parpadeen (cifras grandes en cursiva roja, con el texto en cursiva gris) */
 .cuenta { display: none; grid-template-columns: minmax(0, 1fr); justify-items: center; gap: .5rem; max-width: 100%; }
 .js .cuenta { display: grid; }
 .cuenta__fila { display: flex; justify-content: center; max-width: 100%; }
 .cuenta__item { display: grid; justify-items: center; min-width: min(4.4rem, 27vw); padding-inline: min(clamp(.5rem, 3vw, 1.1rem), 3vw); position: relative; }
 .cuenta__item + .cuenta__item::before { content: ""; position: absolute; left: 0; top: 18%; bottom: 18%; border-left: 1px solid var(--linea); }
-/* Cifras en cursiva serif (cifras de estilo antiguo, muy legibles): --k las agranda respecto al tamaño pensado para una letra caligráfica */
-.cuenta__num { font-family: var(--f-serif); font-style: italic; font-weight: 400; font-size: calc(var(--k) * min(clamp(2.6rem, 1.8rem + 3vw, 3.6rem), 15vw)); line-height: 1; }
-.cuenta__txt { margin-top: .4rem; font: 500 min(.6875rem, 3.6vw)/1 var(--f-sans); letter-spacing: min(.24em, 1.3vw); text-transform: uppercase; color: var(--tinta-tenue); }
-.cuenta__estado { font-size: clamp(2rem, 1.5rem + 2vw, 2.75rem); color: var(--terracota); }
+.cuenta__num { font-family: var(--f-serif); font-style: italic; font-weight: 400; font-variant-numeric: lining-nums; color: var(--rojo); font-size: calc(var(--k) * min(clamp(2.4rem, 1.7rem + 2.8vw, 3.3rem), 14vw)); line-height: 1; }
+.cuenta__txt { margin-top: .25rem; font: italic 400 min(1rem, 4.2vw)/1.1 var(--f-serif); letter-spacing: .02em; text-transform: none; color: var(--tinta-suave); }
+.cuenta__estado { font-size: clamp(2rem, 1.5rem + 2vw, 2.75rem); color: var(--rojo); }
 
 /* Pista para seguir bajando (solo cuando la portada cabe entera en la pantalla; se apaga al hacer scroll) */
 .portada__baja { display: none; }
 .portada.scrolled .portada__baja { opacity: 0; transition: opacity .4s var(--ease); }
 
-/* Vertical (móvil y tablet): la portada ocupa EXACTAMENTE la pantalla; sin hacer scroll se ve todo (nombres, fecha, foto,
-   cuenta atrás y botón). Los tamaños salen de repartir el alto disponible (--alto) entre lo que escala con la pantalla
-   (adorno, nombres y foto) y lo que es fijo (etiquetas, cuenta atrás, botón y huecos, ≈ 7 rem más cifras y botón).
+/* Vertical (móvil y tablet): la portada ocupa EXACTAMENTE la pantalla; sin hacer scroll se ve todo (adorno, nombres, fecha, foto,
+   cuenta atrás y botón). La foto se lleva todo el alto que sobra después de lo que mide cada cosa:
      --D  alto de las cifras de la cuenta atrás      --C  alto del botón
-   Lo que sobre (pantallas muy altas) se reparte entre los tres bloques. */
+   Lo que sobre (pantallas muy altas, donde la foto topa con el ancho) se reparte por igual entre los bloques. */
 @media (orientation: portrait) {
   .portada {
     --pad-t: max(.6rem, calc(var(--alto) * .022));
     --pad-b: max(.75rem, calc(var(--alto) * .026));
     --D: min(clamp(1.6rem, calc(var(--alto) * .052), 2.8rem), 11vw);   /* tope por ancho: con la letra al 200 % las cifras no se salen */
     --C: clamp(2.4rem, calc(var(--alto) * .062), 3rem);
-    --n: min(80vw, 30rem, max(9rem, calc((var(--alto) - var(--pad-t) - var(--pad-b) - 7rem - var(--k) * var(--D) - var(--C)) / 2.15)));
-    --foto: min(70vw, 26rem, calc(var(--n) * .85));
-    align-content: space-between;
+    --n: min(88vw, 28rem);
+    /* alto fijo ≈ adorno + etiqueta + nombres + fecha + ciudad (n × .313 + 6,2 rem), cuenta atrás y botón (k·D + C + 2,2 rem), huecos (1,5 rem) y el marco (.65 rem) */
+    --foto: min(70vw, 26rem, max(9rem, calc((var(--alto) - var(--pad-t) - var(--pad-b) - var(--n) * .313 - var(--k) * var(--D) - var(--C) - 10.6rem) * .8)));
+    align-content: space-evenly;
     gap: .5rem;
     padding: var(--pad-t) var(--gutter) var(--pad-b);
   }
-  .portada__texto { gap: .3rem; }
-  .portada .portada__ruta { width: calc(var(--n) * .8); margin: calc(var(--n) * -.04) auto 0; }
-  .portada__fecha { margin-top: .15rem; }
+  .portada .portada__ruta { width: calc(var(--n) * .55); margin: 0 auto; }
   .portada__extra { gap: .6rem; }
   .cuenta { gap: .3rem; }
   .cuenta__num { font-size: calc(var(--k) * var(--D)); }
@@ -98,7 +97,7 @@
 @media (orientation: landscape) and (min-width: 560px) {
   .portada {
     --pad-v: clamp(.75rem, calc(var(--alto) * .045), 3.5rem);
-    --n: min(31vw, 26rem, max(12rem, calc((var(--alto) - 2 * var(--pad-v) - 17.6rem) * .85)));
+    --n: min(36vw, 30rem, max(12rem, calc((var(--alto) - 2 * var(--pad-v) - 14rem) * 3.2)));
     --foto: min(34vw, 28.75rem, max(9rem, calc((var(--alto) - 2 * var(--pad-v) - 1.5rem) * .8)));
     grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
     grid-template-areas: "texto foto" "extra foto";
@@ -113,29 +112,31 @@
   .portada__texto { align-self: end; }
   .portada__extra { align-self: start; }
   .portada__foto { justify-self: center; }
-  .portada__ruta { margin-bottom: .6rem; }
+  .portada .portada__ruta { width: calc(var(--n) * .55); margin: 0 auto .4rem; }
   /* la columna de texto es más estrecha que la pantalla: la cuenta atrás no puede depender solo del tamaño de letra */
   .cuenta__item { min-width: min(4.4rem, 9vw); }
-  .cuenta__num { font-size: calc(var(--k) * min(clamp(2.6rem, 1.8rem + 3vw, 3.6rem), 6.5vw)); }
+  .cuenta__num { font-size: calc(var(--k) * min(clamp(2.4rem, 1.7rem + 2.8vw, 3.3rem), 6.5vw)); }
 }
 /* Pantallas apaisadas muy bajas (móvil girado, portátiles pequeños): se compacta para que nombres, fecha y foto
    quepan sin hacer scroll; el adorno de arriba se omite y la cuenta atrás se reduce */
 @media (orientation: landscape) and (min-width: 560px) and (max-height: 620px) {
   .portada {
     --pad-v: clamp(.6rem, calc(var(--alto) * .045), 1.5rem);
-    --n: min(34vw, 23rem, max(9rem, calc((var(--alto) - 2 * var(--pad-v) - 9.75rem) * 1.17)));
+    --n: min(36vw, 30rem, max(9rem, calc((var(--alto) - 2 * var(--pad-v) - 10.5rem) * 3.4)));
     --foto: min(34vw, 28.75rem, max(7rem, calc((var(--alto) - 2 * var(--pad-v)) * .8)));
     row-gap: .5rem;
   }
   .portada__ruta { display: none; }
-  .portada__texto { gap: .3rem; }
-  .portada__fecha { margin-top: .3rem; font-size: .75rem; }
+  .portada__texto { gap: .2rem; }
+  .portada__fecha { margin-top: .2rem; }
+  .portada__fecha time { font-size: 1.15rem; }
+  .portada__ciudad { font-size: .9375rem; line-height: 1.2; }
   .portada__extra { gap: .6rem; }
   .cuenta { gap: .2rem; }
-  .cuenta__num { font-size: calc(var(--k) * min(1.75rem, 6.5vw)); }
-  .cuenta__txt { margin-top: .2rem; font-size: .625rem; }
+  .cuenta__num { font-size: calc(var(--k) * min(1.9rem, 6.5vw)); }
+  .cuenta__txt { margin-top: .15rem; font-size: .875rem; }
   .cuenta__item { min-width: min(3.6rem, 9vw); }
-  .portada__cta { min-height: 2.5rem; padding: .6rem 1.4rem; }
+  .portada__cta { min-height: 2.5rem; padding: .45rem 1.4rem .4rem; }
 }
 @media (orientation: landscape) and (min-width: 900px) and (min-height: 640px) {
   .portada__baja {
@@ -145,7 +146,7 @@
   }
   .portada__baja::after {
     content: ""; position: absolute; left: -2px; top: 0; width: 5px; height: 5px; border-radius: 50%;
-    background: var(--terracota); animation: baja 2.8s var(--ease) infinite;
+    background: var(--rojo); animation: baja 2.8s var(--ease) infinite;
   }
 }
 @keyframes baja { 0% { transform: translateY(0); opacity: 0; } 25% { opacity: 1; } 75% { opacity: 1; } 100% { transform: translateY(2.4rem); opacity: 0; } }
@@ -157,15 +158,17 @@
 .ilu--san-pablo { --w: min(84vw, 20rem); aspect-ratio: 520 / 620; }
 .ilu--palomar { --w: min(92vw, 23rem); aspect-ratio: 700 / 440; margin-top: .5rem; }
 
-.evento { display: grid; justify-items: center; gap: .4rem; text-align: center; margin-bottom: clamp(.5rem, 3vw, 1.5rem); }
-.evento .boton { margin-top: 1rem; }
-.evento__lugar { font-family: var(--f-script); font-weight: 400; font-size: min(var(--fs-h3), 15vw); overflow-wrap: anywhere; line-height: 1.02; margin-top: .3rem; text-wrap: balance; }
+.evento { display: grid; justify-items: center; gap: .3rem; text-align: center; margin-bottom: clamp(.5rem, 3vw, 1.5rem); }
+.evento .boton { margin-top: .75rem; }
+.evento .etiqueta { font-size: 1.2rem; color: var(--rojo); }              /* «12:00h» */
+.evento__lugar { font-family: var(--f-serif); font-style: italic; font-weight: 400; font-size: min(var(--fs-h3), 9.5vw); color: var(--rojo); overflow-wrap: anywhere; line-height: 1.15; margin-top: .1rem; text-wrap: balance; }
+.evento__direccion { color: var(--tinta-suave); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .22em; text-decoration-color: currentColor; padding: .2rem .25rem; }
 
 .ruta { width: 100%; display: grid; justify-items: center; margin-block: .75rem; }
 .ruta__v { width: min(6.25rem, 28vw); aspect-ratio: 170 / 560; }
 .ruta__h { display: none; }
 .ruta svg { width: 100%; height: auto; overflow: visible; }
-.ruta__linea { stroke: var(--terracota); }
+.ruta__linea { stroke: var(--rojo); }
 .ruta__h .ruta__linea { stroke-width: 3.3; }
 
 @media (min-width: 900px) {
@@ -187,8 +190,8 @@
 /* Añadir al calendario (archivo .ics) */
 .agenda__calendario { margin-top: clamp(2.5rem, 6vw, 3.5rem); text-align: center; }
 .agenda__calendario a {
-  display: inline-flex; align-items: center; gap: .7em; padding: .5rem .25rem;
-  font: 500 var(--fs-etiqueta)/1.4 var(--f-sans); letter-spacing: .22em; text-transform: uppercase;
+  display: inline-flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .2em .7em; padding: .5rem .25rem; max-width: 100%;
+  font: 400 min(1.3rem, 5.6vw)/1.4 var(--f-mano); letter-spacing: .08em; text-transform: uppercase; color: var(--rojo);
 }
 .agenda__calendario .icono { width: 1.5rem; height: 1.5rem; }
 
@@ -203,17 +206,18 @@
 
 /* ---------- TRANSPORTE ---------- */
 .transporte__lista { display: grid; gap: clamp(2rem, 6vw, 3rem); }
-.medio { display: grid; grid-template-columns: 3rem 1fr; column-gap: 1.35rem; align-items: start; }
-.medio__icono { width: 3rem; height: 3rem; margin-top: .15rem; }
-.medio__titulo { font-family: var(--f-script); font-weight: 400; font-size: min(clamp(2.1rem, 1.7rem + 1.8vw, 2.7rem), 13vw); line-height: 1.05; }
-.medio p { margin-top: .3rem; }
+.medio { display: grid; grid-template-columns: min(3rem, 11vw) minmax(0, 1fr); column-gap: min(1.35rem, 4vw); align-items: start; }
+.medio__icono { width: 100%; height: auto; aspect-ratio: 1; margin-top: .15rem; }
+.medio__titulo { font-family: var(--f-serif); font-style: italic; font-weight: 400; font-size: min(clamp(1.7rem, 1.45rem + 1.2vw, 2.2rem), 9vw); line-height: 1.15; color: var(--rojo); }
+.medio p { margin-top: .3rem; overflow-wrap: anywhere; }
 
 /* ---------- ALOJAMIENTO ---------- */
 .alojamiento__texto { max-width: 36ch; margin-inline: auto; text-align: center; text-wrap: pretty; }
 .alojamiento__contacto { display: flex; justify-content: center; margin-top: 1.5rem; }
 .alojamiento__mapa { --max: 56.25rem; margin-top: clamp(2.25rem, 6vw, 3.5rem); }
 .alojamiento__mapa .mapa { width: 100%; max-width: 100%; aspect-ratio: 4 / 3; min-height: 19rem; border-radius: var(--radio); background-color: var(--papel-2); }
-.mapa__pie { margin-top: 1.5rem; text-align: center; font: 500 var(--fs-etiqueta)/1.4 var(--f-sans); letter-spacing: .22em; text-transform: uppercase; }
+.mapa__pie { margin-top: 1.5rem; text-align: center; font: 400 min(1.3rem, 5.6vw)/1.4 var(--f-mano); letter-spacing: .08em; text-transform: uppercase; }
+.mapa__pie a { color: var(--rojo); }
 .mapa__pie a { display: inline-block; padding: .55rem .25rem; }   /* zona táctil de al menos 24 px de alto */
 @media (min-width: 900px) { .alojamiento__mapa .mapa { aspect-ratio: 16 / 9; } }
 
@@ -222,21 +226,20 @@
 .interludio__marco { width: min(72vw, 21rem); transform: rotate(-1.2deg); margin-bottom: .75rem; }
 
 /* ---------- LISTA DE BODAS ---------- */
-.regalo__icono { width: 3.25rem; height: 3.25rem; margin: 0 auto 1.25rem; }
 .regalo__texto { max-width: 36ch; margin-inline: auto; text-wrap: pretty; }
 .iban { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 1.1rem; margin: 2rem auto 0; container-type: inline-size; }
 /* Siempre en una sola línea: la letra se ajusta al ancho que haya (de 240 px a 2560 px y con la letra del sistema ampliada) */
 .iban__numero {
   display: block; max-width: 100%; padding: .9em .6em;
   white-space: nowrap; text-align: center; word-spacing: .22em;
-  border: 1px dashed var(--linea-fuerte); border-radius: var(--radio); background: var(--campo);
+  border: 1.5px dashed var(--linea-fuerte); border-radius: var(--radio); background: var(--campo); color: var(--tinta);
   font: 500 min(clamp(1.05rem, .9rem + 1vw, 1.3rem), 4.2vw)/1.25 var(--f-sans); letter-spacing: .04em; font-variant-numeric: tabular-nums;
   -webkit-user-select: all; user-select: all;   /* un toque selecciona el IBAN entero */
 }
 @supports (width: 1cqi) { .iban__numero { font-size: min(clamp(1.05rem, .9rem + 1vw, 1.3rem), 4.8cqi); } }
 .iban__copiar .icono { width: 1.15rem; height: 1.15rem; color: currentColor; }
-.iban__copiar.copiado { background: var(--tinta); color: var(--papel); }
-.regalo__gracias { font-size: min(clamp(2.2rem, 1.7rem + 2.2vw, 3rem), 13vw); margin-top: 2.25rem; color: var(--terracota); }
+.iban__copiar.copiado { background: var(--rojo); color: var(--papel); }
+.regalo__gracias { font-size: min(clamp(1.9rem, 1.5rem + 2vw, 2.6rem), 9vw); margin-top: 2.25rem; color: var(--rojo); }
 
 /* ---------- CIERRE ---------- */
 .cierre {
@@ -248,12 +251,30 @@
 .cierre__foto img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 78%;
   -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 30%); mask-image: linear-gradient(to bottom, transparent 0, #000 30%); }
 .cierre__texto { position: relative; z-index: 1; display: grid; justify-items: center; gap: .9rem; }
-.cierre__titulo { font-size: min(clamp(4rem, 2.4rem + 8vw, 8.5rem), 19vw); line-height: 1.02; margin-bottom: .22em; overflow-wrap: anywhere; }   /* el margen deja sitio a los rabillos de la caligrafía */
-.cierre__firma { max-width: 100%; color: var(--tinta); letter-spacing: .28em; text-shadow: 0 0 .9em rgba(245, 240, 228, .9); }
+.cierre__titulo { font-size: min(clamp(2.6rem, 1.6rem + 5vw, 5.5rem), 12vw); line-height: 1.15; overflow-wrap: anywhere; text-shadow: 0 0 .5em rgba(251, 249, 241, .75); }
+.cierre__firma { max-width: 100%; color: var(--tinta); font-size: 1.15rem; letter-spacing: .02em; text-shadow: 0 0 .9em rgba(245, 240, 228, .9); }
 @media (min-width: 900px) { .cierre__foto img { object-position: 50% 62%; } }
 
 .pie { display: grid; justify-items: center; gap: .6rem; padding: 2.25rem var(--gutter) 2.75rem; text-align: center; }
-.pie .floritura { width: 6rem; height: 1.5rem; }
+
+
+/* ---------- ILUSTRACIONES DE ACUARELA (decorativas; se generan con scripts/acuarela) ---------- */
+.acuarela { display: block; width: 100%; height: auto; }
+.acuarela-fig { margin: 0 auto; display: grid; justify-items: center; }
+.acuarela-fig .acuarela { width: var(--w); }
+.acuarela-fig--ramo { --w: min(82vw, 25rem); margin-top: clamp(2.5rem, 7vw, 4.5rem); }
+.acuarela-fig--almohada { --w: min(76vw, 22rem); margin-bottom: clamp(1.25rem, 4vw, 2rem); }
+.acuarela-fig--maleta { --w: min(58vw, 14rem); margin-bottom: 1rem; }
+.pie__granadas { width: min(52vw, 13rem); }
+
+/* Mesa puesta entre la portada y la agenda: una guirnalda que se repite a todo el ancho y, debajo, el dibujo */
+/* margin-top: el parallax de la portada baja la cuenta atrás y el botón hasta 72 px; este hueco evita que pasen por encima de la guirnalda */
+.mesa { --tile: clamp(180px, 46vw, 300px); display: grid; justify-items: center; margin-top: 5rem; margin-bottom: clamp(.5rem, 3vw, 2rem); }
+.mesa__guirnalda {
+  width: 100%; height: calc(var(--tile) * 130 / 420);
+  background: url("../assets/ilustraciones/acuarela/guirnalda-630.webp") repeat-x 50% 0 / var(--tile) auto;
+}
+.mesa__img { width: min(100%, 40rem); margin-top: clamp(.25rem, 2vw, 1.5rem); }
 
 /* ---------- Aviso flotante (copiar IBAN, etc.) ---------- */
 .aviso {

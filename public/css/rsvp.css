@@ -1,7 +1,7 @@
 /* ==========================================================================
    Marta & Jorge · formulario de confirmación de asistencia (RSVP)
    Solo usa los tokens de base.css y las fuentes que ya usa la página (Inter 400/500,
-   Cormorant cursiva, Ephesis): no añade descargas de fuentes. Todo cuelga de .rsvp / .rsvp-* para no
+   Playfair cursiva, rotulado a mano): no añade descargas de fuentes. Todo cuelga de .rsvp / .rsvp-* para no
    chocar con site.css. Mobile-first: pensado para el pulgar (objetivos ≥ 44 px,
    texto de los campos ≥ 16 px para que iOS no haga zoom).
    ========================================================================== */
@@ -29,7 +29,7 @@
   /* filete interior, como una tarjeta impresa */
   .rsvp__tarjeta::before {
     content: ""; position: absolute; inset: .55rem; pointer-events: none;
-    border: 1px solid rgba(43, 42, 40, .12); border-radius: 3px;
+    border: 1px solid rgba(163, 18, 29, .16); border-radius: 3px;
   }
 }
 
@@ -42,7 +42,7 @@
 
 /* ---------- Formulario ---------- */
 .rsvp__form {
-  font-family: var(--f-sans); font-size: 1rem; line-height: 1.45; color: var(--tinta);
+  font-family: var(--f-sans); font-style: normal; font-size: 1rem; line-height: 1.45; color: var(--tinta);
   touch-action: manipulation;
 }
 .rsvp__form:focus { outline: none; }
@@ -67,30 +67,30 @@
 .rsvp-campo + .rsvp-campo { margin-top: 1.75rem; }
 
 .rsvp-label {
-  display: block; margin-bottom: .5rem;
-  font: 500 .9375rem/1.35 var(--f-sans); letter-spacing: .005em; color: var(--tinta);
+  display: block; margin-bottom: .2rem;
+  font: italic 400 1.25rem/1.35 var(--f-serif); letter-spacing: 0; color: var(--rojo);
 }
-.rsvp-req { color: var(--terracota); }
-.rsvp-opcional { font-weight: 400; color: var(--tinta-tenue); }
+.rsvp-req { color: var(--rojo); }
+.rsvp-opcional { font-size: .9em; color: var(--tinta-tenue); }
 .rsvp-ayuda { font: italic 400 1.0625rem/1.4 var(--f-serif); color: var(--tinta-suave); }
 
 /* ---------- Campos de texto ---------- */
 .rsvp-input {
   display: block; width: 100%; min-height: var(--rsvp-alto); margin: 0;
-  padding: .8rem 1rem;
+  padding: .7rem .15rem .6rem;
   font: 400 1.0625rem/1.4 var(--f-sans); color: var(--tinta);
-  background: var(--campo);
-  border: 1px solid var(--linea-fuerte); border-radius: var(--radio);
+  background: transparent;
+  border: 0; border-bottom: 1.5px solid var(--rojo); border-radius: 0;
   -webkit-appearance: none; appearance: none;
   transition: border-color .2s var(--ease), background-color .2s var(--ease);
 }
 .rsvp-input::placeholder { color: var(--tinta-tenue); opacity: 1; } /* ≈ 5,5:1 sobre el papel (el campo es translúcido) */
-.rsvp-input:focus-visible { outline: 2px solid var(--terracota); outline-offset: 2px; border-color: var(--tinta); }
-.rsvp-textarea { min-height: 8.5rem; resize: vertical; line-height: 1.5; }
-@media (hover: hover) { .rsvp-input:hover { border-color: var(--tinta-suave); } }
+.rsvp-input:focus-visible { outline: 2px solid var(--rojo); outline-offset: 3px; border-radius: 2px; }
+.rsvp-textarea { min-height: 8rem; resize: vertical; line-height: 1.5; padding: .8rem .9rem; border: 1.5px solid var(--rojo); border-radius: var(--radio); background: var(--campo); }
+@media (hover: hover) { .rsvp-input:hover { border-bottom-color: var(--rojo-hover); } }
 
 .rsvp-input:focus { background-color: var(--campo-activo); }   /* el campo que se está escribiendo se aclara un poco */
-.rsvp-input[aria-invalid="true"] { border-color: var(--error); background-color: rgba(252, 236, 229, .6); }
+.rsvp-input[aria-invalid="true"] { border-color: var(--error); background-color: rgba(252, 226, 220, .55); }
 /* Autorrelleno del navegador (Chrome en Android pinta los campos de azul o amarillo): se queda en el crema del papel */
 .rsvp-input:-webkit-autofill,
 .rsvp-input:-webkit-autofill:hover,
@@ -116,12 +116,12 @@
 @media (min-width: 30rem) { .rsvp-opciones { grid-template-columns: 1fr 1fr; } }
 .rsvp-opcion {
   display: flex; align-items: center; gap: .85rem; min-height: 3.5rem; padding: .85rem 1.1rem;
-  background: var(--campo); border: 1px solid var(--linea-fuerte); border-radius: var(--radio);
-  font: 500 1.0625rem/1.3 var(--f-sans); color: var(--tinta); cursor: pointer;
+  background: var(--campo); border: 1.5px solid var(--linea-fuerte); border-radius: var(--radio);
+  font: 400 1.0625rem/1.3 var(--f-sans); color: var(--tinta); cursor: pointer;
   transition: border-color .2s var(--ease), box-shadow .2s var(--ease), background-color .2s var(--ease);
 }
-@media (hover: hover) { .rsvp-opcion:hover { border-color: var(--tinta); } }
-.rsvp-opcion--activa { border-color: var(--tinta); box-shadow: inset 0 0 0 1px var(--tinta); background: var(--campo-activo); }
+@media (hover: hover) { .rsvp-opcion:hover { border-color: var(--rojo); } }
+.rsvp-opcion--activa { border-color: var(--rojo); box-shadow: inset 0 0 0 1px var(--rojo); background: var(--campo-activo); }
 .rsvp-opcion:has(input[aria-invalid="true"]) { border-color: var(--error); }
 
 /* Radios y casillas propios: tinta + marca terracota */
@@ -130,7 +130,7 @@
   -webkit-appearance: none; appearance: none; flex: none; margin: 0;
   display: grid; place-content: center;
   width: 1.375rem; height: 1.375rem;
-  border: 1.5px solid var(--tinta); background: var(--campo); color: var(--terracota);
+  border: 1.5px solid var(--rojo); background: var(--campo); color: var(--rojo);
   cursor: pointer;
 }
 .rsvp-opcion input { border-radius: 50%; }
@@ -183,8 +183,8 @@
 .rsvp-bloque + .rsvp-bloque { margin-top: 2.5rem; }
 .rsvp-bloque__titulo {
   float: left; width: 100%; margin-bottom: .9rem;
-  font-family: var(--f-script); font-weight: 400;
-  font-size: clamp(1.95rem, 1.7rem + 1.1vw, 2.35rem); line-height: 1.1; color: var(--tinta);
+  font-family: var(--f-serif); font-style: italic; font-weight: 400;
+  font-size: clamp(1.6rem, 1.4rem + 1vw, 2rem); line-height: 1.2; color: var(--rojo);
 }
 .rsvp-bloque__titulo + * { clear: both; }
 .rsvp-bloque__intro { margin-bottom: 1.15rem; max-width: 40rem; }
@@ -197,19 +197,19 @@
 .rsvp-contador { display: inline-flex; align-items: center; gap: .15rem; flex: 0 1 auto; max-width: 100%; }
 .rsvp-contador__btn {
   display: grid; place-items: center; flex: 0 1 2.75rem; width: 2.75rem; min-width: 2rem; aspect-ratio: 1; height: auto; padding: 0;
-  border: 1px solid var(--linea-fuerte); border-radius: 50%;
-  background: var(--campo); color: var(--tinta);
+  border: 1.5px solid var(--rojo); border-radius: 50%;
+  background: var(--campo); color: var(--rojo);
   transition: background-color .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease), transform .15s var(--ease);
 }
 .rsvp-contador__btn svg { width: 1rem; height: 1rem; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
 @media (hover: hover) {
-  .rsvp-contador__btn:hover { background: var(--tinta); border-color: var(--tinta); color: var(--papel-3); }
+  .rsvp-contador__btn:hover { background: var(--rojo); border-color: var(--rojo); color: var(--papel-3); }
 }
 .rsvp-contador__btn:active { transform: scale(.93); }
 /* En el tope: se atenúan borde e icono (no opacity, para que el contorno de foco se vea entero) */
 .rsvp-contador__btn[aria-disabled="true"] {
   cursor: default; transform: none;
-  background: transparent; border-color: rgba(43, 42, 40, .18); color: rgba(43, 42, 40, .3);
+  background: transparent; border-color: rgba(163, 18, 29, .22); color: rgba(163, 18, 29, .34);
 }
 .rsvp-contador__valor {
   flex: 0 1 2.75rem; width: 2.75rem; min-width: 1.75rem; height: 2.75rem; margin: 0; padding: 0;
@@ -220,7 +220,7 @@
 }
 .rsvp-contador__valor::-webkit-outer-spin-button,
 .rsvp-contador__valor::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.rsvp-contador__valor:focus-visible { outline: 2px solid var(--terracota); outline-offset: 0; }
+.rsvp-contador__valor:focus-visible { outline: 2px solid var(--rojo); outline-offset: 0; }
 .rsvp-contador__valor[aria-invalid="true"] { color: var(--error); }
 
 /* Nombres de acompañantes */
@@ -235,11 +235,11 @@
 .rsvp-trayecto__texto { flex: 1 1 11rem; min-width: 0; }
 .rsvp-trayecto:last-child { border-bottom: 1px solid var(--linea); }
 .rsvp-trayecto__tipo {
-  display: block; margin-bottom: .25rem;
-  font: 500 var(--fs-etiqueta)/1.3 var(--f-sans); letter-spacing: .22em; text-transform: uppercase;
-  color: var(--tinta-tenue);
+  display: block; margin-bottom: .1rem;
+  font: italic 400 1.0625rem/1.3 var(--f-serif); letter-spacing: .01em;
+  color: var(--rojo);
 }
-.rsvp-trayecto__ruta { display: block; font: 500 .9375rem/1.4 var(--f-sans); color: var(--tinta); }
+.rsvp-trayecto__ruta { display: block; font: 400 1rem/1.4 var(--f-sans); color: var(--tinta); }
 .rsvp-trayecto__lugar { display: block; }
 @media (min-width: 640px) { .rsvp-trayecto__lugar { display: inline; } }
 .rsvp-trayecto .rsvp-error { flex-basis: 100%; }
@@ -253,16 +253,16 @@
 }
 .rsvp-persona__titulo {
   float: left; width: 100%; margin-bottom: .5rem;
-  font: italic 400 1.45rem/1.2 var(--f-serif); color: var(--tinta); overflow-wrap: anywhere;
+  font: italic 400 1.45rem/1.2 var(--f-serif); color: var(--rojo); overflow-wrap: anywhere;
 }
 .rsvp-persona__titulo + * { clear: both; }
 .rsvp-casillas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: .85rem; margin-bottom: .8rem; }
 @media (max-width: 21.9rem) { .rsvp-casillas { grid-template-columns: 1fr; } }
 .rsvp-casilla {
   display: flex; align-items: center; gap: .65rem; min-height: 2.75rem; padding-block: .3rem;
-  font: 400 .9375rem/1.3 var(--f-sans); color: var(--tinta); cursor: pointer;
+  font: 400 1rem/1.3 var(--f-sans); color: var(--tinta); cursor: pointer;
 }
-.rsvp-label--sub { font-size: .875rem; color: var(--tinta-suave); margin-bottom: .4rem; }
+.rsvp-label--sub { font-size: 1.1rem; color: var(--tinta-suave); margin-bottom: .1rem; }
 
 /* ---------- Mensaje ---------- */
 .rsvp-campo--mensaje { margin-top: 2.5rem; padding-top: 1.85rem; border-top: 1.5px dotted var(--linea-fuerte); }
@@ -275,17 +275,17 @@
 .rsvp-trampa { position: absolute !important; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
 
 /* ---------- Envío ---------- */
-.rsvp-envio { display: grid; justify-items: center; gap: 1rem; margin-top: 2.25rem; text-align: center; }
+.rsvp-envio { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 1rem; margin-top: 2.25rem; text-align: center; }
 .rsvp-envio__aviso { width: 100%; }
 .rsvp-envio__aviso:empty { margin-bottom: -1rem; } /* sin hueco cuando no hay aviso */
-.rsvp-enviar { width: 100%; max-width: 22rem; min-height: 3.5rem; font-size: .8125rem; }
+.rsvp-enviar { width: 100%; max-width: 22rem; min-height: 3.5rem; font-size: min(1.4rem, 6vw); }
 .rsvp-enviar__giro {
   display: none; width: 1rem; height: 1rem; flex: none;
   border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%;
   animation: rsvp-giro .8s linear infinite;
 }
 .rsvp-enviar--enviando .rsvp-enviar__giro { display: inline-block; }
-.rsvp .rsvp-enviar.rsvp-enviar--enviando { opacity: 1; background: var(--tinta); color: var(--papel); }
+.rsvp .rsvp-enviar.rsvp-enviar--enviando { opacity: 1; background: var(--rojo-hover); color: var(--papel); }
 @keyframes rsvp-giro { to { transform: rotate(1turn); } }
 .rsvp-privacidad { font: italic 400 1.0625rem/1.4 var(--f-serif); color: var(--tinta-suave); }
 
@@ -300,8 +300,8 @@
 .rsvp-aviso--info { border-color: rgba(79, 107, 69, .45); background: rgba(79, 107, 69, .07); }
 .rsvp-aviso--info .rsvp-aviso__titulo { color: var(--ok); }
 .rsvp-aviso__acciones { display: flex; flex-wrap: wrap; gap: .5rem; }
-.rsvp-aviso__acciones .boton { min-height: 2.75rem; padding: .7rem 1.2rem; font-size: .6875rem; background: var(--campo); }
-@media (hover: hover) { .rsvp-aviso__acciones .boton:hover { background: var(--tinta); color: var(--papel); } }
+.rsvp-aviso__acciones .boton { min-height: 2.75rem; padding: .5rem 1.2rem .45rem; font-size: 1.15rem; background: var(--campo); }
+@media (hover: hover) { .rsvp-aviso__acciones .boton:hover { background: var(--rojo); color: var(--papel); } }
 
 /* ---------- Agradecimiento ---------- */
 .rsvp-gracias {
@@ -314,17 +314,17 @@
 @media (min-width: 640px) { .rsvp-gracias { padding: 1.5rem 0 1rem; border: 0; background: none; } }
 .rsvp-gracias__corazon {
   width: 3rem; height: 2.75rem; overflow: visible;
-  fill: rgba(164, 86, 58, .12); stroke: var(--terracota); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
+  fill: rgba(163, 18, 29, .1); stroke: var(--rojo); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
 }
 .rsvp-gracias__titulo {
-  font-family: var(--f-script); font-weight: 400; font-size: clamp(2.75rem, 2.1rem + 3vw, 3.75rem);
-  line-height: 1.08; color: var(--tinta); overflow-wrap: anywhere; text-wrap: balance;
+  font-family: var(--f-mano); font-weight: 400; text-transform: uppercase; letter-spacing: .06em; font-size: clamp(1.9rem, 1.4rem + 2.6vw, 3rem);
+  line-height: 1.2; color: var(--rojo); overflow-wrap: anywhere; text-wrap: balance;
 }
 .rsvp-gracias__titulo:focus { outline: none; }
 .rsvp-gracias__texto { max-width: 28ch; font-size: clamp(1.2rem, 1.1rem + .5vw, 1.375rem); line-height: 1.45; text-wrap: balance; }
 .rsvp-gracias__resumen {
   display: grid; gap: .2rem; margin-top: .15rem; max-width: 30rem;
-  font: 500 var(--fs-etiqueta)/1.6 var(--f-sans); letter-spacing: .18em; text-transform: uppercase;
+  font: 500 .75rem/1.6 var(--f-sans); letter-spacing: .18em; text-transform: uppercase;
   color: var(--tinta-tenue);
 }
 .rsvp-gracias .boton { margin-top: 1rem; }

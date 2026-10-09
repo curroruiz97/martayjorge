@@ -1,22 +1,21 @@
 /* ==========================================================================
    Marta & Jorge · sistema de diseño compartido
-   Papel crema + tinta + caligrafía fina (Ephesis) + serif cursiva
-   (Cormorant Garamond) + etiquetas en versalitas (Inter).
+   Lino crema con rayas rosas + tinta roja: rotulado a mano en mayúsculas (Covered By Your Grace) para nombres y
+   títulos, cursiva serif (Playfair Display) para el texto y Inter para el formulario.
    Todo son variables: para retocar el estilo basta con tocar :root.
    ========================================================================== */
 
-/* ---------- Fuentes (autoalojadas y recortadas a lo que usa la página: ~60 KB en total) ----------
-   · Ephesis (caligrafía fina de pluma) en un solo peso: títulos. Los nombres de la portada no son texto sino un SVG con
-     la misma tipografía (ver scripts/intro). Se ajusta con size-adjust para que los tamaños de los títulos (rem/vw)
-     se lean como los de una letra de tamaño corriente.
-     El rango de pesos 100–900 evita que el navegador la «engorde» artificialmente si algún estilo pide negrita.
-   · Cormorant solo en cursiva: todo el texto serif de la página es cursivo (si algún día se necesitara redonda,
-     añadir el fichero y su @font-face; mientras tanto el texto «normal» saldría también en cursiva). También las cifras.
-   · Inter 400/500 para etiquetas y formulario. Todas con subconjunto latino (español y lenguas vecinas). */
-@font-face { font-family: "Ephesis"; font-style: normal; font-weight: 100 900; font-display: swap; size-adjust: 110%;
-  src: url("../assets/fonts/ephesis-latin-400-normal.woff2") format("woff2"); }
-@font-face { font-family: "Cormorant Garamond"; font-style: italic; font-weight: 400; font-display: swap;
-  src: url("../assets/fonts/cormorant-garamond-latin-400-italic.woff2") format("woff2"); }
+/* ---------- Fuentes (autoalojadas y recortadas a lo que usa la página: ~58 KB en total) ----------
+   · Covered By Your Grace: rotulado a mano en un solo peso (nombres, fecha, títulos de sección, botones).
+     Siempre en mayúsculas (text-transform) y con tamaños pensados para esa letra, que es de trazo fino y alto pequeño.
+   · Playfair Display cursiva: todo el texto corrido, los lugares y las etiquetas. Sus cifras salen «de estilo antiguo»
+     (18:00h, 8) como en la referencia; para cifras grandes (cuenta atrás) se pide font-variant-numeric: lining-nums.
+     Todo el texto serif de la página es cursivo (si se necesitara redonda habría que añadir ese fichero y su @font-face).
+   · Inter 400/500 para el formulario y detalles. Todas con subconjunto latino (español y lenguas vecinas). */
+@font-face { font-family: "Covered By Your Grace"; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("../assets/fonts/covered-by-your-grace-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Playfair Display"; font-style: italic; font-weight: 400; font-display: swap;
+  src: url("../assets/fonts/playfair-display-latin-400-italic.woff2") format("woff2"); }
 @font-face { font-family: "Inter"; font-style: normal; font-weight: 400; font-display: swap;
   src: url("../assets/fonts/inter-latin-400-normal.woff2") format("woff2"); }
 @font-face { font-family: "Inter"; font-style: normal; font-weight: 500; font-display: swap;
@@ -25,35 +24,40 @@
 /* ---------- Tokens ---------- */
 :root {
   color-scheme: light;
-  /* papel y tinta */
-  --papel: #fdf8ec;            /* crema base: la textura lo oscurece ~4 % hasta ≈ #f3efe4 */
-  --papel-2: #ece4d2;          /* crema más oscuro: tarjetas, bandas */
-  --papel-3: #fbf8f1;          /* crema casi blanco (textos claros sobre tinta, sombras de rótulos) */
-  /* superficies translúcidas: dejan asomar la textura del papel en vez de un blanco liso */
-  --campo: rgba(251, 248, 241, .5);           /* campos, opciones y botones claros sobre el papel */
-  --campo-activo: rgba(251, 248, 241, .8);    /* opción elegida */
-  --campo-mapa: rgba(251, 248, 241, .86);     /* controles sobre el mapa: legibles encima de las calles */
-  --tinta: #2b2a28;            /* tinta de ilustraciones y texto principal */
-  --tinta-suave: #5a564e;      /* texto secundario (contraste 6:1 sobre papel) */
-  --tinta-tenue: #666152;      /* etiquetas pequeñas (contraste ≥ 5,1:1 incluso en el punto más oscuro del papel) */
-  --linea: rgba(43, 42, 40, .22);   /* filetes finos */
-  --linea-fuerte: rgba(43, 42, 40, .55);
-  /* acentos (usar con mucha mesura) */
-  --terracota: #a4563a;        /* teja del palomar, corazón, foco */
-  --oliva: #6c7550;            /* pinar */
-  --ocre: #c3a063;             /* piedra de San Pablo, atardecer */
-  --error: #9c2f2f;
+  /* lino y tinta */
+  --papel: #fbf9f1;            /* crema del lino: la textura (multiply) lo deja en ≈ #f4f2e9 */
+  --papel-2: #f4e1d9;          /* crema rosado: puertas de la portada, tarjetas, fondo del mapa */
+  --papel-3: #fbf8f1;          /* crema casi blanco (textos claros sobre rojo, halos de los rótulos del mapa) */
+  --rosa: rgba(238, 200, 190, .78);       /* rayas del lino */
+  --rosa-hueco: rgba(246, 226, 218, .55); /* línea clara entre las dos rayas de cada pareja */
+  --rojo: #a3121d;             /* tinta roja: nombres, títulos, botones y subrayados */
+  --rojo-hover: #7f0d16;
+  --tinta: #4b3c37;            /* marrón grisáceo oscuro: iconos y texto fuerte */
+  --tinta-suave: #5a4b45;      /* texto corrido y direcciones (contraste ≥ 6:1 sobre el lino y ≥ 5:1 sobre las rayas) */
+  --tinta-tenue: #675751;      /* detalles pequeños (contraste ≥ 4,6:1 incluso sobre las rayas) */
+  --linea: rgba(163, 18, 29, .26);          /* filetes finos */
+  --linea-fuerte: rgba(163, 18, 29, .6);
+  /* acentos */
+  --terracota: var(--rojo);    /* (nombre heredado) acento principal: ahora es el rojo de la tinta */
+  --oliva: #6c7550;            /* hojas */
+  --ocre: #c3a063;             /* oro del anillo, atardecer */
+  --error: #b3261e;
   --ok: #4f6b45;
+  /* superficies translúcidas: dejan asomar el lino (y sus rayas) en vez de un blanco liso */
+  --campo: rgba(251, 248, 241, .42);          /* tarjetas, opciones y botones claros sobre el lino */
+  --campo-activo: rgba(251, 248, 241, .78);   /* opción elegida */
+  --campo-mapa: rgba(251, 248, 241, .88);     /* controles sobre el mapa: legibles encima de las calles */
 
   /* tipografía */
-  --f-script: "Ephesis", "Snell Roundhand", "Apple Chancery", "Segoe Script", "Lucida Handwriting", cursive;
-  --f-serif: "Cormorant Garamond", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  --f-mano: "Covered By Your Grace", "Segoe Print", "Bradley Hand", "Comic Sans MS", cursive;
+  --f-script: var(--f-mano);   /* (nombre heredado) */
+  --f-serif: "Playfair Display", "Iowan Old Style", Georgia, "Times New Roman", serif;
   --f-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
-  --fs-cuerpo: clamp(1.125rem, 1.02rem + .45vw, 1.3125rem);   /* 18 → 21 px */
-  --fs-etiqueta: .75rem;                                        /* 12 px, versalitas */
-  --fs-h2: clamp(2.75rem, 1.9rem + 4.2vw, 4.75rem);
-  --fs-h3: clamp(2rem, 1.6rem + 1.8vw, 2.75rem);
+  --fs-cuerpo: clamp(1.0625rem, .98rem + .38vw, 1.25rem);       /* 17 → 20 px */
+  --fs-etiqueta: 1.0625rem;                                      /* etiquetas y detalles: cursiva de 17 px */
+  --fs-h2: clamp(2.1rem, 1.5rem + 3.2vw, 3.6rem);                /* títulos de sección (rotulado) */
+  --fs-h3: clamp(1.7rem, 1.4rem + 1.5vw, 2.5rem);                /* nombres de lugar (cursiva) */
 
   /* espaciado y layout */
   --gutter: clamp(min(1.25rem, 5.5vw), 6vw, 3rem);   /* con la letra muy ampliada el margen no se come la pantalla */
@@ -61,6 +65,8 @@
   --sp-1: .5rem; --sp-2: 1rem; --sp-3: 1.5rem; --sp-4: 2.5rem; --sp-5: 4rem; --sp-6: 6rem;
   --seccion: clamp(4.5rem, 11vw, 9rem);
   --radio: 6px;
+  /* ancho de cada pareja de rayas del lino: ≈ 1/5 de la pantalla en el móvil, con tope en pantallas grandes */
+  --p: clamp(72px, 20vw, 150px);
 
   /* movimiento */
   --ease: cubic-bezier(.22, .61, .36, 1);
@@ -86,22 +92,29 @@ ul[role="list"], ol[role="list"] { list-style: none; margin: 0; padding: 0; }
 body {
   min-height: 100vh;
   background-color: var(--papel);
-  background-image: url("../assets/img/papel.webp"), url("../assets/img/papel-mancha.webp");
-  background-size: 512px 512px, 1536px 1536px;
-  background-blend-mode: multiply, multiply;
-  color: var(--tinta);
+  /* de arriba abajo: la textura del lino (se multiplica sobre lo de debajo, así los hilos se ven también en las rayas),
+     las parejas de rayas rosas (degradado que se repite cada --p, con una pareja centrada en la pantalla) y el crema */
+  background-image:
+    url("../assets/img/lino.webp"),
+    linear-gradient(90deg, transparent 0, transparent 39%, var(--rosa) 40.6%, var(--rosa) 47.6%, var(--rosa-hueco) 49%, var(--rosa-hueco) 51%, var(--rosa) 52.4%, var(--rosa) 59.4%, transparent 61%, transparent 100%);
+  background-size: 256px 256px, var(--p) 100%;
+  background-position: 0 0, 50% 0;
+  background-repeat: repeat, repeat-x;
+  background-blend-mode: multiply, normal;
+  color: var(--tinta-suave);
   font-family: var(--f-serif);
+  font-style: italic;
   font-size: var(--fs-cuerpo);
-  line-height: 1.55;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
 }
 
-::selection { background: rgba(164, 86, 58, .22); }
+::selection { background: rgba(163, 18, 29, .18); }
 :focus-visible { outline: 2px solid var(--terracota); outline-offset: 3px; border-radius: 2px; }
-html { -webkit-tap-highlight-color: rgba(164, 86, 58, .14); }
+html { -webkit-tap-highlight-color: rgba(163, 18, 29, .12); }
 a { color: inherit; text-decoration-color: var(--terracota); text-decoration-thickness: 1px; text-underline-offset: .28em; }
 a:hover { text-decoration-thickness: 2px; }
 
@@ -112,39 +125,55 @@ a:hover { text-decoration-thickness: 2px; }
 .seccion[id] { scroll-margin-top: 1rem; }
 
 /* ---------- Tipografía ---------- */
-/* Etiqueta pequeña en versalitas: "CEREMONIA · 12:00" */
+/* Subrayado «a rotulador»: una raya roja con el trazo irregular (la usan los títulos y los enlaces con rotulado) */
+:root {
+  --subrayado: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 14' preserveAspectRatio='none'%3E%3Cpath d='M3 8.2C34 5.4 72 9.2 110 6.6S190 4.6 237 7.4' fill='none' stroke='%23a3121d' stroke-width='2.6' stroke-linecap='round'/%3E%3Cpath d='M16 11.2C58 10 112 11.8 150 10.4S206 9.8 226 10.6' fill='none' stroke='%23a3121d' stroke-opacity='.55' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+/* Etiqueta: cursiva pequeña, como «18:00h» sobre el nombre del lugar en la referencia */
 .etiqueta {
-  font-family: var(--f-sans); font-weight: 500; font-size: var(--fs-etiqueta);
-  letter-spacing: .26em; text-transform: uppercase; line-height: 1.4;
-  color: var(--tinta-tenue);
+  font-family: var(--f-serif); font-style: italic; font-weight: 400; font-size: var(--fs-etiqueta);
+  letter-spacing: .01em; text-transform: none; line-height: 1.4;
+  color: var(--tinta-suave);
 }
-/* Títulos caligráficos */
+/* Rotulado a mano en mayúsculas, en tinta roja */
 .titulo, .script {
-  font-family: var(--f-script); font-weight: 400; line-height: 1.1;
-  letter-spacing: .005em; color: var(--tinta);
+  font-family: var(--f-mano); font-style: normal; font-weight: 400; line-height: 1.15;
+  letter-spacing: .07em; text-transform: uppercase; color: var(--rojo);
 }
-.titulo { font-size: min(var(--fs-h2), 21vw); text-wrap: balance; overflow-wrap: anywhere; }   /* el tope en vw evita que una palabra larga se salga con la letra muy ampliada */
-.titulo--m { font-size: min(var(--fs-h3), 15vw); }
-/* Texto en cursiva serif, como en las capturas de referencia */
+.titulo { position: relative; display: inline-block; padding-bottom: .38em; font-size: min(var(--fs-h2), 11.5vw); text-wrap: balance; overflow-wrap: anywhere; }   /* el tope en vw evita que una palabra larga se salga con la letra muy ampliada */
+.titulo::after { content: ""; position: absolute; left: -3%; right: -3%; bottom: 0; height: .3em; background: var(--subrayado) center / 100% 100% no-repeat; }
+.titulo--m { font-size: min(var(--fs-h3), 10vw); }
+/* Texto en cursiva serif (ya es el estilo base de la página) */
 .cursiva { font-style: italic; font-weight: 400; }
 .suave { color: var(--tinta-suave); }
 .centrado { text-align: center; }
+/* Enlaces (direcciones…): gris con subrayado, como en la referencia */
+a { color: var(--tinta-suave); }
 
-/* ---------- Botones: píldora de línea fina ---------- */
+/* ---------- Botones ---------- */
+/* Píldora de línea roja con el rotulado a mano; la «sólida» va rellena de rojo (el botón principal de cada bloque) */
 .boton {
-  display: inline-flex; align-items: center; justify-content: center; gap: .65em;
-  min-height: 3rem; padding: .85rem min(1.9rem, 5vw); max-width: 100%; text-align: center;
-  border: 1px solid var(--tinta); border-radius: 999px;
-  background: transparent; color: var(--tinta);
-  font-family: var(--f-sans); font-weight: 500; font-size: var(--fs-etiqueta);
-  letter-spacing: min(.22em, 1.4vw); text-transform: uppercase; line-height: 1.15; text-decoration: none;
+  display: inline-flex; align-items: center; justify-content: center; gap: .6em;
+  min-height: 3rem; padding: .55rem min(1.9rem, 5vw) .5rem; max-width: 100%; text-align: center;
+  border: 1.5px solid var(--rojo); border-radius: 999px;
+  background: transparent; color: var(--rojo);
+  font-family: var(--f-mano); font-style: normal; font-weight: 400; font-size: 1.2rem;
+  letter-spacing: min(.1em, 1.4vw); text-transform: uppercase; line-height: 1.15; text-decoration: none;
   transition: background-color .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease), transform .3s var(--ease);
 }
-.boton:hover { background: var(--tinta); color: var(--papel); text-decoration: none; }
+.boton:hover { background: var(--rojo); color: var(--papel); text-decoration: none; }
 .boton:active { transform: scale(.98); }
-.boton--solido { background: var(--tinta); color: var(--papel); }
-.boton--solido:hover { background: var(--terracota); border-color: var(--terracota); }
+.boton--solido { background: var(--rojo); color: var(--papel); }
+.boton--solido:hover { background: var(--rojo-hover); border-color: var(--rojo-hover); }
 .boton[disabled], .boton[aria-disabled="true"] { opacity: .5; pointer-events: none; }
+/* Enlace rotulado: sin caja, con el subrayado a rotulador (como CÓMO LLEGAR / LISTA DE BODAS en la referencia) */
+.boton--enlace {
+  position: relative; min-height: 2.75rem; padding: .5rem .35rem .75rem; border: 0; border-radius: 0; background: none; color: var(--rojo);
+  font-size: min(1.3rem, 5.6vw);
+}
+.boton--enlace::after { content: ""; position: absolute; left: 0; right: -4%; bottom: .2rem; height: .55rem; background: var(--subrayado) left center / 100% 100% no-repeat; transition: transform .3s var(--ease); transform-origin: left center; }
+.boton--enlace:hover { background: none; color: var(--rojo-hover); }
+.boton--enlace:hover::after { transform: scaleX(1.04) rotate(-.6deg); }
 
 /* ---------- Separadores ---------- */
 .divisor { border: 0; border-top: 1.5px dotted var(--linea-fuerte); width: min(100%, 22rem); margin: var(--sp-5) auto; }

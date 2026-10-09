@@ -1,12 +1,12 @@
 """
 favicon.py · favicon 64x64: lazo en forma de corazón (el de la ruta) con su avioncito.
 
-Trazo grueso para que se lea a 16 px. Tinta #2b2a28 sobre transparente; en modo
-oscuro del navegador cambia a crema para no desaparecer sobre la pestaña oscura.
+Trazo grueso para que se lea a 16 px. Rojo (#a3121d) sobre transparente; en modo
+oscuro del navegador cambia a rosa claro para no desaparecer sobre la pestaña oscura.
 """
-from pluma import TINTA, trazado, fnum
+from pluma import ROJO, trazado, fnum
 
-CREMA = "#f5f0e4"
+CREMA = "#f2b6b0"   # rosa claro del modo oscuro
 
 
 def svg():
@@ -20,7 +20,7 @@ def svg():
     d = trazado(pts, {10})
     o = ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">']
     o.append('<style>.t{stroke:%s}.f{fill:%s}@media (prefers-color-scheme:dark){.t{stroke:%s}.f{fill:%s}}</style>'
-             % (TINTA, TINTA, CREMA, CREMA))
+             % (ROJO, ROJO, CREMA, CREMA))
     o.append('<path class="t" fill="none" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round" d="%s"/>' % d)
     # avioncito al final del lazo (triángulo relleno: a 16 px solo se distingue como una punta)
     o.append('<path class="f" d="M62 49.5L50.6 44.4L53.2 51.2L50.8 57.4Z"/>')

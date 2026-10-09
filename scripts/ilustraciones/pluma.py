@@ -20,7 +20,8 @@ import math
 import random
 from contextlib import contextmanager
 
-TINTA = "#2b2a28"
+TINTA = "#4b3c37"          # marrón grisáceo oscuro (el mismo que --tinta en base.css)
+ROJO = "#a3121d"           # rojo de la tinta de la web (nombres, títulos, ruta, favicon)
 OCRE = "#c3a063"
 TERRACOTA = "#a4563a"
 OLIVA = "#6c7550"

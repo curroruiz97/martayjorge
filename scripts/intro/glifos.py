@@ -1,4 +1,4 @@
-"""Etapa 1: glifos de «Marta», «y», «Jorge» en la caligrafía de la portada -> contornos (unidades de fuente),
+"""Etapa 1: glifos de «MARTA», «Y», «JORGE» en el rotulado de la portada -> contornos (unidades de fuente),
 máscara raster y esqueleto. Salida: pickle con todo + imagen de depuración."""
 import pickle
 import sys
@@ -12,8 +12,10 @@ from fontTools.ttLib import TTFont
 from PIL import Image, ImageChops, ImageDraw
 from skimage.morphology import skeletonize
 
-TTF = "fuente.ttf"   # lo deja generar.sh a partir de la fuente autoalojada (public/assets/fonts/ephesis-latin-400-normal.woff2)
-ESC = 0.6  # píxeles por unidad de fuente para el raster (em = 600 px)
+TTF = "fuente.ttf"   # lo deja generar.sh a partir de la fuente autoalojada (public/assets/fonts/covered-by-your-grace-latin-400-normal.woff2)
+# claves internas (las usan el resto de etapas) -> texto que se dibuja de verdad
+TEXTOS = {"Marta": "MARTA", "y": "Y", "Jorge": "JORGE"}
+ESC = 0.6  # píxeles por unidad de fuente para el raster (em ≈ 600 px; debe coincidir con trazos.py y ensamblar.py)
 PAD = 40   # margen del raster en px
 
 font = TTFont(TTF)
@@ -88,8 +90,8 @@ def rasterizar(cs):
 
 def main():
     res = {}
-    for palabra in ("Marta", "y", "Jorge"):
-        glifos, ancho = shape(palabra)
+    for palabra, texto in TEXTOS.items():
+        glifos, ancho = shape(texto)
         lista = []
         for g in glifos:
             cs, d = contornos(g["name"])
