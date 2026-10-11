@@ -4,7 +4,7 @@ import math
 import numpy as np
 
 import pincel
-from pincel import Lienzo, ESTILOS, BLANCO, ROJO_LADRILLO
+from pincel import Lienzo, ESTILOS, BLANCO, ROJO_ACUARELA
 
 # Pincel ancho para bordes y fondos: las medidas van en «anchos de pincel»
 ESTILOS['brocha'] = dict(ancho=1.0, cerdas=90, carga=1.5, recorrido=9.0, fin=(0.35, 0.55), seco=0.6,
@@ -88,7 +88,7 @@ def aguada(ancho=600, alto=1800, semilla=53):
     return lz.imagen(granulado=False, oscurecer=False)
 
 
-def pincelada_boton(ancho=760, alto=190, semilla=61, color=ROJO_LADRILLO):
+def pincelada_boton(ancho=760, alto=190, semilla=61, color=ROJO_ACUARELA):
     """Fondo de botón: dos pasadas de pincel cargado; la zona central (bajo el texto) queda llena."""
     rng = np.random.RandomState(semilla)
     est = ESTILOS['brocha-cargada']

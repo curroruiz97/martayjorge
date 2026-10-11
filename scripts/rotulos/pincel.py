@@ -29,10 +29,12 @@ from pluma import catmull_denso  # noqa: E402
 
 import alfabeto  # noqa: E402
 
-# Tintas de acuarela, claras y suaves (lo pidieron así tras ver las muestras con rojo ladrillo y negro)
-TERRACOTA = (186, 98, 76)        # #ba624c · títulos y nombres
+# Tintas. Rotulado definitivo (segunda vuelta, estilo de la invitación de referencia): rojo acuarela.
+ROJO_ACUARELA = (178, 58, 64)    # #b23a40 · títulos, nombres y fecha (= --rojo de la web)
+# Primera vuelta (pincel seco): tintas claras y suaves
+TERRACOTA = (186, 98, 76)        # #ba624c
 GRIS_PAYNE = (104, 112, 122)     # #68707a · acentos (la «y» de los nombres, «S.R.C.»): el negro, aguado
-ROJO_LADRILLO = (168, 74, 51)    # #a84a33 (= --rojo de la web): botones, más denso para que el texto blanco se lea
+ROJO_LADRILLO = (168, 74, 51)    # #a84a33 (rojo de la web en la primera vuelta)
 NEGRO = (35, 31, 28)             # negro cálido de tinta china (solo para pruebas)
 BLANCO = (255, 255, 255)         # para máscaras
 
@@ -243,14 +245,15 @@ class Lienzo:
         G = self.G[y0:y1, x0:x1]
         lo, hi = est['umbral']
         th = lo + (hi - lo) * (1 - G)
-        A = suave(th - est['suavidad'], th + est['suavidad'], F)
+        # (el borde inferior nunca baja de 0,03: sin tinta no puede quedar pigmento, ni un velo en la caja del trazo)
+        A = suave(np.maximum(th - est['suavidad'], 0.03), th + est['suavidad'], F)
         extra = 1.0
         if est.get('charco'):
             # el pigmento se acumula donde se levanta el pincel (y algo donde se apoya): más densidad ahí
             cw = est['charco'] * (np.exp(-((1 - u) / 0.07) ** 2) + 0.5 * np.exp(-(u / 0.05) ** 2))
             F2 = np.zeros_like(F)
             salpicar(F2, X - x0, Y - y0, (V.reshape(N, -1) * cw[None, :]).ravel().astype(np.float32))
-            extra = 1 + caja(caja(F2, rad), rad) / np.maximum(Fb, 1e-6)
+            extra = 1 + np.minimum(caja(caja(F2, rad), rad) / np.maximum(Fb, 0.05 * float(Fb.max())), 1.5 * est['charco'])
         self._capa(color)[y0:y1, x0:x1] += A * extra * rng.uniform(0.85, 1.0)
         self.trazos.append((color, P / ss, float(w.max() / ss)))
 

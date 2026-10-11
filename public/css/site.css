@@ -87,9 +87,10 @@
   }
 }
 
-/* Fecha en rotulado a mano y la ciudad debajo en cursiva */
-.portada__fecha { margin-top: .35rem; display: grid; justify-items: center; gap: .05rem; }
-.portada__fecha time { font: 400 clamp(1.3rem, 1.05rem + 1.2vw, 1.75rem)/1.2 var(--f-mano); letter-spacing: .12em; text-transform: uppercase; color: var(--rojo); }
+/* Fecha rotulada con el mismo pincel que los nombres (imagen de scripts/rotulos) y la ciudad debajo en cursiva */
+.portada__fecha { --cap: clamp(.95rem, 4.3vw, 1.25rem); margin-top: .35rem; display: grid; justify-items: center; gap: .05rem; }
+.portada__fecha time { display: block; line-height: 0; width: 100%; }
+.portada__fecha .rotulo { margin-inline: auto; }
 .portada__ciudad { font: italic 400 1.0625rem/1.3 var(--f-serif); color: var(--tinta-suave); }
 
 /* Cuenta atrás: sobria, sin cifras que parpadeen (cifras grandes en cursiva roja, con el texto en cursiva gris) */
@@ -146,7 +147,7 @@
   .portada__texto { align-self: end; gap: .2rem; }
   .portada__extra { align-self: start; gap: .6rem; }
   .portada__fecha { margin-top: .2rem; }
-  .portada__fecha time { font-size: 1.15rem; }
+  .portada__fecha { --cap: .9rem; }
   .portada__ciudad { font-size: .9375rem; line-height: 1.2; }
   .cuenta { gap: .2rem; }
   .cuenta__num { font-size: calc(var(--k) * min(1.9rem, 6.5vw)); }

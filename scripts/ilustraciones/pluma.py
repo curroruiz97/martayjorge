@@ -21,7 +21,7 @@ import random
 from contextlib import contextmanager
 
 TINTA = "#4b3c37"          # marrón grisáceo oscuro (el mismo que --tinta en base.css)
-ROJO = "#a84a33"           # rojo de la tinta de la web (= --rojo: ruta y avión; el favicon de la V1 conserva #a3121d)
+ROJO = "#b23a40"           # rojo de la tinta de la web (= --rojo: ruta y avión; el favicon de la V1 conserva #a3121d)
 OCRE = "#c3a063"
 TERRACOTA = "#a4563a"
 OLIVA = "#6c7550"

@@ -1,10 +1,15 @@
-"""Genera el rotulado a pincel seco de la web y lo coloca en public/index.html.
+"""Genera el rotulado a pincel de acuarela de la web y lo coloca en public/index.html.
+
+Estilo (segunda vuelta de la V2, el de la invitación de referencia que mandaron los novios, más legible):
+pincel de acuarela fino «con gracia» (pincel.ESTILOS['acuarela-gracia']) en rojo acuarela; los títulos de sección
+llevan un subrayado a mano. La primera vuelta (pincel seco grueso) sigue disponible en pincel.ESTILOS['rotulo'].
 
 Uso:  python3 scripts/rotulos/generar.py
 Salidas (public/assets/rotulos/):
   <título>.webp                 títulos de sección (misma altura de mayúscula en todos: 104 px, nítidos en móviles
                                 3× y en pantallas 2×; en CSS la mayúscula mide como mucho 44 px)
-  nombres.webp                  «Marta y Jorge» de la portada (se pinta trazo a trazo con una máscara SVG)
+  nombres.webp                  «MARTA y JORGE» de la portada (se pinta trazo a trazo con una máscara SVG)
+  fecha.webp                    «8 DE MAYO DE 2027» de la portada
   borde-sup / borde-inf / borde-4 / aguada .webp   máscaras de las fotos (blanco con alfa)
   pincelada-boton.webp          fondo de los botones principales
 En public/index.html reescribe lo que hay entre <!-- rotulo:ID --> y <!-- /rotulo:ID --> (imágenes de los títulos,
@@ -29,22 +34,23 @@ DEST = os.path.join(PUB, 'assets', 'rotulos')
 HTML = os.path.join(PUB, 'index.html')
 WEB = 'assets/rotulos/'
 
-CAP_CSS = 44           # altura máxima de la mayúscula en CSS px (--cap en site.css: min(2.75rem, 8.4vw))
+ESTILO = 'acuarela-gracia'
+TINTA = lambda *_: pincel.ROJO_ACUARELA
+CAP_CSS = 44           # altura máxima de la mayúscula en CSS px (--cap en base.css: min(2.75rem, 8.4vw))
 CAP_PX = 104           # altura de la mayúscula en la imagen (móvil de 390 px a 3×: 33 × 3 ≈ 99 px)
 NOMBRES_ANCHO = 1100   # ancho de la imagen de los nombres (≈ 3× del ancho que ocupan en el móvil)
 
-acento = lambda cond: (lambda li, ci, ch: pincel.GRIS_PAYNE if cond(li, ci, ch) else pincel.TERRACOTA)
-
-# id, líneas, semilla, texto accesible, tinta, icono (fichero de scripts/acuarela, opcional)
+# id, líneas, semilla, texto accesible, subrayado, icono (fichero de scripts/acuarela, opcional)
 TITULOS = [
-    ('agenda', ['AGENDA'], 3, 'Agenda', None, None),
-    ('transporte', ['TRANSPORTE'], 7, 'Transporte', None, None),
-    ('alojamiento', ['ALOJAMIENTO'], 17, 'Alojamiento', None, 'almohada-icono'),
-    ('src', ['S.R.C. · SE RUEGA', 'CONFIRMACIÓN'], 11, 'S.R.C. · Se ruega confirmación',
-     acento(lambda li, ci, ch: li == 0 and ci < 6), None),
-    ('lista-de-bodas', ['LISTA DE BODAS'], 8, 'Lista de bodas', None, 'alianzas-icono'),
-    ('os-esperamos', ['¡OS ESPERAMOS!'], 13, '¡Os esperamos!', None, None),
+    ('agenda', ['AGENDA'], 3, 'Agenda', True, None),
+    ('transporte', ['TRANSPORTE'], 7, 'Transporte', True, None),
+    ('alojamiento', ['ALOJAMIENTO'], 17, 'Alojamiento', True, 'almohada-icono'),
+    ('src', ['S.R.C. · SE RUEGA', 'CONFIRMACIÓN'], 11, 'S.R.C. · Se ruega confirmación', True, None),
+    ('lista-de-bodas', ['LISTA DE BODAS'], 8, 'Lista de bodas', True, 'alianzas-icono'),
+    ('os-esperamos', ['¡OS ESPERAMOS!'], 13, '¡Os esperamos!', False, None),
 ]
+# la fecha de la portada: más pequeña (en CSS, --cap de .portada__fecha); se pinta a una mayúscula de 64 px
+FECHA = (['8 DE MAYO DE 2027'], 9, '8 de mayo de 2027', 64)
 
 
 def webp(im, ruta, alfa=60):
@@ -57,15 +63,16 @@ def webp(im, ruta, alfa=60):
     return b.tell()
 
 
-def titulo(id_, lineas, semilla, tinta):
-    lz, info = pincel.rotular(lineas, CAP_PX, semilla=semilla, tinta=tinta, margen_x=0.2, interlinea=0.62)
-    im = lz.imagen(granulado=False, oscurecer=False)
+def titulo(id_, lineas, semilla, subrayado, cap_px=CAP_PX):
+    lz, info = pincel.rotular(lineas, cap_px, estilo=ESTILO, semilla=semilla, tinta=TINTA, margen_x=0.2, interlinea=0.62,
+                              subrayado=subrayado)
+    im = lz.imagen(granulado=False)
     kb = webp(im, os.path.join(DEST, f'{id_}.webp'))
-    k = CAP_CSS / CAP_PX
+    k = CAP_CSS / cap_px
     return dict(u=info['u'], w=round(im.width * k), h=round(im.height * k), peso=kb)
 
 
-def marcado_titulo(id_, texto, d, icono):
+def marcado_titulo(id_, texto, d, icono, perezosa=True):
     partes = []
     if icono:
         ruta3 = os.path.join(PUB, 'assets', 'ilustraciones', 'acuarela', f'{icono}-3x.webp')
@@ -78,7 +85,8 @@ def marcado_titulo(id_, texto, d, icono):
     partes.append(f'<span class="sr-only">{texto}</span>')
     partes.append(
         f'<img class="rotulo" src="{WEB}{id_}.webp" '
-        f'width="{d["w"]}" height="{d["h"]}" style="--u:{d["u"]:.3f}" alt="" decoding="async" loading="lazy">')
+        f'width="{d["w"]}" height="{d["h"]}" style="--u:{d["u"]:.3f}" alt="" decoding="async"'
+        + (' loading="lazy">' if perezosa else '>'))
     return ''.join(partes)
 
 
@@ -93,12 +101,11 @@ def simplificar(P, paso):
 
 
 def nombres():
-    tinta = acento(lambda li, ci, ch: ch == 'Y')
     # primero se mide el ancho en mayúsculas para que la imagen salga exactamente de NOMBRES_ANCHO px
-    _, info = pincel.rotular(['MARTA Y JORGE'], 10, semilla=5, tinta=tinta, margen_x=0.2, pintar=False)
+    _, info = pincel.rotular(['MARTA y JORGE'], 10, estilo=ESTILO, semilla=5, tinta=TINTA, margen_x=0.2, pintar=False)
     cap = NOMBRES_ANCHO / info['u']
-    lz, info = pincel.rotular(['MARTA Y JORGE'], cap, semilla=5, tinta=tinta, margen_x=0.2)
-    im = lz.imagen(granulado=False, oscurecer=False)
+    lz, info = pincel.rotular(['MARTA y JORGE'], cap, estilo=ESTILO, semilla=5, tinta=TINTA, margen_x=0.2)
+    im = lz.imagen(granulado=False)
     W, H = im.size
     peso = webp(im, os.path.join(DEST, 'nombres.webp'))
 
@@ -157,11 +164,16 @@ def main():
     os.makedirs(DEST, exist_ok=True)
     html = open(HTML, encoding='utf-8').read()
     total = 0
-    for id_, lineas, semilla, texto, tinta, icono in TITULOS:
-        d = titulo(id_, lineas, semilla, tinta)
+    for id_, lineas, semilla, texto, subrayado, icono in TITULOS:
+        d = titulo(id_, lineas, semilla, subrayado)
         html = reemplazar(html, id_, marcado_titulo(id_, texto, d, icono))
         total += d['peso']
         print(f'  {id_:16s} u={d["u"]:.2f}  {d["peso"] / 1024:5.1f} KB')
+    lineas, semilla, texto, cap_px = FECHA
+    d = titulo('fecha', lineas, semilla, False, cap_px)
+    html = reemplazar(html, 'fecha', marcado_titulo('fecha', texto, d, None, perezosa=False))
+    total += d['peso']
+    print(f'  fecha            u={d["u"]:.2f}  {d["peso"] / 1024:5.1f} KB')
     svg, rn, peso, cob = nombres()
     html = reemplazar(html, 'nombres', svg)
     html = re.sub(r'<header class="portada" id="portada"[^>]*>', f'<header class="portada" id="portada" style="--rn:{rn:.4f}">', html, count=1)

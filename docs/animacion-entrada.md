@@ -1,6 +1,6 @@
 # Animación de entrada de la portada
 
-Está pensada como una invitación pintada a mano: **lino, acuarela y pincel seco**. Nada de destellos ni rebotes;
+Está pensada como una invitación pintada a mano: **lino, acuarela y pincel**. Nada de destellos ni rebotes;
 todo es suave y se puede saltar en cualquier momento.
 
 ## Qué se ve (≈ 4,5 s)
@@ -8,9 +8,9 @@ todo es suave y se puede saltar en cualquier momento.
 | t (s) | Qué pasa |
 |---|---|
 | 0,75 | «¡Nos casamos!» aparece con un fundido suave |
-| 0,85 – 3,25 | **«MARTA Y JORGE» se pintan a pincel seco**, trazo a trazo y en el orden en que los pinta un rotulista (la M en cuatro golpes, la O de una vuelta que no llega a cerrar…). La «y» va en gris Payne; el resto, en terracota |
+| 0,85 – 3,25 | **«MARTA y JORGE» se pintan a pincel de acuarela**, en rojo, trazo a trazo y en el orden en que los pinta un rotulista (la M en cuatro golpes, la O de una vuelta…), con la «y» minúscula de enlace |
 | 2,1 – 3,7 | La foto aparece con una **aguada**: un frente de agua con el borde rasgado la «pinta» de arriba abajo |
-| 3,0 – 4,35 | La fecha, la cuenta atrás y el botón entran con un fundido |
+| 3,0 – 4,35 | La fecha (rotulada con el mismo pincel), la cuenta atrás y el botón entran con un fundido |
 
 La foto va de lado a lado en el móvil, con los bordes de arriba y abajo deshechos en pinceladas; en pantallas anchas va
 en una caja 4:5 con los cuatro bordes a pincel.

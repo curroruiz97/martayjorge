@@ -27,7 +27,7 @@
   /* filete interior, como una tarjeta impresa */
   .rsvp__tarjeta::before {
     content: ""; position: absolute; inset: .55rem; pointer-events: none;
-    border: 1px solid rgba(168, 74, 51, .16); border-radius: 3px;
+    border: 1px solid rgba(178, 58, 64, .16); border-radius: 3px;
   }
 }
 
@@ -207,7 +207,7 @@
 /* En el tope: se atenúan borde e icono (no opacity, para que el contorno de foco se vea entero) */
 .rsvp-contador__btn[aria-disabled="true"] {
   cursor: default; transform: none;
-  background: transparent; border-color: rgba(168, 74, 51, .22); color: rgba(168, 74, 51, .34);
+  background: transparent; border-color: rgba(178, 58, 64, .22); color: rgba(178, 58, 64, .34);
 }
 .rsvp-contador__valor {
   flex: 0 1 2.75rem; width: 2.75rem; min-width: 1.75rem; height: 2.75rem; margin: 0; padding: 0;
@@ -311,7 +311,7 @@
 @media (min-width: 640px) { .rsvp-gracias { padding: 1.5rem 0 1rem; border: 0; background: none; } }
 .rsvp-gracias__corazon {
   width: 3rem; height: 2.75rem; overflow: visible;
-  fill: rgba(168, 74, 51, .1); stroke: var(--rojo); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
+  fill: rgba(178, 58, 64, .1); stroke: var(--rojo); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
 }
 .rsvp-gracias__titulo {
   font-family: var(--f-mano); font-weight: 400; text-transform: uppercase; letter-spacing: .06em; font-size: clamp(1.9rem, 1.4rem + 2.6vw, 3rem);

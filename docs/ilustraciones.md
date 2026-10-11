@@ -7,15 +7,23 @@
 En la **V2** (comentarios de los novios: «efecto general de acuarela, hecho a mano, con irregularidades a pincel seco») hay
 **tres familias**, todas hechas con código, propias y reproducibles (mismas semillas → mismas imágenes):
 
-1. **Rotulado a pincel seco** (§R): títulos de sección, los nombres de la portada, los bordes de las fotos, la aguada de la
-   entrada y la pincelada de los botones. `scripts/rotulos/` → `public/assets/rotulos/`.
+1. **Rotulado a pincel** (§R): títulos de sección, los nombres y la fecha de la portada (pincel de acuarela fino), los
+   bordes de las fotos, la aguada de la entrada y la pincelada de los botones (pincel seco).
+   `scripts/rotulos/` → `public/assets/rotulos/`.
 2. **Acuarelas** (§0): la guirnalda y el bodegón entre la portada y la Agenda, San Pablo y el Palomar (§A) y los iconos
    de Alojamiento y Lista de bodas. `scripts/acuarela/` → `public/assets/ilustraciones/acuarela/`.
 3. **A pluma** (§1 en adelante): la ruta con el avión de la Agenda, adornos, iconos y favicon (SVG). San Pablo y el
    Palomar a pluma eran de la V1 y se conservan fuera de la web.
 
 
-## R. Rotulado a pincel seco (`scripts/rotulos/` → `public/assets/rotulos/`)
+## R. Rotulado a pincel (`scripts/rotulos/` → `public/assets/rotulos/`)
+
+> **Estilo definitivo** (segunda vuelta de la V2): los novios mandaron una invitación de referencia (rotulado a acuarela
+> rojo, con subrayados a mano) y pidieron ese estilo pero más legible y estiloso. Se usa `ESTILOS['acuarela-gracia']`:
+> pincel redondo fino y cargado de agua, sin estrías secas, más grueso al bajar que al subir, tinta roja transparente
+> (`#b23a40`) que se acumula en los bordes y donde se levanta el pincel, letras más anchas y espaciadas con alguna algo
+> más pequeña y un poco de rebote; los títulos llevan un subrayado a mano. La primera vuelta (pincel seco grueso, que se
+> describe abajo) sigue en `ESTILOS['rotulo']` y se usa para los bordes de las fotos y la pincelada de los botones.
 
 - **`alfabeto.py`**: mayúsculas de **un solo trazo**, en el orden y el sentido en que las pinta un rotulista, condensadas
   (avance ≈ 0,62 de la altura) para que los títulos largos quepan en el móvil. Las vocales con tilde, `¡ ! . ·` incluidos.
@@ -24,18 +32,19 @@ En la **V2** (comentarios de los novios: «efecto general de acuarela, hecho a m
   deshilachado al final, alguna cerda suelta); el **grano del papel** decide dónde agarra el pigmento, así salen las
   estrías y los bordes rasgados que siguen la dirección del trazo. Cada letra lleva su escala, giro y línea base algo
   distintos, y las curvas cerradas (O, D, B, P, R) se quedan un poco sin cerrar. Solo numpy y Pillow.
-- **Tintas** (tras la hoja de muestras, los novios pidieron colores **más claros y suaves, de acuarela**): terracota
-  aguada `#ba624c` para títulos y nombres, gris Payne `#68707a` (el negro, aguado) para los acentos (la «y» de los nombres
-  y «S.R.C.»), con la tinta transparente (se ven los cruces). Los botones usan `#a84a33`, el `--rojo` de la web.
+- **Tinta**: rojo acuarela `#b23a40` (el rojo de la referencia, medido sobre su captura) en títulos, nombres y fecha; es
+  también el `--rojo` de la web (botones, fechas, enlaces, mapa y ruta). En la primera vuelta se probaron terracota y gris
+  Payne (`TERRACOTA`, `GRIS_PAYNE` en `pincel.py`).
 - **`generar.py`** escribe los WebP y **el marcado en `public/index.html`** entre `<!-- rotulo:ID -->` y
   `<!-- /rotulo:ID -->` (la imagen de cada título con su texto en un `.sr-only`, y el SVG de los nombres con los ejes de
   sus trazos para la animación). Los títulos están en `TITULOS` (texto, semilla, tinta, icono). Comprueba que los ejes de
   los nombres cubren toda la tinta de la imagen.
 - **`piezas.py`**: bordes de foto (`borde-sup`, `borde-inf`, `borde-4`, blancos con alfa: se usan como máscaras), la
   aguada de la entrada y la pincelada de los botones.
-- **`muestras.py`**: hoja de muestras con variantes de pincel (seco, intermedio, cargado), para elegir.
-- Pesos: cada título 11–40 KB (una sola imagen con la mayúscula a 104 px, nítida en móviles 3× y pantallas 2×; el color
-  es plano y la textura va en el alfa), nombres ≈ 26 KB, máscaras 3–16 KB.
+- **`muestras.py`**: hojas de muestras para elegir (`--acuarela`: variantes del pincel de acuarela y la tinta; sin
+  opciones: las del pincel seco de la primera vuelta).
+- Pesos: cada título 11–38 KB (una sola imagen con la mayúscula a 104 px, nítida en móviles 3× y pantallas 2×), nombres
+  ≈ 18 KB, fecha ≈ 12 KB, máscaras 3–16 KB.
 
 ```bash
 python3 scripts/rotulos/generar.py       # ≈ 10 s

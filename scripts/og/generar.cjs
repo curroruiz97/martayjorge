@@ -27,7 +27,7 @@ const fs = require('fs');
     html .portada__extra { display: none; }
     html .portada__aviso { font-size: 24px; }
     html .portada__fecha { margin-top: 22px; }
-    html .portada__fecha time { font-size: 34px; }
+    html .portada__fecha { --cap: 24px; }
     html .portada__ciudad { font-size: 25px; }
     html .portada__foto { align-self: center; justify-self: center; margin: 0; width: 432px; height: 540px; }
   ` });

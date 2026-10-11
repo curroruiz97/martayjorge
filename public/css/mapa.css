@@ -9,7 +9,7 @@
 
 /* ---------- Antes de cargar (o sin JS / si falla): el óvalo a pincel ---------- */
 .mapa {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M103 15c41-2 72 39 71 86-1 47-33 86-75 84-42-2-72-41-71-87S61 17 103 15z' fill='rgba(168,74,51,.08)' stroke='%23a84a33' stroke-opacity='.75' stroke-width='3.2' stroke-linecap='round'/%3E%3Cpath d='M96 19c43-1 73 37 72 83-1 44-30 79-70 79' fill='none' stroke='%23a84a33' stroke-opacity='.45' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M103 15c41-2 72 39 71 86-1 47-33 86-75 84-42-2-72-41-71-87S61 17 103 15z' fill='rgba(178,58,64,.08)' stroke='%23b23a40' stroke-opacity='.75' stroke-width='3.2' stroke-linecap='round'/%3E%3Cpath d='M96 19c43-1 73 37 72 83-1 44-30 79-70 79' fill='none' stroke='%23b23a40' stroke-opacity='.45' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: center;
   background-size: auto 82%;
@@ -41,7 +41,7 @@
 /* ---------- Botones +/− (44 px mínimo para el dedo) ---------- */
 .mapa .leaflet-container .leaflet-bar {
   border: 1.5px solid var(--rojo); border-radius: 8px; overflow: hidden;
-  background: var(--campo-mapa); box-shadow: 2px 2px 0 rgba(168, 74, 51, .16);
+  background: var(--campo-mapa); box-shadow: 2px 2px 0 rgba(178, 58, 64, .16);
 }
 .mapa .leaflet-container .leaflet-bar a {
   width: 44px; height: 44px; line-height: 42px;
@@ -87,7 +87,7 @@
 .mapa .leaflet-popup-content-wrapper {
   background: var(--campo-mapa); color: var(--tinta);
   border: 1.5px solid var(--rojo); border-radius: 8px;
-  box-shadow: 3px 3px 0 rgba(168, 74, 51, .18);
+  box-shadow: 3px 3px 0 rgba(178, 58, 64, .18);
 }
 .mapa .leaflet-popup-tip { background: var(--campo-mapa); box-shadow: none; border: 1.5px solid var(--rojo); }
 .mapa .leaflet-popup-content { margin: .9rem 2.75rem .95rem 1.1rem; font: 400 1rem/1.25 var(--f-serif); }

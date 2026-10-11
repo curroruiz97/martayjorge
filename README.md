@@ -5,9 +5,9 @@ Web de **una sola página** (sin menú, todo en scroll) para la boda del **sába
 - **12:00** · Ceremonia en la Iglesia de San Pablo
 - **14:00** · Celebración en La Posada Real del Pinar (Pozal de Gallinas)
 
-Estilo de papelería de boda pintada a mano: **lino crema con rayas rosas**, **rotulado a pincel seco** en tintas de acuarela
-suaves, cursiva con serifas, **acuarelas propias** y fotos de lado a lado con los bordes a pincel; formulario de confirmación
-con acompañantes, autocar y alergias.
+Estilo de papelería de boda pintada a mano: **lino crema con rayas rosas**, **rotulado a pincel de acuarela en rojo** (con
+subrayados a mano, como la invitación de referencia que mandaron los novios), cursiva con serifas, **acuarelas propias** y
+fotos de lado a lado con los bordes a pincel; formulario de confirmación con acompañantes, autocar y alergias.
 
 > **Versiones** · La **V2** (comentarios de los novios sobre la V1: más acuarela y pincel seco, menos espacio en blanco,
 > pensada para el móvil) está en la rama **`v2`**; Vercel la publica como vista previa sin tocar producción. La **V1**
@@ -17,7 +17,7 @@ con acompañantes, autocar y alergias.
 
 | Sección | Qué hace |
 |---|---|
-| **Portada** | Entrada animada (los nombres se pintan a pincel seco trazo a trazo y la foto, de lado a lado con los bordes a pincel, aparece con una aguada), cuenta atrás sobria (días · horas · minutos) y botón para confirmar. Cabe entera en una pantalla. Guía en [`docs/animacion-entrada.md`](docs/animacion-entrada.md) |
+| **Portada** | Entrada animada (los nombres se pintan a pincel de acuarela trazo a trazo, la fecha también va rotulada y la foto, de lado a lado con los bordes a pincel, aparece con una aguada), cuenta atrás sobria (días · horas · minutos) y botón para confirmar. Cabe entera en una pantalla. Guía en [`docs/animacion-entrada.md`](docs/animacion-entrada.md) |
 | **Mesa puesta** | Bodegón de acuarela (narcisos, vela en candelabro turquesa, copa de rosado, menú, tomates cherry, naranjas, uvas, girasoles, botella y tarta) bajo una guirnalda, entre la portada y la Agenda |
 | **Agenda** | San Pablo y el Palomar en acuarela y a pincel, unidos por un caminito rojo que serpentea y un avión que lo recorre; enlaces «¿Cómo llegar?» a Google Maps y «Añadir al calendario» |
 | **Transporte** | Coche (parking recomendado junto a la Catedral) y autocar |
@@ -28,7 +28,7 @@ con acompañantes, autocar y alergias.
 | **Cierre** | «¡Os esperamos!» sobre el cielo de la foto del atardecer, que se ve entera. Es el final de la página |
 | **`/admin`** | Panel privado (con contraseña) para que los novios vean totales, filtren y descarguen CSV |
 
-Todos los títulos son rótulos pintados con el motor de pincel seco de `scripts/rotulos/` (el texto va en un `.sr-only`
+Todos los títulos son rótulos pintados con el motor de pincel de `scripts/rotulos/` (el texto va en un `.sr-only`
 para lectores de pantalla). Una sola composición, la del móvil, en todas las pantallas (en escritorio, centrada).
 
 Stack: HTML/CSS/JS **sin build ni frameworks** · hosting y funciones en **Vercel** · datos en **Supabase** (Postgres).
@@ -43,12 +43,12 @@ public/                 ← lo que se publica
   js/                   boot.js · main.js (animaciones, cuenta atrás, copiar IBAN) · intro.js (saltar la entrada, parallax) · rsvp.js · mapa.js
   assets/fonts/         tipografías autoalojadas y recortadas (Covered By Your Grace, Playfair Display cursiva, Inter 400/500: ~58 KB)
   assets/img/           fotos optimizadas (WebP), textura de lino (lino.webp), imagen para compartir (og.jpg) e icono del móvil
-  assets/rotulos/       rótulos a pincel seco (títulos y nombres), máscaras de los bordes de las fotos, aguada y pincelada de botón
+  assets/rotulos/       rótulos a pincel de acuarela (títulos, nombres y fecha), máscaras de los bordes de las fotos, aguada y pincelada de botón
   assets/ilustraciones/ acuarela/ (bodegón, San Pablo, Palomar, iconos…) y SVG a pluma (ruta, adornos, iconos, favicon); guía: docs/ilustraciones.md
   admin/                panel de respuestas
 api/                    funciones serverless de Vercel (rsvp, admin, ping)
 supabase/               schema.sql (tabla y vistas) · consultas.sql (consultas listas para pegar)
-scripts/                dev.mjs (servidor local) · test-rsvp.mjs · rotulos/ (pincel seco: rótulos, nombres, bordes de foto) · acuarela/ (acuarelas, San Pablo y Palomar) · ilustraciones/ (SVG a pluma) · fondo/ (textura de lino) · og/ (imagen para compartir el enlace y el icono del móvil)
+scripts/                dev.mjs (servidor local) · test-rsvp.mjs · rotulos/ (pincel: rótulos, nombres, fecha, bordes de foto) · acuarela/ (acuarelas, San Pablo y Palomar) · ilustraciones/ (SVG a pluma) · fondo/ (textura de lino) · og/ (imagen para compartir el enlace y el icono del móvil)
 docs/                   rsvp.md (guía completa del formulario y los datos) · animacion-entrada.md · ilustraciones.md · contenido-original.md (brief) · datos-verificados.md · ilustraciones/v1/ (dibujos a pluma de la V1)
 vercel.json             salida en public/, cabeceras de seguridad, cron diario
 ```
@@ -127,7 +127,7 @@ boda y, después, exportad lo que queráis conservar y vaciad la tabla. Guía co
 | Textos, horarios, enlaces «¿Cómo llegar?» | `public/index.html` |
 | Teléfono (WhatsApp) o correo de contacto | atributos `data-whatsapp` / `data-email` de `<section id="confirmacion">`: si falla un envío, el formulario ofrece mandar la respuesta por ahí (en la V2 ya no hay botón de contacto visible) |
 | IBAN | `public/index.html`, sección *Lista de bodas* (texto visible y atributo `data-copiar`). Se ve siempre en una sola línea: el tamaño de la letra se adapta al ancho disponible (`.iban__numero` en `site.css`) |
-| Colores y tipografías | variables de `:root` en `public/css/base.css` (`--rojo`, rojo ladrillo suave `#a84a33`, es la tinta de botones, fechas y subrayados; `--rosa` y `--p` las rayas del fondo). Los fondos claros de tarjeta, opciones, botones e IBAN son translúcidos (`--campo`, `--campo-activo`, `--campo-mapa`) para que se vea el lino |
+| Colores y tipografías | variables de `:root` en `public/css/base.css` (`--rojo`, rojo acuarela `#b23a40`, es la tinta de botones, fechas y subrayados; `--rosa` y `--p` las rayas del fondo). Los fondos claros de tarjeta, opciones, botones e IBAN son translúcidos (`--campo`, `--campo-activo`, `--campo-mapa`) para que se vea el lino |
 | Títulos, nombres, bordes de las fotos, pincelada de los botones | `scripts/rotulos/` (textos, semillas y tintas en `generar.py`); `python3 scripts/rotulos/generar.py` rehace las imágenes y el marcado en `index.html`. Guía en [`docs/ilustraciones.md`](docs/ilustraciones.md) §R |
 | Fondo (lino y rayas) | la textura sale de `python3 scripts/fondo/generar.py` (`public/assets/img/lino.webp`); las rayas son un degradado CSS en el `body` de `base.css` (ancho de cada pareja: `--p`; color e intensidad: `--rosa` y `--rosa-hueco`, cuanto menor es el último número, más suaves se ven) |
 | Ilustraciones de acuarela | `scripts/acuarela/` (objetos y escenas; se regeneran con `python3 scripts/acuarela/generar.py`; San Pablo y el Palomar, con `arquitectura.py`); la guía está en [`docs/ilustraciones.md`](docs/ilustraciones.md) |
@@ -161,10 +161,10 @@ boda y, después, exportad lo que queráis conservar y vaciad la tabla. Guía co
   recreado el *estilo*, no sus dibujos: **las ilustraciones son propias** y las letras son tipografías libres parecidas
   (Covered By Your Grace y Playfair Display, licencia OFL; las licencias están junto a las fuentes). Si queréis exactamente
   las ilustraciones de esa web, hay que encargárselas o comprarlas a su autora. Todo el aspecto sale de variables en `base.css`.
-- **V2** (comentarios de los novios): efecto general de acuarela hecha a mano con pincel seco. Los títulos y los nombres
-  son **rótulos pintados con un pincel de cerdas simulado** (`scripts/rotulos/`), en tintas de acuarela claras y suaves
-  (las eligieron tras una hoja de muestras); no es una tipografía, así que cada letra es algo distinta y los trazos curvos
-  no llegan a cerrar.
+- **V2** (comentarios de los novios): efecto general de acuarela hecha a mano. Los títulos, los nombres y la fecha son
+  **rótulos pintados con un pincel de acuarela simulado** (`scripts/rotulos/`), en rojo acuarela y con subrayados a mano,
+  en el estilo de la invitación de referencia pero más legibles (lo eligieron con dos hojas de muestras); no es una
+  tipografía, así que cada letra es algo distinta.
 - Las ilustraciones de **San Pablo** y del **Palomar** son dibujos propios (no calcados de la acuarela ni del render con
   IA): en la V1 a pluma; en la V2, la misma geometría pintada en acuarela y a pincel (`scripts/acuarela/arquitectura.py`).
   Si contratáis al ilustrador para las invitaciones en papel, basta con sustituir `san-pablo-acuarela-*.webp` por su

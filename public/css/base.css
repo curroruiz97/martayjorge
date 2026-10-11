@@ -30,13 +30,13 @@
   --papel-3: #fbf8f1;          /* crema casi blanco (textos claros sobre rojo, halos de los rótulos del mapa) */
   --rosa: rgba(238, 200, 190, .18);       /* rayas del lino: muy suaves, apenas se notan (el último número es la intensidad) */
   --rosa-hueco: rgba(246, 226, 218, .07); /* línea clara entre las dos rayas de cada pareja */
-  --rojo: #a84a33;             /* tinta roja: nombres, títulos, botones y subrayados */
-  --rojo-hover: #87361f;
+  --rojo: #b23a40;             /* tinta roja: nombres, títulos, botones y subrayados */
+  --rojo-hover: #8f2a31;
   --tinta: #4b3c37;            /* marrón grisáceo oscuro: iconos y texto fuerte */
   --tinta-suave: #5a4b45;      /* texto corrido y direcciones (contraste ≥ 6:1 sobre el lino y ≥ 5:1 sobre las rayas) */
   --tinta-tenue: #675751;      /* detalles pequeños (contraste ≥ 4,6:1 incluso sobre las rayas) */
-  --linea: rgba(168, 74, 51, .26);          /* filetes finos */
-  --linea-fuerte: rgba(168, 74, 51, .6);
+  --linea: rgba(178, 58, 64, .26);          /* filetes finos */
+  --linea-fuerte: rgba(178, 58, 64, .6);
   /* acentos */
   --terracota: var(--rojo);    /* (nombre heredado) acento principal: ahora es el rojo de la tinta */
   --oliva: #6c7550;            /* hojas */
@@ -111,9 +111,9 @@ body {
   overflow-x: hidden;
 }
 
-::selection { background: rgba(168, 74, 51, .18); }
+::selection { background: rgba(178, 58, 64, .18); }
 :focus-visible { outline: 2px solid var(--terracota); outline-offset: 3px; border-radius: 2px; }
-html { -webkit-tap-highlight-color: rgba(168, 74, 51, .12); }
+html { -webkit-tap-highlight-color: rgba(178, 58, 64, .12); }
 a { color: inherit; text-decoration-color: var(--terracota); text-decoration-thickness: 1px; text-underline-offset: .28em; }
 a:hover { text-decoration-thickness: 2px; }
 
@@ -126,7 +126,7 @@ a:hover { text-decoration-thickness: 2px; }
 /* ---------- Tipografía ---------- */
 /* Subrayado «a rotulador»: una raya roja con el trazo irregular (la usan los títulos y los enlaces con rotulado) */
 :root {
-  --subrayado: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 14' preserveAspectRatio='none'%3E%3Cpath d='M3 8.2C34 5.4 72 9.2 110 6.6S190 4.6 237 7.4' fill='none' stroke='%23a84a33' stroke-width='2.6' stroke-linecap='round'/%3E%3Cpath d='M16 11.2C58 10 112 11.8 150 10.4S206 9.8 226 10.6' fill='none' stroke='%23a84a33' stroke-opacity='.55' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E");
+  --subrayado: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 14' preserveAspectRatio='none'%3E%3Cpath d='M3 8.2C34 5.4 72 9.2 110 6.6S190 4.6 237 7.4' fill='none' stroke='%23b23a40' stroke-width='2.6' stroke-linecap='round'/%3E%3Cpath d='M16 11.2C58 10 112 11.8 150 10.4S206 9.8 226 10.6' fill='none' stroke='%23b23a40' stroke-opacity='.55' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E");
 }
 /* Etiqueta: cursiva pequeña, como «18:00h» sobre el nombre del lugar en la referencia */
 .etiqueta {
@@ -143,7 +143,7 @@ a:hover { text-decoration-thickness: 2px; }
 .titulo::after { content: ""; position: absolute; left: -3%; right: -3%; bottom: 0; height: .3em; background: var(--subrayado) center / 100% 100% no-repeat; }
 /* Rótulos a pincel seco (imágenes de scripts/rotulos): todos con la misma altura de mayúscula (--cap); el ancho sale
    de --u (ancho de la imagen en mayúsculas), que el generador escribe en cada <img>. El texto va en un .sr-only. */
-.titulo--rotulo { --cap: min(2.75rem, 8.4vw); display: flex; justify-content: center; align-items: center; width: 100%; padding-bottom: 0; font-size: 1rem; }
+.titulo--rotulo { --cap: min(2.75rem, 7.2vw); display: flex; justify-content: center; align-items: center; width: 100%; padding-bottom: 0; font-size: 1rem; }
 .titulo--rotulo::after { content: none; }
 .rotulo { width: min(100%, calc(var(--cap) * var(--u))); height: auto; min-width: 0; flex: 0 1 auto; }
 /* icono de acuarela a la izquierda del título, del alto de las mayúsculas; se acerca aprovechando el margen
