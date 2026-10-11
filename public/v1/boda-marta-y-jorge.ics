@@ -1,0 +1,32 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Marta y Jorge//Boda 8 mayo 2027//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Boda de Marta y Jorge
+X-WR-TIMEZONE:Europe/Madrid
+BEGIN:VEVENT
+UID:ceremonia-20270508@martayjorge
+DTSTAMP:20261008T000000Z
+DTSTART:20270508T100000Z
+DTEND:20270508T110000Z
+SUMMARY:Ceremonia · Boda de Marta y Jorge
+LOCATION:Iglesia de San Pablo\, Valladolid
+DESCRIPTION:¡Nos casamos! A las 14:00 celebración en La Posada Real del P
+ inar (Pozal de Gallinas).
+URL:https://www.google.com/maps/search/?api=1&query=Iglesia+de+San+Pablo+Va
+ lladolid
+END:VEVENT
+BEGIN:VEVENT
+UID:celebracion-20270508@martayjorge
+DTSTAMP:20261008T000000Z
+DTSTART:20270508T120000Z
+DTEND:20270508T210000Z
+SUMMARY:Celebración · Boda de Marta y Jorge
+LOCATION:La Posada Real del Pinar\, Pozal de Gallinas\, Valladolid
+DESCRIPTION:¡Nos casamos! Celebración después de la ceremonia de las 12:
+ 00 en la Iglesia de San Pablo.
+URL:https://www.google.com/maps/search/?api=1&query=La+Posada+Real+del+Pina
+ r+Pozal+de+Gallinas
+END:VEVENT
+END:VCALENDAR

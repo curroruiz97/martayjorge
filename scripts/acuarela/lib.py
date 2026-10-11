@@ -5,12 +5,17 @@ pocas LÍNEAS de tinta finas y algo temblorosas. El navegador (Chromium sin cabe
 blanco; en la página se coloca con «mix-blend-mode: multiply», así el blanco desaparece y los colores se mezclan con el lino.
 
 Todo es determinista (semillas fijas) para que, al regenerar, salgan las mismas ilustraciones.
+
+V2 (más «a mano»): saturación desigual dentro de cada mancha, bordes que a ratos se pierden en el papel, floraciones
+(zonas más claras donde el agua empujó el pigmento), grano de papel más visible y líneas de tinta finas, a trazos y algo
+desalineadas con el color (dibujadas aparte, como en los bocetos de tinta y acuarela).
 """
 import math
 import random
 import re
 
 TINTA = "#4a2c2a"      # tinta de las líneas (marrón rojizo muy oscuro)
+DESREGISTRO = (3.0, -2.0)   # la tinta va un poco desplazada respecto al color (unidades del lienzo)
 
 
 class _Grupo:
@@ -148,10 +153,16 @@ class Lienzo:
         self.capas.append(("mancha", '<path d="%s" %s stroke="%s" opacity="%.2f" filter="url(#%s)"/>'
                                      '<path d="%s" %s stroke="%s" opacity="%.2f" filter="url(#%s)"/>' % (d, base, color, opacidad, f1, d, base, rim, rimo, f2)))
 
-    def linea(self, d, ancho=2.0, color=TINTA, opacidad=0.9):
-        """Línea de tinta fina y temblorosa."""
+    def linea(self, d, ancho=2.0, color=TINTA, opacidad=0.9, rota=True):
+        """Línea de tinta fina, temblorosa y (por defecto) a trazos: la pluma se levanta de vez en cuando."""
         f = self._filtro("tinta", d, 10 + ancho)
-        self.capas.append(("linea", '<path d="%s" fill="none" stroke="%s" stroke-width="%.1f" stroke-linecap="round" stroke-linejoin="round" opacity="%.2f" filter="url(#%s)"/>' % (d, color, ancho, opacidad, f)))
+        guiones = ""
+        if rota:
+            partes = []
+            for _ in range(6):
+                partes += [self.rng.uniform(40, 150), self.rng.uniform(3, 11)]
+            guiones = ' stroke-dasharray="%s" stroke-dashoffset="%.0f"' % (" ".join("%.0f" % v for v in partes), self.rng.uniform(0, 200))
+        self.capas.append(("linea", '<path d="%s" fill="none" stroke="%s" stroke-width="%.1f" stroke-linecap="round" stroke-linejoin="round" opacity="%.2f"%s filter="url(#%s)"/>' % (d, color, ancho * .75, opacidad * .85, guiones, f)))
 
     def punto(self, cx, cy, r, color=TINTA, opacidad=0.9):
         d = "M%.1f %.1f L%.1f %.1f" % (cx - r, cy - r, cx + r, cy + r)
@@ -172,9 +183,9 @@ class Lienzo:
         manchas = "".join('<g style="mix-blend-mode:multiply">%s</g>' % s for t, s in self.capas if t == "mancha")
         lineas = "".join(s for t, s in self.capas if t == "linea")
         return ('<svg xmlns="http://www.w3.org/2000/svg" width="%d" height="%d" viewBox="0 0 %d %d">'
-                '<defs><style>%s</style>%s</defs>%s%s<g style="mix-blend-mode:multiply">%s</g></svg>'
+                '<defs><style>%s</style>%s</defs>%s%s<g style="mix-blend-mode:multiply" transform="translate(%.1f %.1f)">%s</g></svg>'
                 % (self.w, self.h, self.w, self.h, fuente_css, "".join(self.filtros),
-                   '<rect width="100%" height="100%" fill="#fff"/>' if fondo else '', manchas, lineas))
+                   '<rect width="100%" height="100%" fill="#fff"/>' if fondo else '', manchas, DESREGISTRO[0], DESREGISTRO[1], lineas))
 
 
 # Filtros SVG con región propia (userSpaceOnUse: así valen también para líneas rectas, cuya caja mide cero de alto):
@@ -186,13 +197,22 @@ FILTRO = {
   <feTurbulence type="fractalNoise" baseFrequency="{s:.3f}" numOctaves="3" seed="7" result="ruidoBorde"/>
   <feDisplacementMap in="SourceGraphic" in2="ruidoBorde" scale="14" xChannelSelector="R" yChannelSelector="G" result="deformada"/>
   <feGaussianBlur in="deformada" stdDeviation="0.9" result="color"/>
-  <feColorMatrix in="color" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="forma"/>
+  <feColorMatrix in="color" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="nitida"/>
+  <feGaussianBlur in="nitida" stdDeviation="5.5" result="difusa"/>
+  <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="13" result="ruidoPerdido"/>
+  <feColorMatrix in="ruidoPerdido" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  2.6 0 0 0 -1.05" result="perdido"/>
+  <feComposite in="nitida" in2="perdido" operator="arithmetic" k1="-1" k2="1" k3="0" k4="0" result="p1"/>
+  <feComposite in="difusa" in2="perdido" operator="arithmetic" k1="1" k2="0" k3="0" k4="0" result="p2"/>
+  <feComposite in="p1" in2="p2" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="forma"/>
   <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="21" result="ruidoDensidad"/>
-  <feColorMatrix in="ruidoDensidad" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.9 0 0 0 0.45" result="densidad"/>
+  <feColorMatrix in="ruidoDensidad" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1.3 0 0 0 0.2" result="densidad"/>
+  <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" seed="17" result="ruidoFlor"/>
+  <feComponentTransfer in="ruidoFlor" result="flor"><feFuncA type="table" tableValues="0 0 .05 .6 1"/></feComponentTransfer>
   <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3" result="papel"/>
-  <feColorMatrix in="papel" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.9 0 0 0 0.62" result="grano"/>
+  <feColorMatrix in="papel" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1.15 0 0 0 0.4" result="grano"/>
   <feComposite in="forma" in2="densidad" operator="arithmetic" k1="1" k2="0" k3="0" k4="0" result="m1"/>
-  <feComposite in="m1" in2="grano" operator="arithmetic" k1="1" k2="0" k3="0" k4="0" result="mascara"/>
+  <feComposite in="m1" in2="flor" operator="arithmetic" k1="-0.4" k2="1" k3="0" k4="0" result="m2"/>
+  <feComposite in="m2" in2="grano" operator="arithmetic" k1="1" k2="0" k3="0" k4="0" result="mascara"/>
   <feComposite in="color" in2="mascara" operator="in"/>
 </filter>''',
     "wcr": '''<filter id="{id}" filterUnits="userSpaceOnUse" x="{x:.0f}" y="{y:.0f}" width="{w:.0f}" height="{h:.0f}" color-interpolation-filters="sRGB">

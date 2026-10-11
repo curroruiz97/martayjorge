@@ -1,6 +1,6 @@
 /* Marta & Jorge · comportamiento de la página (sin dependencias).
-   Cuenta atrás, revelado al hacer scroll, ilustraciones que se dibujan,
-   avión que vuela por la ruta, copiar IBAN y botón de contacto. */
+   Cuenta atrás, revelado al hacer scroll (y aguada de la foto de la playa),
+   avión que vuela por la ruta y copiar IBAN. */
 (() => {
   'use strict';
 
@@ -43,7 +43,12 @@
     if (!('IntersectionObserver' in window)) { els.forEach((e) => e.classList.add('visible')); return; }
     const io = new IntersectionObserver((entradas) => {
       entradas.forEach((e) => {
-        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+          // foto que aparece con una aguada: al terminar se le quita la máscara (ver .interludio en site.css)
+          if ('aguada' in e.target.dataset) setTimeout(() => e.target.classList.add('pintada'), 1900);
+        }
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
     els.forEach((e) => io.observe(e));
@@ -89,7 +94,7 @@
     }
   }
 
-  /* ---------- Ilustraciones SVG: se incrustan para poder animarlas ---------- */
+  /* ---------- La ruta (SVG): se incrusta para poder animar el avión ---------- */
   async function cargarSvg(caja) {
     const url = caja.dataset.svg;
     try {
@@ -112,15 +117,6 @@
       console.warn('No se pudo cargar la ilustración', url, err);
       return null;
     }
-  }
-
-  function prepararTrazos(svg) {
-    const trazos = $$('.l', svg);
-    const n = Math.max(1, trazos.length);
-    trazos.forEach((p, i) => {
-      if (!p.hasAttribute('pathLength')) p.setAttribute('pathLength', '1');
-      p.style.transitionDelay = ((i / n) * 1.3).toFixed(3) + 's';
-    });
   }
 
   /** Avión que recorre #ruta mientras la línea discontinua se va dibujando. */
@@ -179,23 +175,19 @@
     requestAnimationFrame(paso);
   }
 
-  /** Tras la ilustración ya incrustada: prepara el trazo o el vuelo del avión. */
+  /** Tras incrustar la ruta: prepara el vuelo del avión. */
   function montarIlustracion(caja, svg) {
     const ruta = $('#ruta', svg);
-    if (ruta) {
-      let fijar = null;
-      try { fijar = prepararRuta(svg); } catch (e) { console.warn('Ruta sin animar', e); } // primero se prepara (busca #ruta y #avion)…
-      const sufijo = caja.className || 'x';
-      ruta.id = 'ruta-' + sufijo;      // …y después se hacen únicos los ids (hay una ruta horizontal y otra vertical)
-      ruta.classList.add('ruta__linea'); // el color terracota lo pone el CSS
-      const avion = $('#avion', svg);
-      if (avion) avion.id = 'avion-' + sufijo;
-      if (!fijar) return;
-      alEntrar(caja, () => volar(fijar), { threshold: 0.35 });
-    } else {
-      prepararTrazos(svg);
-      alEntrar(caja, () => caja.classList.add('dibuja'), { threshold: 0.25 });
-    }
+    if (!ruta) return;
+    let fijar = null;
+    try { fijar = prepararRuta(svg); } catch (e) { console.warn('Ruta sin animar', e); } // primero se prepara (busca #ruta y #avion)…
+    const sufijo = caja.className || 'x';
+    ruta.id = 'ruta-' + sufijo;      // …y después se hacen únicos los ids
+    ruta.classList.add('ruta__linea'); // el color lo pone el CSS
+    const avion = $('#avion', svg);
+    if (avion) avion.id = 'avion-' + sufijo;
+    if (!fijar) return;
+    alEntrar(caja, () => volar(fijar), { threshold: 0.35 });
   }
 
   /** Puerta de carga: mientras suena la entrada de la portada no se descarga ni se procesa nada que esté más abajo
@@ -207,12 +199,11 @@
       const eventos = ['wheel', 'touchstart', 'pointerdown', 'keydown', 'scroll'];
       const abrir = () => { eventos.forEach((e) => window.removeEventListener(e, abrir)); abierta(); };
       eventos.forEach((e) => window.addEventListener(e, abrir, { passive: true }));
-      setTimeout(abrir, Math.max(0, 4300 - performance.now()));
+      setTimeout(abrir, Math.max(0, 3700 - performance.now()));
     });
   }
 
-  /** Las ilustraciones se piden cuando quedan a un par de pantallas de distancia (y solo las que se ven en este
-      ancho: la ruta vertical o la horizontal, no las dos). */
+  /** La ruta se pide cuando queda a un par de pantallas de distancia. */
   function initIlustraciones() {
     const cajas = $$('[data-svg]');
     const cargar = async (caja) => {
@@ -261,37 +252,11 @@
     });
   }
 
-  /* ---------- Botón de contacto (solo si hay teléfono/correo configurado en #alojamiento) ---------- */
-  function initContacto() {
-    const sec = $('#alojamiento');
-    const caja = sec && $('[data-contacto]', sec);
-    if (!caja) return;
-    const tel = (sec.dataset.whatsapp || '').replace(/\D+/g, '');
-    const mail = (sec.dataset.email || '').trim();
-    let a;
-    if (tel) {
-      a = document.createElement('a');
-      a.href = `https://wa.me/${tel}?text=${encodeURIComponent('Hola Marta y Jorge, os escribo sobre el alojamiento para la boda.')}`;
-      a.textContent = 'Escribirnos por WhatsApp';
-    } else if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) {
-      a = document.createElement('a');
-      a.href = `mailto:${mail}?subject=${encodeURIComponent('Alojamiento para la boda')}`;
-      a.textContent = 'Escribirnos un correo';
-    }
-    if (!a) return;
-    a.className = 'boton';
-    a.rel = 'noopener';
-    if (tel) a.target = '_blank';
-    caja.appendChild(a);
-    caja.hidden = false;
-  }
-
   /* ---------- Arranque ---------- */
   initRevelado();
   initCuenta();
   initIlustraciones();
   initCopiar();
-  initContacto();
   // main.js ha arrancado: ya no hace falta el plan B que muestra todo pasados 4 s
   if (window.__revealTimer) clearTimeout(window.__revealTimer);
 })();

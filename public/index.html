@@ -2,6 +2,8 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
+  <!-- Comparación de versiones (V1 en /v1/ · V2 aquí): sin elegir, se ve la V1. Ver README («Versiones») -->
+  <script src="/version/elegir.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Marta y Jorge · 8 de mayo de 2027 · Valladolid</title>
   <meta name="description" content="Nos casamos el 8 de mayo de 2027 en Valladolid. Aquí tenéis todos los detalles y podéis confirmar vuestra asistencia.">
@@ -27,7 +29,7 @@
   <link rel="icon" href="assets/ilustraciones/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
   <link rel="preload" href="assets/fonts/inter-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/img/hero-vertical-740.webp" as="image" type="image/webp" imagesrcset="assets/img/hero-vertical-480.webp 480w, assets/img/hero-vertical-620.webp 620w, assets/img/hero-vertical-740.webp 740w" imagesizes="(min-width: 900px) 460px, 78vw" fetchpriority="high">
+  <link rel="preload" href="assets/img/hero-vertical-740.webp" as="image" type="image/webp" imagesrcset="assets/img/hero-vertical-480.webp 480w, assets/img/hero-vertical-620.webp 620w, assets/img/hero-vertical-740.webp 740w" imagesizes="(min-width: 700px) 420px, (orientation: landscape) and (min-width: 560px) 300px, 100vw" fetchpriority="high">
 
   <script src="js/boot.js"></script>
   <link rel="stylesheet" href="css/base.css">
@@ -35,48 +37,36 @@
   <link rel="stylesheet" href="css/intro.css">
   <link rel="stylesheet" href="css/rsvp.css">
   <link rel="stylesheet" href="css/mapa.css">
+  <link rel="stylesheet" href="/version/selector.css">
 </head>
 <body>
 <main>
 
   <!-- ============ PORTADA ============ -->
-  <header class="portada" id="portada">
+  <header class="portada" id="portada" style="--rn:0.1582">
     <div class="portada__texto">
-      <div class="portada__ruta" aria-hidden="true"><svg class="portada__ruta-svg" viewBox="0 0 480 150" aria-hidden="true" focusable="false"><g class="rz-g"><path class="rz" pathLength="1" style="--d:0.39s" d="M14 96L15.5 95.7L16.9 95.4L18.4 95.1L19.9 94.7L21.3 94.4L22.8 94"/><path class="rz" pathLength="1" style="--d:0.47s" d="M29.1 92.6L30.6 92.2L32 91.9L33.5 91.6L35 91.4L36 91.2"/><path class="rz" pathLength="1" style="--d:0.53s" d="M42.9 90.4L44.4 90.4L45.9 90.3L47.4 90.3L48.9 90.4L50.4 90.4L51.9 90.5L53.4 90.6"/><path class="rz" pathLength="1" style="--d:0.57s" d="M59.4 91.1L60.9 91.3L62.4 91.5L63.9 91.7L65.3 91.9L65.8 92"/><path class="rz" pathLength="1" style="--d:0.61s" d="M73.2 93.2L74.7 93.5L76.2 93.8L77.7 94.1L79.1 94.4L80.6 94.8L81.1 94.9"/><path class="rz" pathLength="1" style="--d:0.64s" d="M86.9 96.4L88.3 96.9L89.7 97.3L91.2 97.7L92.6 98.2L94 98.6L95.5 99.1"/><path class="rz" pathLength="1" style="--d:0.67s" d="M101.6 101.1L103.1 101.6L104.5 102.1L105.9 102.5L107.3 103L108.3 103.3"/><path class="rz" pathLength="1" style="--d:0.70s" d="M114.8 105.8L116.2 106.3L117.6 106.8L119 107.4L120.5 107.9L121.9 108.4L123.3 108.8L124.7 109.3"/><path class="rz" pathLength="1" style="--d:0.73s" d="M130.5 110.9L132 111.2L133.4 111.5L134.9 111.9L136.4 112.1L136.9 112.2"/><path class="rz" pathLength="1" style="--d:0.75s" d="M144.3 113.3L145.8 113.5L147.3 113.6L148.8 113.6L150.3 113.5L151.8 113.4L152.3 113.3"/><path class="rz" pathLength="1" style="--d:0.77s" d="M158.1 112L159.6 111.6L161 111.3L162.5 110.9L163.9 110.4L165.2 109.7L166.5 109"/><path class="rz" pathLength="1" style="--d:0.79s" d="M171.8 105.1L172.9 104.1L174 103.2L175.2 102.2L176.3 101.1L177 100.5"/><path class="rz" pathLength="1" style="--d:0.82s" d="M182 95.6L183 94.5L184.1 93.4L185.1 92.3L186.1 91.2L187.1 90.1L188.1 89L189.1 87.8"/><path class="rz" pathLength="1" style="--d:0.83s" d="M192.9 83.2L193.8 82L194.7 80.8L195.5 79.5L196.3 78.2L196.5 77.8"/><path class="rz" pathLength="1" style="--d:0.85s" d="M199.8 71.1L200.3 69.7L200.8 68.2L201.2 66.8L201.5 65.3L201.8 63.9L201.8 63.4"/><path class="rz" pathLength="1" style="--d:0.87s" d="M201.4 57.4L200.9 56L200.4 54.6L199.7 53.2L199 51.9L198.2 50.7L197.2 49.5"/><path class="rz" pathLength="1" style="--d:0.89s" d="M192.1 45.7L190.6 45.2L189.2 44.9L187.7 44.7L186.2 44.6L185.2 44.6"/><path class="rz" pathLength="1" style="--d:0.91s" d="M178.4 45.9L177.1 46.6L175.9 47.5L174.7 48.4L173.6 49.4L172.5 50.5L171.6 51.6L170.7 52.9"/><path class="rz" pathLength="1" style="--d:0.93s" d="M168.7 58.5L168.3 59.9L167.9 61.4L167.5 62.8L167 62L166.8 61.5"/><path class="rz" pathLength="1" style="--d:0.95s" d="M164.3 54.4L163.6 53.1L162.7 51.9L161.7 50.8L160.7 49.7L159.6 48.7L159.2 48.3"/><path class="rz" pathLength="1" style="--d:0.96s" d="M154.3 44.9L152.9 44.4L151.4 44L150 43.8L148.5 43.7L147 43.8L145.5 44"/><path class="rz" pathLength="1" style="--d:0.98s" d="M139.4 46.2L138.2 47.1L137 48L135.9 49L134.8 50.1L134.2 50.8"/><path class="rz" pathLength="1" style="--d:1.00s" d="M130.7 56.9L130.3 58.3L130.1 59.8L130.1 61.3L130.1 62.8L130.3 64.3L130.5 65.8L130.9 67.2"/><path class="rz" pathLength="1" style="--d:1.02s" d="M132.6 73L133.2 74.4L133.8 75.7L134.4 77.1L135.1 78.4L135.4 78.9"/><path class="rz" pathLength="1" style="--d:1.04s" d="M139.4 85.2L140.3 86.4L141.3 87.5L142.2 88.7L143.2 89.8L144.2 90.9L144.6 91.3"/><path class="rz" pathLength="1" style="--d:1.06s" d="M148.9 95.5L150 96.4L151.2 97.4L152.4 98.3L153.6 99.1L154.9 100L156.1 100.8"/><path class="rz" pathLength="1" style="--d:1.08s" d="M161.7 104.1L163 104.9L164.3 105.7L165.6 106.4L166.8 107.2L167.7 107.8"/><path class="rz" pathLength="1" style="--d:1.10s" d="M173.4 111.8L174.6 112.6L175.9 113.5L177.1 114.4L178.3 115.2L179.6 116L180.9 116.8L182.1 117.6"/><path class="rz" pathLength="1" style="--d:1.12s" d="M187.4 120.5L188.7 121.3L190 122L191.3 122.7L192.6 123.4L193.1 123.7"/><path class="rz" pathLength="1" style="--d:1.15s" d="M200 126.4L201.5 126.8L203 127.1L204.4 127.4L205.9 127.6L207.4 127.8L207.9 127.9"/><path class="rz" pathLength="1" style="--d:1.17s" d="M213.9 128.4L215.4 128.5L216.9 128.5L218.4 128.6L219.9 128.6L221.4 128.6L222.9 128.6"/><path class="rz" pathLength="1" style="--d:1.19s" d="M229.4 128.3L230.9 128.2L232.3 128L233.8 127.9L235.3 127.7L236.3 127.6"/><path class="rz" pathLength="1" style="--d:1.23s" d="M243.2 126.5L244.7 126.3L246.2 126L247.7 125.7L249.1 125.4L250.6 125L252.1 124.7L253.5 124.4"/><path class="rz" pathLength="1" style="--d:1.25s" d="M259.4 123L260.8 122.7L262.3 122.3L263.7 122L265.2 121.6L265.7 121.5"/><path class="rz" pathLength="1" style="--d:1.28s" d="M273 119.8L274.4 119.5L275.9 119.2L277.4 118.8L278.8 118.5L280.3 118.2L280.8 118.1"/><path class="rz" pathLength="1" style="--d:1.31s" d="M286.6 116.7L288.1 116.3L289.5 116L291 115.6L292.5 115.3L293.9 114.9L295.4 114.5"/><path class="rz" pathLength="1" style="--d:1.34s" d="M301.7 113L303.2 112.7L304.6 112.4L306.1 112L307.5 111.7L308.5 111.5"/><path class="rz" pathLength="1" style="--d:1.39s" d="M315.4 110.1L316.9 109.8L318.3 109.5L319.8 109.3L321.3 109L322.8 108.8L324.3 108.6L325.7 108.4"/><path class="rz" pathLength="1" style="--d:1.42s" d="M331.7 107.6L333.2 107.4L334.7 107.2L336.2 107.1L337.6 106.9L338.1 106.8"/><path class="rz" pathLength="1" style="--d:1.47s" d="M345.6 106.1L347.1 106L348.6 105.9L350.1 105.8L351.6 105.7L353.1 105.6L353.6 105.5"/><path class="rz" pathLength="1" style="--d:1.51s" d="M359.6 105.2L361.1 105.2L362.6 105.1L364.1 105.1L365.6 105L367.1 105L368.6 105"/><path class="rz" pathLength="1" style="--d:1.56s" d="M375.1 105.2L376.6 105.3L378.1 105.4L379.6 105.5L381.1 105.6L382 105.7"/><path class="rz" pathLength="1" style="--d:1.64s" d="M389 106.4L390.5 106.5L392 106.7L393.5 106.8L395 106.9L396.5 107L398 107.1L399.5 107.2"/><path class="rz" pathLength="1" style="--d:1.70s" d="M405.5 107.2L407 107.1L408.5 107.1L410 107L411.5 106.8L412 106.8"/><path class="rz" pathLength="1" style="--d:1.79s" d="M419.4 105.9L420.9 105.7L422.4 105.5L423.9 105.3L425.3 105L426.8 104.7L427.3 104.7"/><path class="rz" pathLength="1" style="--d:1.92s" d="M433.2 103.5L434.7 103.2L436.1 102.9L437.6 102.6L439.1 102.2L440.5 101.9L442 101.5"/><path class="rz" pathLength="1" style="--d:2.11s" d="M448.2 99.6L449.6 99.1L451 98.5L452.4 97.9L453.8 97.4L454.7 97"/><path class="rz" pathLength="1" style="--d:2.30s" d="M461.2 94.3L461.6 94.1"/></g><g class="avion-h" stroke="#2b2a28" stroke-linecap="round" stroke-linejoin="round">
-<path fill="#fbf8f1" stroke="none" d="M15.5 0L-14.5 -9L-7.5 .6L-12 8.4Z"/>
-<path fill="none" stroke-width="1.9" d="M16.4 -.2L-14.5 -9L-7.5 .6L-12 8.4L15.1 .3"/>
-<path fill="none" stroke-width="1.3" d="M14.5 .1L-7.5 .6"/>
-<path fill="none" stroke-width="1.1" d="M12.5 .9L-5.6 4.4L-7.5 .6"/>
-<path fill="none" stroke-width=".8" d="M-8.4 5.6l3.6-2.6M-4.4 4.2l3.8-2.4M-.6 2.9l3.4-1.9"/>
-</g></svg></div>
       <p class="etiqueta portada__aviso intro" style="--d:.75s">¡Nos casamos!</p>
       <h1 class="nombres">
         <span class="sr-only">Marta y Jorge</span>
-        <svg class="nombres__svg" viewBox="-3336 -780 6673 941" aria-hidden="true" focusable="false"><defs><path id="g1" d="M34 30Q32 141 28.5 251.5Q25 362 25 473Q25 481 25 501.5Q25 522 25.5 545Q26 568 26 588Q26 608 26 616Q30 632 38 641.5Q46 651 63 651Q80 651 93 640.5Q106 630 114 616L258 338Q259 336 265 326Q271 316 274 312Q275 311 277 310Q279 309 279 308L283 317L368 616Q377 630 381.5 647.5Q386 665 391.5 682Q397 699 405.5 714Q414 729 431 739H439Q466 739 479 723.5Q492 708 497 685.5Q502 663 501.5 638.5Q501 614 502 596Q502 589 503.5 569Q505 549 507 522Q509 495 511 464.5Q513 434 514.5 407Q516 380 517.5 360Q519 340 519 334V330Q520 321 523 300Q526 279 529.5 255.5Q533 232 536 211Q539 190 541 182Q542 177 544.5 167Q547 157 550.5 145.5Q554 134 557 124Q560 114 562 110Q558 87 550.5 74.5Q543 62 518 62Q515 62 509 62.5Q503 63 502 63Q499 65 490.5 73Q482 81 481 84L465 139L435 367V376Q434 394 434 414.5Q434 435 433.5 456Q433 477 431 498Q429 519 423 537L418 531L346 241Q345 230 344 217.5Q343 205 339 193.5Q335 182 327 174Q319 166 304 165Q298 164 291 167Q284 170 277 175Q270 180 264.5 186.5Q259 193 258 199L131 401L110 443V357Q110 296 112.5 237.5Q115 179 115 118Q115 113 115 100.5Q115 88 114.5 74Q114 60 114 47.5Q114 35 114 30Q110 18 102.5 9Q95 0 81 0Q62 0 51.5 6.5Q41 13 34 30Z"/><clipPath id="cp1"><use href="#g1"/></clipPath><path id="g2" d="M25 63Q25 123 33 182Q41 241 47 300Q47 303 48 313.5Q49 324 50.5 336Q52 348 53.5 358.5Q55 369 55 372V376L97 688Q95 708 103.5 723.5Q112 739 135 739Q160 742 176.5 732.5Q193 723 204 708Q215 693 222 675Q229 657 237 642Q242 628 249.5 609Q257 590 267.5 561Q278 532 292.5 490Q307 448 326 388L330 384Q337 388 356.5 397Q376 406 397.5 416Q419 426 438 435Q457 444 465 447Q466 449 470.5 450.5Q475 452 477 453H479Q489 453 494 445.5Q499 438 499 431Q499 420 494 412Q489 404 482.5 397.5Q476 391 468.5 385Q461 379 457 372L358 322Q354 317 354 314Q354 306 362.5 289Q371 272 376 262Q379 256 386 240Q393 224 401 207Q409 190 416.5 174.5Q424 159 427 153V150Q427 114 391 114Q380 114 368 116.5Q356 119 350 131L283 274H274Q236 245 193 217Q150 189 105 169Q98 133 96.5 96Q95 59 97 22Q89 11 81 5.5Q73 0 59 0Q45 0 38 6.5Q31 13 28 22.5Q25 32 25 43Q25 54 25 63ZM114 257Q144 269 172.5 289Q201 309 227 326Q230 328 234.5 330Q239 332 243 335Q247 338 253 342V350L161 612L157 616Q154 610 149.5 582Q145 554 139.5 509.5Q134 465 127.5 407Q121 349 114 283Z"/><clipPath id="cp2"><use href="#g2"/></clipPath><path id="g3" d="M76 232Q70 245 66.5 253Q63 261 63 272Q63 281 65.5 288.5Q68 296 68 305Q68 327 66.5 346Q65 365 63 388Q62 391 56 393Q50 395 43 398.5Q36 402 30.5 409Q25 416 25 429Q25 441 30.5 449.5Q36 458 42 465.5Q48 473 53.5 481.5Q59 490 59 502Q59 507 58 520.5Q57 534 56.5 549Q56 564 55.5 577.5Q55 591 55 596V598V600Q59 609 61.5 615Q64 621 67 624Q70 627 75 628.5Q80 630 88 630Q109 630 119 622Q129 614 133 603.5Q137 593 138 584Q139 575 143 574L215 637H219Q254 660 293 672.5Q332 685 375 685Q388 685 406.5 682Q425 679 441.5 671.5Q458 664 469.5 652Q481 640 481 622Q481 602 476 581Q471 560 462.5 539.5Q454 519 442.5 500.5Q431 482 418 469Q413 458 354 413Q295 368 178 279L658 249Q668 248 685.5 247.5Q703 247 719.5 244Q736 241 748 232.5Q760 224 760 207Q760 198 757.5 192.5Q755 187 751.5 183.5Q748 180 743.5 177Q739 174 735 169H718H701Q681 171 659.5 174Q638 177 609.5 181Q581 185 543 189Q505 193 452 196Q399 199 328.5 201Q258 203 165 203Q164 203 162.5 200Q161 197 161 195Q161 157 167.5 120.5Q174 84 174 48Q174 41 172.5 32.5Q171 24 167 16.5Q163 9 157 4Q151 -1 142 -1Q136 -1 128 1.5Q120 4 112.5 9Q105 14 99 20Q93 26 92 34ZM143 453Q143 428 144 406Q145 384 147 358H150Q151 358 155 360Q159 362 175 372.5Q191 383 224 405.5Q257 428 317 469Q329 476 343 493Q357 510 369 530Q381 550 389 569.5Q397 589 397 602Q397 612 387.5 612Q378 612 371 612Q356 612 337 607Q318 602 291.5 587Q265 572 228.5 544Q192 516 143 469Z"/><clipPath id="cp3"><use href="#g3"/></clipPath><path id="g4" d="M218 439Q217 447 215.5 459.5Q214 472 212.5 483.5Q211 495 210 503Q209 511 209 511H201L87 477Q82 469 70.5 469Q59 469 53 469Q39 469 24.5 481.5Q10 494 10 509Q10 520 17.5 530.5Q25 541 36 545L197 596Q200 607 208.5 618.5Q217 630 231 630Q245 630 254.5 623Q264 616 276 612Q285 613 306 618Q327 623 350.5 628.5Q374 634 395 639Q416 644 424 646Q436 648 442 651Q448 654 461 654Q478 654 496 644Q514 634 514 614Q514 601 505 591.5Q496 582 483 579L293 531V522Q293 491 298.5 461Q304 431 302 401L336 92V70Q336 58 335.5 45.5Q335 33 331.5 23Q328 13 320 6.5Q312 0 296 0Q284 0 270.5 10Q257 20 256 34L218 431Z"/><clipPath id="cp4"><use href="#g4"/></clipPath><path id="g5" d="M25 63Q25 123 33 182Q41 241 47 300Q47 303 48 313.5Q49 324 50.5 336Q52 348 53.5 358.5Q55 369 55 372V376L97 688Q95 708 103.5 723.5Q112 739 135 739Q160 742 176.5 732.5Q193 723 204 708Q215 693 222 675Q229 657 237 642Q242 628 249.5 609Q257 590 267.5 561Q278 532 292.5 490Q307 448 326 388L330 384Q337 388 356.5 397Q376 406 397.5 416Q419 426 438 435Q457 444 465 447Q466 449 470.5 450.5Q475 452 477 453H479Q489 453 494 445.5Q499 438 499 431Q499 420 494 412Q489 404 482.5 397.5Q476 391 468.5 385Q461 379 457 372L358 322Q354 317 354 314Q354 306 362.5 289Q371 272 376 262Q379 256 386 240Q393 224 401 207Q409 190 416.5 174.5Q424 159 427 153V150Q427 114 391 114Q380 114 368 116.5Q356 119 350 131L283 274H274Q236 245 193 217Q150 189 105 169Q98 133 96.5 96Q95 59 97 22Q89 11 81 5.5Q73 0 59 0Q45 0 38 6.5Q31 13 28 22.5Q25 32 25 43Q25 54 25 63ZM114 257Q144 269 172.5 289Q201 309 227 326Q230 328 234.5 330Q239 332 243 335Q247 338 253 342V350L161 612L157 616Q154 610 149.5 582Q145 554 139.5 509.5Q134 465 127.5 407Q121 349 114 283Z"/><clipPath id="cp5"><use href="#g5"/></clipPath><path id="g6" d="M226 -6Q227 -1 228.5 13Q230 27 232.5 42.5Q235 58 237 71.5Q239 85 240 91Q245 136 252.5 180.5Q260 225 260 270V285L244 293Q240 295 224 306Q208 317 188.5 331Q169 345 150 359.5Q131 374 121 383Q115 387 101.5 398.5Q88 410 73.5 423.5Q59 437 46 449.5Q33 462 28 467Q20 475 13 485.5Q6 496 6 507Q6 524 19 531.5Q32 539 47 539Q57 539 68 536.5Q79 534 87 526Q125 484 172 442Q219 400 268 370L272 383L314 653Q316 664 326.5 667Q337 670 346 670Q372 670 385.5 657.5Q399 645 399 616V614Q399 613 397.5 609Q396 605 394.5 600Q393 595 392 590.5Q391 586 391 585Q388 573 383 538.5Q378 504 372 456.5Q366 409 359 352Q352 295 345 237.5Q338 180 331 126.5Q324 73 318 32Q319 22 319.5 9Q320 -4 316 -16Q312 -28 303.5 -36Q295 -44 280 -44Q261 -44 246.5 -34Q232 -24 226 -6Z"/><clipPath id="cp6"><use href="#g6"/></clipPath><path id="g7" d="M10 255Q10 268 17 280Q24 292 40 292Q49 292 55 286Q61 280 65.5 271.5Q70 263 74 254.5Q78 246 83 241Q90 235 107.5 215Q125 195 143 173Q161 151 176 132.5Q191 114 193 110Q195 108 199 103.5Q203 99 205 97L209 101Q209 102 209.5 111Q210 120 210 131Q210 142 210 153.5Q210 165 210 172Q210 258 207.5 342.5Q205 427 205 513V654Q208 668 217.5 674.5Q227 681 240 681Q254 681 267.5 675Q281 669 285 654Q283 529 288.5 408Q294 287 294 163Q294 148 294 120.5Q294 93 289.5 66Q285 39 272.5 19Q260 -1 236 -1Q234 -1 230.5 -0.5Q227 0 226 0Q221 2 208 10Q195 18 193 22L28 207Q16 220 13 230.5Q10 241 10 255Z"/><clipPath id="cp7"><use href="#g7"/></clipPath><path id="g8" d="M22 177Q23 183 22 209Q21 235 21.5 273.5Q22 312 23.5 358Q25 404 30.5 451Q36 498 46.5 541.5Q57 585 74 617Q80 644 103 654.5Q126 665 168 667Q195 667 214 653Q233 639 246.5 618.5Q260 598 270 574Q280 550 288 531V526Q295 506 298.5 466.5Q302 427 303.5 383.5Q305 340 305 300Q305 260 305 239Q305 209 297 167.5Q289 126 271.5 89Q254 52 226 26Q198 0 159 0Q126 0 100.5 17Q75 34 57.5 60.5Q40 87 31 118Q22 149 22 177ZM119 110Q121 99 130.5 87.5Q140 76 153 76H161Q203 114 216 163.5Q229 213 229 268Q229 281 228 308Q227 335 224.5 368.5Q222 402 218 439Q214 476 208 508.5Q202 541 194 565Q186 589 175 598Q174 597 172.5 594Q171 591 171 590Q150 564 133 519Q116 474 107.5 412.5Q99 351 100.5 274.5Q102 198 119 110Z"/><clipPath id="cp8"><use href="#g8"/></clipPath><path id="g9" d="M76 232Q70 245 66.5 253Q63 261 63 272Q63 281 65.5 288.5Q68 296 68 305Q68 327 66.5 346Q65 365 63 388Q62 391 56 393Q50 395 43 398.5Q36 402 30.5 409Q25 416 25 429Q25 441 30.5 449.5Q36 458 42 465.5Q48 473 53.5 481.5Q59 490 59 502Q59 507 58 520.5Q57 534 56.5 549Q56 564 55.5 577.5Q55 591 55 596V598V600Q59 609 61.5 615Q64 621 67 624Q70 627 75 628.5Q80 630 88 630Q109 630 119 622Q129 614 133 603.5Q137 593 138 584Q139 575 143 574L215 637H219Q254 660 293 672.5Q332 685 375 685Q388 685 406.5 682Q425 679 441.5 671.5Q458 664 469.5 652Q481 640 481 622Q481 602 476 581Q471 560 462.5 539.5Q454 519 442.5 500.5Q431 482 418 469Q413 458 354 413Q295 368 178 279L658 249Q668 248 685.5 247.5Q703 247 719.5 244Q736 241 748 232.5Q760 224 760 207Q760 198 757.5 192.5Q755 187 751.5 183.5Q748 180 743.5 177Q739 174 735 169H718H701Q681 171 659.5 174Q638 177 609.5 181Q581 185 543 189Q505 193 452 196Q399 199 328.5 201Q258 203 165 203Q164 203 162.5 200Q161 197 161 195Q161 157 167.5 120.5Q174 84 174 48Q174 41 172.5 32.5Q171 24 167 16.5Q163 9 157 4Q151 -1 142 -1Q136 -1 128 1.5Q120 4 112.5 9Q105 14 99 20Q93 26 92 34ZM143 453Q143 428 144 406Q145 384 147 358H150Q151 358 155 360Q159 362 175 372.5Q191 383 224 405.5Q257 428 317 469Q329 476 343 493Q357 510 369 530Q381 550 389 569.5Q397 589 397 602Q397 612 387.5 612Q378 612 371 612Q356 612 337 607Q318 602 291.5 587Q265 572 228.5 544Q192 516 143 469Z"/><clipPath id="cp9"><use href="#g9"/></clipPath><path id="g10" d="M374 -87Q359 -27 352.5 40.5Q346 108 344 167Q335 162 329 151.5Q323 141 318.5 129.5Q314 118 309 106.5Q304 95 297 87Q274 61 247 39.5Q220 18 183 18Q153 18 123.5 31Q94 44 70.5 65.5Q47 87 32.5 115Q18 143 18 174Q18 217 32 261.5Q46 306 66 344Q70 351 78.5 364.5Q87 378 96.5 392Q106 406 114 417.5Q122 429 125 432L234 547Q256 570 289.5 580.5Q323 591 352 593Q367 595 377 588.5Q387 582 387 567Q387 555 377.5 548.5Q368 542 355 538Q342 534 328 530.5Q314 527 306 522Q253 479 210 425.5Q167 372 133 314Q122 279 110 247Q98 215 98 177Q98 174 98.5 163.5Q99 153 99 150Q109 126 129.5 106Q150 86 178 86Q192 86 207 95Q222 104 230 117Q234 122 244 137Q254 152 264.5 169Q275 186 284.5 201Q294 216 297 222Q300 228 305.5 237.5Q311 247 315.5 256Q320 265 323.5 272.5Q327 280 327 281V285Q313 281 299 278.5Q285 276 270 276Q261 276 250.5 277.5Q240 279 230.5 283Q221 287 214.5 294Q208 301 208 313Q208 318 209 325Q210 332 213 336Q221 343 234.5 346.5Q248 350 263.5 351.5Q279 353 294.5 354.5Q310 356 323 361Q334 365 349 371.5Q364 378 380.5 384.5Q397 391 414 396Q431 401 445 403Q448 403 453.5 401Q459 399 465 396Q471 393 475 389.5Q479 386 479 383Q479 361 467 352.5Q455 344 436 332Q439 292 433.5 252Q428 212 428 172Q428 124 430 74Q432 24 440 -23Q441 -25 443 -33.5Q445 -42 447.5 -51Q450 -60 452 -68Q454 -76 454 -78V-80Q454 -94 443.5 -107.5Q433 -121 419 -121Q404 -121 390.5 -111Q377 -101 374 -87Z"/><clipPath id="cp10"><use href="#g10"/></clipPath><path id="g11" d="M78 22Q68 62 63 97.5Q58 133 56 173Q55 196 56 212.5Q57 229 52 249Q51 253 47.5 255Q44 257 40.5 260Q37 263 34 267.5Q31 272 31 282Q31 290 34.5 296Q38 302 41.5 307.5Q45 313 48.5 319.5Q52 326 52 335V350Q52 360 50 384Q48 408 46 435Q44 462 42.5 486Q41 510 40 519Q39 536 31 549Q23 562 23 579Q23 611 36 624Q49 637 82 637Q89 637 93.5 631Q98 625 104 625H108Q111 626 117 627.5Q123 629 125 629Q209 665 256 685Q303 705 327 714Q351 723 359.5 724Q368 725 374 722Q386 720 390.5 714.5Q395 709 395 698Q395 688 392 678Q389 668 378 663L247 600L243 596L133 549Q127 547 126 539Q125 531 125 526Q125 518 127 497Q129 476 131 453.5Q133 431 135.5 413.5Q138 396 139 396H140Q140 396 141 397Q152 405 176 424.5Q200 444 225 464Q250 484 269 499.5Q288 515 289 515Q300 515 309 504Q318 493 318 481Q318 469 313 454Q308 439 297 431L141 292Q141 292 141 287Q141 282 140.5 276Q140 270 140 263.5Q140 257 140 253Q140 217 145 181.5Q150 146 150 110H154Q155 110 163 118Q171 126 175 131Q177 134 184.5 144Q192 154 210 177Q228 200 258 238Q288 276 335 334Q339 338 346.5 346Q354 354 356 354Q359 357 368.5 356.5Q378 356 382 354Q387 352 395 343Q403 334 403 326Q403 314 390.5 294.5Q378 275 361 254Q344 233 327 213.5Q310 194 301 182Q287 160 267.5 128.5Q248 97 225 68.5Q202 40 174.5 19.5Q147 -1 116 -1Q101 -1 94.5 4Q88 9 78 22Z"/><clipPath id="cp11"><use href="#g11"/></clipPath></defs><g class="pal pal--marta" transform="translate(-3322 0) scale(1.0 -1.0)"><g transform="translate(0 0)"><g clip-path="url(#cp1)"><path class="tz" pathLength="1" stroke-width="104" style="--d:0.00s;--t:0.08s" d="M65 619L69 571L86 574L69 571L83 504L111 522L83 504L67 472L68 246L75 34"/><path class="tz" pathLength="1" stroke-width="104" style="--d:0.11s;--t:0.15s" d="M83 497L143 467L243 291L255 281L295 265L301 212L295 265L307 274L314 287L388 561L398 571L392 591L398 571L442 594L445 676L429 671L445 676L457 670L465 663L457 670L445 676L441 693L445 676L442 599L460 574L464 557L473 396L485 282L501 167L520 99"/></g><use class="rl" href="#g1" style="--d:0.20s"/></g><g transform="translate(640 0)"><g clip-path="url(#cp2)"><path class="tz" pathLength="1" stroke-width="92" style="--d:0.30s;--t:0.13s" d="M58 33L63 148L69 193L78 218L80 306L86 363L121 631L129 650L142 662L130 699L157 706L169 705L157 706L130 699L142 662L152 664L185 649L192 641L283 391L290 351L303 336L318 306L326 273L365 188L382 155L395 146"/><path class="tz" pathLength="1" stroke-width="92" style="--d:0.46s;--t:0.08s" d="M80 218L147 233L243 296L282 307L303 325L304 333L325 354L358 362L430 397L472 425L480 438"/></g><use class="rl" href="#g2" style="--d:0.48s"/></g><g transform="translate(1204 0)"><g clip-path="url(#cp3)"><path class="tz" pathLength="1" stroke-width="96" style="--d:0.59s;--t:0.15s" d="M137 38L127 87L122 150L119 233L127 260L125 303L143 319L187 335L340 445L367 468L384 487L416 537L428 565L434 612L427 633L412 643L363 649L315 641L248 611L167 548L107 528L85 588L107 528L99 510L117 502L99 510L97 443L66 432L97 443L102 420L105 325L110 313L94 300L110 313L123 303"/><path class="tz" pathLength="1" stroke-width="96" style="--d:0.76s;--t:0.08s" d="M725 208L707 207L622 218L430 232L147 242L127 253"/></g><use class="rl" href="#g3" style="--d:0.78s"/></g><g transform="translate(2027 0)"><g clip-path="url(#cp4)"><path class="tz" pathLength="1" stroke-width="104" style="--d:0.89s;--t:0.08s" d="M38 509L63 513L163 544L237 555L257 573L244 590L257 573L313 580L455 614L485 614"/><path class="tz" pathLength="1" stroke-width="104" style="--d:1.00s;--t:0.08s" d="M245 559L250 547L255 454L295 42"/></g><use class="rl" href="#g4" style="--d:1.02s"/></g><g transform="translate(2531 0)"><g clip-path="url(#cp5)"><path class="tz" pathLength="1" stroke-width="92" style="--d:1.12s;--t:0.13s" d="M58 33L63 148L69 193L78 218L80 306L86 363L121 631L129 650L142 662L130 699L157 706L169 705L157 706L130 699L142 662L152 664L185 649L192 641L283 391L290 351L303 336L318 306L326 273L365 188L382 155L395 146"/><path class="tz" pathLength="1" stroke-width="92" style="--d:1.28s;--t:0.08s" d="M80 218L147 233L243 296L282 307L303 325L304 333L325 354L358 362L430 397L472 425L480 438"/></g><use class="rl" href="#g5" style="--d:1.30s"/></g></g><g class="pal pal--y" transform="translate(32 0) scale(1.0 -1.0)"><g transform="translate(0 0)"><g clip-path="url(#cp6)"><path class="tz" pathLength="1" stroke-width="108" style="--d:1.48s;--t:0.08s" d="M34 508L54 500L133 425L211 362L243 342L298 329L302 324L299 235L292 158L280 85L277 32L273 19L266 13L273 2"/><path class="tz" pathLength="1" stroke-width="108" style="--d:1.59s;--t:0.08s" d="M348 627L349 612L315 365L310 337L304 327"/></g><use class="rl" href="#g6" style="--d:1.61s"/></g></g><g class="pal pal--jorge" transform="translate(752 0) scale(1.0 -1.0)"><g transform="translate(0 0)"><g clip-path="url(#cp7)"><path class="tz" pathLength="1" stroke-width="104" style="--d:1.79s;--t:0.08s" d="M243 633L243 486L252 151L248 94L241 66L235 61L234 46L235 61L227 62L188 76L175 86L51 229L41 248L37 273"/></g><use class="rl" href="#g7" style="--d:1.81s"/></g><g transform="translate(378 0)"><g clip-path="url(#cp8)"><path class="tz" pathLength="1" stroke-width="100" style="--d:1.92s;--t:0.12s" d="M155 632L136 624L114 597L97 560L78 497L63 397L60 205L68 147L92 77L116 52L158 42L186 48L209 67L231 99L246 130L260 189L265 224L266 337L256 472L249 505L229 574L213 605L201 620L190 626L155 632"/></g><use class="rl" href="#g8" style="--d:1.98s"/></g><g transform="translate(763 0)"><g clip-path="url(#cp9)"><path class="tz" pathLength="1" stroke-width="96" style="--d:2.08s;--t:0.15s" d="M137 38L127 87L122 150L119 233L127 260L125 303L143 319L187 335L340 445L367 468L384 487L416 537L428 565L434 612L427 633L412 643L363 649L315 641L248 611L167 548L107 528L85 588L107 528L99 510L117 502L99 510L97 443L66 432L97 443L102 420L105 325L110 313L94 300L110 313L123 303"/><path class="tz" pathLength="1" stroke-width="96" style="--d:2.26s;--t:0.08s" d="M725 208L707 207L622 218L430 232L147 242L127 253"/></g><use class="rl" href="#g9" style="--d:2.28s"/></g><g transform="translate(1586 0)"><g clip-path="url(#cp10)"><path class="tz" pathLength="1" stroke-width="93" style="--d:2.39s;--t:0.12s" d="M361 568L350 569L298 553L260 527L186 450L146 403L117 360L92 313L72 263L65 235L60 182L73 120L106 81L125 68L141 62L185 56L211 62L228 70L248 87L271 115L311 185L373 219L376 230L353 240L376 230L378 295L382 313L396 310L404 302L396 310L382 313L408 358L436 373L453 377"/><path class="tz" pathLength="1" stroke-width="93" style="--d:2.53s;--t:0.08s" d="M235 317L271 315L361 323L380 312L385 202L390 68L398 -10L415 -78"/></g><use class="rl" href="#g10" style="--d:2.55s"/></g><g transform="translate(2142 0)"><g clip-path="url(#cp11)"><path class="tz" pathLength="1" stroke-width="98" style="--d:2.66s;--t:0.13s" d="M365 696L160 603L86 586L67 597L86 586L81 576L85 471L93 364L97 346L95 294L110 297L95 294L72 289L95 294L98 179L109 91L117 71L128 67L117 41L130 36L117 41L128 67L140 69L180 83L192 93L278 211L359 311L370 336"/><path class="tz" pathLength="1" stroke-width="98" style="--d:2.82s;--t:0.08s" d="M100 349L165 370L176 377L284 469L290 481L291 499"/></g><use class="rl" href="#g11" style="--d:2.84s"/></g></g></svg>
+        <!-- rotulo:nombres --><svg class="nombres__svg" viewBox="0 0 1100 174" style="--fin:2.41s" aria-hidden="true" focusable="false"><defs><mask id="m-nombres" maskUnits="userSpaceOnUse" x="0" y="0" width="1100" height="174" style="mask-type:alpha"><path class="tz" pathLength="1" stroke-width="29" style="--d:0.00s;--t:0.11s" d="M29.2 34.3L29.4 40.4L29.5 46.5L29.7 52.6L29.8 58.7L29.9 64.8L30.1 70.9L30.2 77.0L30.3 83.1L30.5 89.2L30.6 95.4L30.7 101.5L30.9 107.6L31.0 113.7L31.1 119.8L31.3 125.9L31.4 132.0L31.5 138.1L31.7 144.2L31.8 150.3"/><path class="tz" pathLength="1" stroke-width="29" style="--d:0.09s;--t:0.08s" d="M28.0 34.7L30.6 40.4L33.3 46.1L35.9 51.8L38.6 57.5L41.2 63.2L43.9 69.0L46.5 74.7L49.2 80.4L51.8 86.1L54.5 91.8L57.1 97.5L59.8 103.3L62.4 109.0"/><path class="tz" pathLength="1" stroke-width="23" style="--d:0.16s;--t:0.08s" d="M63.3 108.7L65.5 102.9L67.8 97.1L70.1 91.2L72.4 85.4L74.6 79.6L76.9 73.7L79.2 67.9L81.5 62.1L83.7 56.2L86.0 50.4L88.3 44.6L90.6 38.8L92.8 32.9"/><path class="tz" pathLength="1" stroke-width="27" style="--d:0.23s;--t:0.11s" d="M94.1 32.7L94.4 38.7L94.7 44.8L94.9 50.8L95.2 56.8L95.5 62.9L95.8 68.9L96.0 74.9L96.3 81.0L96.6 87.0L96.9 93.0L97.1 99.1L97.4 105.1L97.7 111.2L98.0 117.2L98.3 123.2L98.5 129.3L98.8 135.3L99.1 141.3L99.4 147.4"/><path class="tz" pathLength="1" stroke-width="26" style="--d:0.34s;--t:0.10s" d="M159.7 45.2L157.8 51.2L155.9 57.3L154.1 63.3L152.2 69.4L150.3 75.4L148.4 81.5L146.5 87.5L144.6 93.6L142.7 99.6L140.8 105.6L138.9 111.7L137.0 117.7L135.1 123.8L133.2 129.8L131.4 135.9L129.5 141.9"/><path class="tz" pathLength="1" stroke-width="27" style="--d:0.43s;--t:0.09s" d="M160.3 47.5L162.1 53.3L163.8 59.2L165.6 65.0L167.3 70.8L169.1 76.7L170.8 82.5L172.6 88.3L174.4 94.2L176.1 100.0L177.9 105.8L179.6 111.6L181.4 117.5L183.1 123.3L184.9 129.1L186.6 135.0L188.4 140.8"/><path class="tz" pathLength="1" stroke-width="25" style="--d:0.51s;--t:0.05s" d="M141.8 108.4L148.5 108.4L155.3 108.5L162.0 108.6L168.7 108.6L175.4 108.7L182.2 108.8"/><path class="tz" pathLength="1" stroke-width="30" style="--d:0.57s;--t:0.10s" d="M220.8 39.6L220.9 46.0L221.0 52.3L221.2 58.7L221.3 65.0L221.4 71.4L221.5 77.7L221.6 84.1L221.7 90.4L221.8 96.8L221.9 103.1L222.1 109.5L222.2 115.8L222.3 122.2L222.4 128.5L222.5 134.9L222.6 141.2L222.7 147.6"/><path class="tz" pathLength="1" stroke-width="25" style="--d:0.66s;--t:0.12s" d="M221.5 39.2L227.5 38.3L233.6 37.1L239.6 36.1L245.8 35.8L251.8 36.9L257.6 39.0L262.9 42.1L267.4 46.3L270.2 51.7L271.4 57.7L271.4 63.8L270.1 69.9L267.8 75.5L264.7 80.9L261.1 85.9L256.9 90.3L251.8 93.7L245.8 95.2L239.7 95.5L233.6 95.3L227.4 95.4"/><path class="tz" pathLength="1" stroke-width="29" style="--d:0.76s;--t:0.07s" d="M242.6 94.2L246.5 99.0L250.3 103.9L254.2 108.8L258.1 113.7L262.0 118.6L265.9 123.5L269.8 128.3L273.6 133.2L277.5 138.1L281.4 143.0"/><path class="tz" pathLength="1" stroke-width="24" style="--d:0.84s;--t:0.07s" d="M305.6 34.9L311.7 34.6L317.8 34.4L323.9 34.2L330.0 33.9L336.1 33.7L342.2 33.4L348.3 33.2L354.3 33.0L360.4 32.7L366.5 32.5"/><path class="tz" pathLength="1" stroke-width="26" style="--d:0.90s;--t:0.10s" d="M335.6 36.5L335.4 42.5L335.3 48.6L335.2 54.6L335.1 60.6L335.0 66.7L334.8 72.7L334.7 78.7L334.6 84.7L334.5 90.8L334.4 96.8L334.2 102.8L334.1 108.9L334.0 114.9L333.9 120.9L333.8 126.9L333.6 133.0L333.5 139.0L333.4 145.0"/><path class="tz" pathLength="1" stroke-width="28" style="--d:1.00s;--t:0.10s" d="M416.2 28.6L414.9 34.5L413.6 40.4L412.2 46.2L410.9 52.1L409.6 58.0L408.3 63.9L406.9 69.7L405.6 75.6L404.3 81.5L402.9 87.4L401.6 93.2L400.3 99.1L399.0 105.0L397.6 110.9L396.3 116.7L395.0 122.6L393.7 128.5L392.3 134.4"/><path class="tz" pathLength="1" stroke-width="26" style="--d:1.09s;--t:0.10s" d="M419.2 28.3L421.0 34.2L422.8 40.1L424.7 46.1L426.5 52.0L428.3 57.9L430.2 63.8L432.0 69.8L433.9 75.7L435.7 81.6L437.5 87.5L439.4 93.4L441.2 99.4L443.0 105.3L444.9 111.2L446.7 117.1L448.5 123.1L450.4 129.0L452.2 134.9"/><path class="tz" pathLength="1" stroke-width="22" style="--d:1.18s;--t:0.05s" d="M403.8 99.7L410.3 99.1L416.8 98.6L423.2 98.1L429.7 97.6L436.2 97.0L442.6 96.5"/><path class="tz" pathLength="1" stroke-width="30" style="--d:1.25s;--t:0.06s" d="M545.9 74.1L549.1 79.9L552.3 85.8L555.6 91.6L558.8 97.5L562.1 103.3L565.3 109.1L568.6 115.0L571.8 120.8"/><path class="tz" pathLength="1" stroke-width="30" style="--d:1.30s;--t:0.10s" d="M591.9 69.8L590.9 75.9L589.9 82.0L588.9 88.1L587.9 94.2L586.9 100.3L585.8 106.4L584.6 112.4L583.3 118.5L581.6 124.4L579.8 130.3L577.7 136.2L575.3 141.9L572.6 147.4L569.5 152.8L565.6 157.5L560.9 161.5L556.2 165.6"/><path class="tz" pathLength="1" stroke-width="27" style="--d:1.41s;--t:0.12s" d="M729.9 30.3L729.6 36.4L729.4 42.5L729.2 48.7L728.9 54.8L728.7 60.9L728.4 67.0L728.1 73.2L727.7 79.3L727.3 85.4L727.0 91.5L726.5 97.6L725.8 103.7L724.6 109.7L723.1 115.7L721.0 121.4L718.4 126.9L714.7 131.9L709.8 135.5L704.0 137.4L698.0 136.9L693.7 132.7L690.5 127.4L687.2 122.3"/><path class="tz" pathLength="1" stroke-width="26" style="--d:1.53s;--t:0.17s" d="M794.5 43.8L788.9 46.3L783.2 48.6L778.3 52.2L774.7 57.1L771.8 62.5L769.4 68.1L767.3 73.9L765.7 79.8L764.5 85.8L764.2 92.0L764.7 98.1L765.8 104.1L767.3 110.0L769.2 115.8L771.7 121.4L775.0 126.6L779.3 130.9L784.5 134.2L790.2 136.3L796.3 136.6L802.3 135.2L807.8 132.6L812.5 128.7L815.8 123.6L817.8 117.8L819.0 111.8L819.8 105.7L820.3 99.6L820.6 93.5L820.6 87.4L820.5 81.2L820.0 75.1L819.2 69.0L817.9 63.1L815.9 57.3L812.3 52.4L806.8 49.6L801.0 47.7"/><path class="tz" pathLength="1" stroke-width="25" style="--d:1.70s;--t:0.11s" d="M854.3 31.0L854.2 37.3L854.1 43.6L854.1 49.8L854.0 56.1L854.0 62.4L853.9 68.7L853.8 74.9L853.8 81.2L853.7 87.5L853.7 93.7L853.6 100.0L853.6 106.3L853.5 112.5L853.4 118.8L853.4 125.1L853.3 131.3L853.3 137.6L853.2 143.9L853.2 150.1"/><path class="tz" pathLength="1" stroke-width="31" style="--d:1.79s;--t:0.11s" d="M854.2 33.3L860.4 32.4L866.6 31.3L872.8 30.5L879.1 30.8L885.1 32.8L890.4 36.0L894.9 40.5L897.8 46.0L899.4 52.1L900.2 58.3L900.2 64.6L899.3 70.8L896.7 76.5L892.7 81.3L887.9 85.4L882.6 88.7L876.8 91.2L870.6 92.3L864.4 92.7L858.1 93.3"/><path class="tz" pathLength="1" stroke-width="28" style="--d:1.89s;--t:0.07s" d="M874.3 93.7L877.5 99.4L880.7 105.1L883.9 110.8L887.1 116.5L890.3 122.2L893.5 127.9L896.6 133.6L899.8 139.3L903.0 145.1L906.2 150.8"/><path class="tz" pathLength="1" stroke-width="27" style="--d:1.97s;--t:0.17s" d="M1000.2 52.9L997.1 47.8L994.2 42.5L990.8 37.6L985.9 34.2L980.1 32.7L974.1 32.3L968.1 33.1L962.5 35.1L957.3 38.2L952.8 42.1L949.2 46.9L946.3 52.1L943.9 57.7L941.9 63.3L940.2 69.1L938.8 74.9L937.6 80.8L936.9 86.8L936.7 92.8L937.0 98.8L937.8 104.7L938.9 110.6L940.4 116.5L942.2 122.2L944.4 127.8L947.1 133.1L950.6 138.0L954.8 142.3L959.6 145.9L965.0 148.7L970.7 150.3L976.7 150.7L982.5 149.4L987.2 145.6L990.6 140.7L993.4 135.4L995.9 129.9L997.9 124.3L998.7 118.3L998.5 112.3L998.4 106.3"/><path class="tz" pathLength="1" stroke-width="26" style="--d:2.11s;--t:0.05s" d="M973.2 102.8L979.4 102.7L985.6 102.5L991.8 102.4L997.9 102.3L1004.1 102.2"/><path class="tz" pathLength="1" stroke-width="31" style="--d:2.17s;--t:0.10s" d="M1035.9 24.1L1035.7 30.3L1035.6 36.5L1035.4 42.6L1035.3 48.8L1035.2 55.0L1035.0 61.2L1034.9 67.4L1034.7 73.5L1034.6 79.7L1034.4 85.9L1034.3 92.1L1034.2 98.3L1034.0 104.4L1033.9 110.6L1033.7 116.8L1033.6 123.0L1033.4 129.2L1033.3 135.3"/><path class="tz" pathLength="1" stroke-width="23" style="--d:2.26s;--t:0.05s" d="M1035.6 26.9L1042.4 26.7L1049.2 26.4L1056.1 26.2L1062.9 26.0L1069.7 25.7L1076.5 25.5"/><path class="tz" pathLength="1" stroke-width="25" style="--d:2.31s;--t:0.05s" d="M1035.1 79.1L1041.8 79.2L1048.5 79.2L1055.2 79.3L1061.9 79.4L1068.5 79.4"/><path class="tz" pathLength="1" stroke-width="26" style="--d:2.35s;--t:0.06s" d="M1029.1 134.5L1035.8 134.3L1042.4 134.2L1049.0 134.0L1055.6 133.9L1062.3 133.8L1068.9 133.6L1075.5 133.5"/></mask></defs><image class="nombres__pinta" href="assets/rotulos/nombres.webp" width="1100" height="174" mask="url(#m-nombres)"/><image class="nombres__final" href="assets/rotulos/nombres.webp" width="1100" height="174"/></svg><!-- /rotulo:nombres -->
       </h1>
-      <p class="portada__fecha intro" style="--d:3.9s">
-        <time datetime="2027-05-08">8 de mayo de 2027</time>
+      <p class="portada__fecha intro" style="--d:3s">
+        <time datetime="2027-05-08"><!-- rotulo:fecha --><span class="sr-only">8 de mayo de 2027</span><img class="rotulo" src="assets/rotulos/fecha.webp" width="571" height="71" style="--u:12.960" alt="" decoding="async"><!-- /rotulo:fecha --></time>
         <span class="portada__ciudad">Valladolid</span>
       </p>
     </div>
 
-    <figure class="portada__foto marco arco">
-      <div class="ventana">
-        <div class="ventana__foto">
-          <img
-            src="assets/img/hero-vertical-740.webp"
-            srcset="assets/img/hero-vertical-480.webp 480w, assets/img/hero-vertical-620.webp 620w, assets/img/hero-vertical-740.webp 740w"
-            sizes="(min-width: 900px) 460px, 78vw"
-            width="739" height="924"
-            alt="Marta y Jorge abrazados junto a un fiordo noruego, con una caña de pescar"
-            fetchpriority="high" decoding="async">
-        </div>
-        <div class="postigo postigo--izq" aria-hidden="true"><span class="postigo__cara"></span><svg viewBox="0 0 200 500" focusable="false"><path class="po" pathLength="1" style="--k:.00s" d="M198 498H2V200A198 198 0 0 1 198 2"/><path class="po" pathLength="1" style="--k:.16s" d="M200 2V498"/><path class="po po--f" pathLength="1" style="--k:.34s" d="M176 474H26V200A174 174 0 0 1 176 26V474"/><path class="po po--f" pathLength="1" style="--k:.58s" d="M26 318H176"/><circle class="po-pomo" cx="184" cy="282" r="5.5"/></svg><span class="postigo__sombra"></span></div>
-        <div class="postigo postigo--der" aria-hidden="true"><span class="postigo__cara"></span><svg viewBox="0 0 200 500" focusable="false"><path class="po" pathLength="1" style="--k:.00s" d="M2 498H198V200A198 198 0 0 0 2 2"/><path class="po" pathLength="1" style="--k:.16s" d="M0 2V498"/><path class="po po--f" pathLength="1" style="--k:.34s" d="M24 474H174V200A174 174 0 0 0 24 26V474"/><path class="po po--f" pathLength="1" style="--k:.58s" d="M24 318H174"/><circle class="po-pomo" cx="16" cy="282" r="5.5"/></svg><span class="postigo__sombra"></span></div>
-      </div>
+    <figure class="portada__foto foto-pincel">
+      <img
+        src="assets/img/hero-vertical-740.webp"
+        srcset="assets/img/hero-vertical-480.webp 480w, assets/img/hero-vertical-620.webp 620w, assets/img/hero-vertical-740.webp 740w"
+        sizes="(min-width: 700px) 420px, (orientation: landscape) and (min-width: 560px) 300px, 100vw"
+        width="739" height="924"
+        alt="Marta y Jorge abrazados junto a un fiordo noruego, con una caña de pescar"
+        fetchpriority="high" decoding="async">
     </figure>
 
-    <div class="portada__extra intro" style="--d:4.25s">
+    <div class="portada__extra intro" style="--d:3.35s">
       <div class="cuenta" data-cuenta="2027-05-08T12:00:00+02:00">
         <p class="sr-only" data-cuenta-sr aria-live="off"></p>
         <div class="cuenta__fila" aria-hidden="true">
@@ -88,14 +78,12 @@
       </div>
       <a class="boton boton--solido portada__cta" href="#confirmacion">Confirmar asistencia</a>
     </div>
-
-    <span class="portada__baja intro" style="--d:5.3s" aria-hidden="true"></span>
   </header>
 
-  <!-- ============ MESA PUESTA (ilustración de acuarela, solo decorativa) ============ -->
-  <div class="mesa revelar" aria-hidden="true">
-    <div class="mesa__guirnalda"></div>
-    <img class="acuarela mesa__img" src="assets/ilustraciones/acuarela/bodegon-640.webp" srcset="assets/ilustraciones/acuarela/bodegon-640.webp 640w, assets/ilustraciones/acuarela/bodegon-1000.webp 1000w" sizes="(min-width: 700px) 40rem, 100vw" width="1000" height="720" alt="" loading="lazy" decoding="async">
+  <!-- ============ MESA PUESTA (bodegón de acuarela, solo decorativo; se funde con el lino: .acuarela-plana) ============ -->
+  <div class="mesa" aria-hidden="true">
+    <div class="mesa__guirnalda acuarela-plana revelar"></div>
+    <img class="acuarela acuarela-plana mesa__img revelar" src="assets/ilustraciones/acuarela/bodegon-v2-640.webp" srcset="assets/ilustraciones/acuarela/bodegon-v2-640.webp 640w, assets/ilustraciones/acuarela/bodegon-v2-1000.webp 1000w" sizes="(min-width: 700px) 40rem, 100vw" width="1000" height="545" alt="" loading="lazy" decoding="async">
   </div>
 
   <!-- ============ AGENDA ============ -->
@@ -103,14 +91,12 @@
     <div class="contenedor">
       <header class="cabecera revelar">
         <p class="etiqueta">Sábado, 8 de mayo de 2027</p>
-        <h2 class="titulo" id="t-agenda">Agenda</h2>
+        <h2 class="titulo titulo--rotulo" id="t-agenda"><!-- rotulo:agenda --><span class="sr-only">Agenda</span><img class="rotulo" src="assets/rotulos/agenda.webp" width="229" height="77" style="--u:5.198" alt="" decoding="async" loading="lazy"><!-- /rotulo:agenda --></h2>
       </header>
 
       <div class="agenda__grid">
         <!-- Ceremonia -->
-        <div class="ilu ilu--san-pablo" data-svg="assets/ilustraciones/san-pablo.svg" role="img" aria-label="Dibujo de la fachada de la Iglesia de San Pablo de Valladolid">
-          <noscript><img src="assets/ilustraciones/san-pablo.svg" alt="Dibujo de la fachada de la Iglesia de San Pablo de Valladolid" width="520" height="620"></noscript>
-        </div>
+        <img class="ilu ilu--san-pablo acuarela-plana revelar" src="assets/ilustraciones/acuarela/san-pablo-acuarela-640.webp" srcset="assets/ilustraciones/acuarela/san-pablo-acuarela-640.webp 640w, assets/ilustraciones/acuarela/san-pablo-acuarela-960.webp 960w" sizes="(min-width: 600px) 24rem, 84vw" width="960" height="1145" alt="La fachada de la Iglesia de San Pablo de Valladolid, pintada a la acuarela" loading="lazy" decoding="async">
         <article class="evento evento--ceremonia revelar">
           <p class="etiqueta">Ceremonia · 12:00h</p>
           <h3 class="evento__lugar">Iglesia de San Pablo</h3>
@@ -118,16 +104,13 @@
           <a class="boton boton--enlace" href="https://www.google.com/maps/search/?api=1&amp;query=Iglesia+de+San+Pablo+Valladolid" target="_blank" rel="noopener">¿Cómo llegar?<span class="sr-only"> a la Iglesia de San Pablo (se abre en Google Maps)</span></a>
         </article>
 
-        <!-- Ruta: ceremonia → celebración (horizontal en escritorio, vertical en móvil) -->
+        <!-- Ruta: ceremonia → celebración -->
         <div class="ruta" aria-hidden="true">
-          <div class="ruta__h" data-svg="assets/ilustraciones/ruta-horizontal.svg"></div>
           <div class="ruta__v" data-svg="assets/ilustraciones/ruta-vertical.svg"></div>
         </div>
 
         <!-- Celebración -->
-        <div class="ilu ilu--palomar" data-svg="assets/ilustraciones/palomar.svg" role="img" aria-label="Dibujo del Palomar de La Posada Real del Pinar">
-          <noscript><img src="assets/ilustraciones/palomar.svg" alt="Dibujo del Palomar de La Posada Real del Pinar" width="700" height="440"></noscript>
-        </div>
+        <img class="ilu ilu--palomar acuarela-plana revelar" src="assets/ilustraciones/acuarela/palomar-acuarela-640.webp" srcset="assets/ilustraciones/acuarela/palomar-acuarela-640.webp 640w, assets/ilustraciones/acuarela/palomar-acuarela-960.webp 960w" sizes="(min-width: 600px) 30rem, 92vw" width="960" height="603" alt="El Palomar de La Posada Real del Pinar entre pinos, pintado a la acuarela" loading="lazy" decoding="async">
         <article class="evento evento--celebracion revelar">
           <p class="etiqueta">Celebración · 14:00h</p>
           <h3 class="evento__lugar">La Posada Real del Pinar</h3>
@@ -142,9 +125,6 @@
           <span>Añadir al calendario</span>
         </a>
       </p>
-      <figure class="acuarela-fig acuarela-fig--ramo revelar" aria-hidden="true">
-        <img class="acuarela" src="assets/ilustraciones/acuarela/ramo-480.webp" srcset="assets/ilustraciones/acuarela/ramo-480.webp 480w, assets/ilustraciones/acuarela/ramo-760.webp 760w" sizes="(min-width: 600px) 25rem, 82vw" width="760" height="420" alt="" loading="lazy" decoding="async">
-      </figure>
     </div>
   </section>
 
@@ -152,8 +132,7 @@
   <section class="seccion transporte" id="transporte" aria-labelledby="t-transporte">
     <div class="contenedor contenedor--estrecho">
       <header class="cabecera revelar">
-        <p class="etiqueta">Cómo llegar</p>
-        <h2 class="titulo" id="t-transporte">Transporte</h2>
+        <h2 class="titulo titulo--rotulo" id="t-transporte"><!-- rotulo:transporte --><span class="sr-only">Transporte</span><img class="rotulo" src="assets/rotulos/transporte.webp" width="369" height="77" style="--u:8.378" alt="" decoding="async" loading="lazy"><!-- /rotulo:transporte --></h2>
       </header>
 
       <div class="transporte__lista">
@@ -177,48 +156,37 @@
   </section>
 
   <!-- ============ ALOJAMIENTO ============ -->
-  <section class="seccion alojamiento" id="alojamiento" aria-labelledby="t-alojamiento" data-whatsapp="+34 689 34 37 50" data-email="">
+  <section class="seccion alojamiento" id="alojamiento" aria-labelledby="t-alojamiento">
     <div class="contenedor contenedor--estrecho">
-      <figure class="acuarela-fig acuarela-fig--almohada revelar" aria-hidden="true">
-        <img class="acuarela" src="assets/ilustraciones/acuarela/almohada-460.webp" srcset="assets/ilustraciones/acuarela/almohada-460.webp 460w, assets/ilustraciones/acuarela/almohada-700.webp 700w" sizes="(min-width: 600px) 22rem, 76vw" width="700" height="470" alt="" loading="lazy" decoding="async">
-      </figure>
       <header class="cabecera revelar">
-        <p class="etiqueta">Dónde dormir</p>
-        <h2 class="titulo" id="t-alojamiento">Alojamiento</h2>
+        <h2 class="titulo titulo--rotulo" id="t-alojamiento"><!-- rotulo:alojamiento --><img class="titulo__icono" src="assets/ilustraciones/acuarela/almohada-icono-3x.webp" srcset="assets/ilustraciones/acuarela/almohada-icono-2x.webp 2x, assets/ilustraciones/acuarela/almohada-icono-3x.webp 3x" width="60" height="51" alt="" decoding="async" loading="lazy"><span class="sr-only">Alojamiento</span><img class="rotulo" src="assets/rotulos/alojamiento.webp" width="388" height="77" style="--u:8.806" alt="" decoding="async" loading="lazy"><!-- /rotulo:alojamiento --></h2>
       </header>
-      <div class="revelar">
-        <p class="cursiva alojamiento__texto">En Valladolid tenéis muchísimas opciones de alojamiento en el entorno del centro. Escribidnos y os ayudaremos y aconsejaremos para encontrar el mejor sitio&nbsp;posible.</p>
-        <p class="alojamiento__contacto" data-contacto hidden></p>
-      </div>
+      <p class="cursiva alojamiento__texto revelar">En Valladolid tenéis muchísimas opciones de alojamiento en el entorno del centro. Escribidnos y os ayudaremos y aconsejaremos para encontrar el mejor sitio&nbsp;posible.</p>
     </div>
     <div class="contenedor alojamiento__mapa revelar">
-      <!-- Mapa con la zona recomendada (círculo). Lo monta js/mapa.js al acercarse a la pantalla. -->
+      <!-- Mapa con la zona recomendada (óvalo). Lo monta js/mapa.js al acercarse a la pantalla. -->
       <div id="mapa-alojamiento" class="mapa marco" role="region" aria-label="Mapa del centro de Valladolid con la zona recomendada para alojarse"></div>
       <p class="mapa__pie"><a href="https://www.google.com/maps/search/?api=1&amp;query=Valladolid+centro" target="_blank" rel="noopener">Abrir en Google Maps</a></p>
     </div>
   </section>
 
   <!-- ============ INTERLUDIO (foto) ============ -->
-  <figure class="interludio revelar" aria-hidden="false">
-    <div class="interludio__marco marco arco">
-      <img
-        src="assets/img/playa-600.webp"
-        srcset="assets/img/playa-480.webp 480w, assets/img/playa-600.webp 600w, assets/img/playa-840.webp 840w"
-        sizes="(min-width: 900px) 340px, 72vw"
-        width="600" height="800" loading="lazy" decoding="async"
-        alt="Marta y Jorge tumbados en una playa de piedras, bajo los pinos, mirando el mar">
-    </div>
+  <figure class="interludio foto-pincel revelar" data-aguada>
+    <img
+      src="assets/img/playa-600.webp"
+      srcset="assets/img/playa-480.webp 480w, assets/img/playa-600.webp 600w, assets/img/playa-840.webp 840w"
+      sizes="(min-width: 700px) 30rem, 100vw"
+      width="600" height="800" loading="lazy" decoding="async"
+      alt="Marta y Jorge tumbados en una playa de piedras, bajo los pinos, mirando el mar">
   </figure>
 
   <!-- ============ CONFIRMACIÓN DE ASISTENCIA (RSVP) ============
        Estilos: css/rsvp.css · Lógica: js/rsvp.js · Envía a /api/rsvp → Supabase (docs/rsvp.md).
-       Si el envío falla ofrece WhatsApp/correo con los datos de data-whatsapp / data-email de #alojamiento. -->
-  <section class="seccion rsvp" id="confirmacion" aria-labelledby="t-confirmacion" data-rsvp data-endpoint="/api/rsvp">
+       Si el envío falla ofrece mandar la respuesta por WhatsApp/correo con los datos de data-whatsapp / data-email de esta sección. -->
+  <section class="seccion rsvp" id="confirmacion" aria-labelledby="t-confirmacion" data-rsvp data-endpoint="/api/rsvp" data-whatsapp="+34 689 34 37 50" data-email="">
     <div class="contenedor contenedor--estrecho">
       <header class="cabecera revelar">
-        <p class="etiqueta">S.R.C. · Se ruega confirmación</p>
-        <h2 class="titulo" id="t-confirmacion">Confirma tu asistencia</h2>
-        <p class="cursiva rsvp__entradilla">Cuéntanos si podrás acompañarnos y ayúdanos a organizarlo todo.</p>
+        <h2 class="titulo titulo--rotulo" id="t-confirmacion"><!-- rotulo:src --><span class="sr-only">S.R.C. · Se ruega confirmación</span><img class="rotulo" src="assets/rotulos/src.webp" width="512" height="148" style="--u:11.616" alt="" decoding="async" loading="lazy"><!-- /rotulo:src --></h2>
       </header>
 
       <div class="rsvp__tarjeta">
@@ -362,7 +330,6 @@
               <span class="rsvp-enviar__giro" aria-hidden="true"></span>
               <span data-rsvp-enviar-texto>Enviar confirmación</span>
             </button>
-            <p class="rsvp-privacidad">Usaremos estos datos solo para organizar la boda.</p>
           </div>
           <p class="sr-only" data-rsvp-anuncio aria-live="polite"></p>
 
@@ -427,15 +394,11 @@
   <!-- ============ LISTA DE BODAS ============ -->
   <section class="seccion regalo" id="lista-de-bodas" aria-labelledby="t-regalo">
     <div class="contenedor contenedor--estrecho centrado">
-      <figure class="acuarela-fig acuarela-fig--maleta revelar" aria-hidden="true">
-        <img class="acuarela" src="assets/ilustraciones/acuarela/maleta-380.webp" srcset="assets/ilustraciones/acuarela/maleta-380.webp 380w, assets/ilustraciones/acuarela/maleta-560.webp 560w" sizes="(min-width: 600px) 15rem, 60vw" width="560" height="431" alt="" loading="lazy" decoding="async">
-      </figure>
       <header class="cabecera revelar">
-        <p class="etiqueta">Un detalle</p>
-        <h2 class="titulo" id="t-regalo">Lista de bodas</h2>
+        <h2 class="titulo titulo--rotulo" id="t-regalo"><!-- rotulo:lista-de-bodas --><img class="titulo__icono" src="assets/ilustraciones/acuarela/alianzas-icono-3x.webp" srcset="assets/ilustraciones/acuarela/alianzas-icono-2x.webp 2x, assets/ilustraciones/acuarela/alianzas-icono-3x.webp 3x" width="71" height="51" alt="" decoding="async" loading="lazy"><span class="sr-only">Lista de bodas</span><img class="rotulo" src="assets/rotulos/lista-de-bodas.webp" width="469" height="77" style="--u:10.648" alt="" decoding="async" loading="lazy"><!-- /rotulo:lista-de-bodas --></h2>
       </header>
       <div class="revelar">
-        <p class="cursiva regalo__texto">Vuestra presencia será el mejor regalo y,&nbsp;para quienes queráis tener un detalle, hemos depositado nuestro viaje de novios en:</p>
+        <p class="cursiva regalo__texto">Vuestra presencia será el mejor regalo. Si además queréis tener un detalle con nosotros, hemos habilitado el siguiente espacio para quienes así lo&nbsp;deseéis:</p>
         <div class="iban">
           <p class="iban__numero" id="iban" role="img" aria-label="IBAN: E S 8 1, 0 0 8 1, 2 7 1 9, 2 7 0 0, 2 2 8 7, 6 4 0 5"><span>ES81</span> <span>0081</span> <span>2719</span> <span>2700</span> <span>2287</span> <span>6405</span></p>
           <button class="boton iban__copiar" type="button" data-copiar="ES81 0081 2719 2700 2287 6405">
@@ -450,27 +413,20 @@
 
   <!-- ============ CIERRE ============ -->
   <section class="cierre" id="cierre" aria-labelledby="t-cierre">
-    <picture class="cierre__foto">
-      <source media="(min-width: 900px)" type="image/webp"
-        srcset="assets/img/cierre-wide-900.webp 900w, assets/img/cierre-wide-1600.webp 1600w" sizes="100vw">
-      <img
-        src="assets/img/cierre-tall-880.webp"
-        srcset="assets/img/cierre-tall-560.webp 560w, assets/img/cierre-tall-880.webp 880w"
-        sizes="100vw" width="880" height="1173" loading="lazy" decoding="async"
-        alt="Marta y Jorge abrazados al atardecer, con el mar al fondo">
-    </picture>
     <div class="cierre__texto revelar">
-      <h2 class="cierre__titulo script" id="t-cierre">¡Os esperamos!</h2>
+      <h2 class="cierre__titulo titulo--rotulo" id="t-cierre"><!-- rotulo:os-esperamos --><span class="sr-only">¡Os esperamos!</span><img class="rotulo" src="assets/rotulos/os-esperamos.webp" width="462" height="71" style="--u:10.497" alt="" decoding="async" loading="lazy"><!-- /rotulo:os-esperamos --></h2>
       <p class="etiqueta cierre__firma">Marta y Jorge <span aria-hidden="true">·</span> 8 de mayo de 2027</p>
     </div>
+    <picture class="cierre__foto foto-pincel foto-pincel--arriba">
+      <img
+        src="assets/img/cierre-wide-900.webp"
+        srcset="assets/img/cierre-wide-900.webp 900w, assets/img/cierre-wide-1600.webp 1600w"
+        sizes="100vw" width="1600" height="1304" loading="lazy" decoding="async"
+        alt="Marta y Jorge abrazados al atardecer, con el mar al fondo">
+    </picture>
   </section>
 
 </main>
-
-<footer class="pie">
-  <img class="acuarela pie__granadas" src="assets/ilustraciones/acuarela/granadas-300.webp" srcset="assets/ilustraciones/acuarela/granadas-300.webp 300w, assets/ilustraciones/acuarela/granadas-420.webp 420w" sizes="(min-width: 600px) 13rem, 52vw" width="420" height="230" alt="" loading="lazy" decoding="async">
-  <p class="etiqueta">Marta y Jorge · Valladolid · 2027</p>
-</footer>
 
 <div class="aviso" id="aviso" role="status" aria-live="polite" hidden></div>
 
@@ -478,5 +434,6 @@
 <script src="js/intro.js" defer></script>
 <script src="js/rsvp.js" defer></script>
 <script src="js/mapa.js" defer></script>
+<script src="/version/selector.js" defer></script>
 </body>
 </html>

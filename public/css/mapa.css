@@ -3,21 +3,21 @@
    El tamaño del contenedor (.mapa) lo da site.css (aspect-ratio + min-height),
    así que la altura queda reservada antes de cargar Leaflet y no hay saltos.
    Aquí: estado previo/sin JS, piezas de Leaflet con la estética de papelería,
-   marcadores, rótulo del círculo, ventanas, avisos y foco.
+   marcadores, rótulo del óvalo, ventanas, avisos y foco.
    Todo cuelga de .mapa para no tocar nada fuera de él.
    ========================================================================== */
 
-/* ---------- Antes de cargar (o sin JS / si falla): círculo a rotulador ---------- */
+/* ---------- Antes de cargar (o sin JS / si falla): el óvalo a pincel ---------- */
 .mapa {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M101 19c44-3 82 35 81 81-1 46-38 82-83 81-46-1-81-37-80-83S56 22 101 19z' fill='rgba(164,86,58,.08)' stroke='%23a4563a' stroke-width='2.6' stroke-linecap='round' stroke-dasharray='9 8'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M103 15c41-2 72 39 71 86-1 47-33 86-75 84-42-2-72-41-71-87S61 17 103 15z' fill='rgba(178,58,64,.08)' stroke='%23b23a40' stroke-opacity='.75' stroke-width='3.2' stroke-linecap='round'/%3E%3Cpath d='M96 19c43-1 73 37 72 83-1 44-30 79-70 79' fill='none' stroke='%23b23a40' stroke-opacity='.45' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: center;
-  background-size: auto 78%;
+  background-size: auto 82%;
 }
 .mapa--lista { background-image: none; }
 
-/* Altura mínima a partir de 600 px: así el círculo (radio 900 m) cabe entero a zoom 15 y se ven
-   las calles. Con menos ancho (móvil) cabe a zoom 14 en el alto que ya reserva site.css. */
+/* Altura mínima a partir de 600 px: así el óvalo (760 × 840 m) cabe entero a zoom 16 y se ven bien
+   las calles. Con menos ancho (móvil) cabe a zoom 15 en el alto que ya reserva site.css. */
 @media (min-width: 600px) { #mapa-alojamiento.mapa { min-height: 34rem; } }
 
 /* El lienzo de Leaflet llena el contenedor. El recorte (overflow) va aquí y no en
@@ -41,7 +41,7 @@
 /* ---------- Botones +/− (44 px mínimo para el dedo) ---------- */
 .mapa .leaflet-container .leaflet-bar {
   border: 1.5px solid var(--rojo); border-radius: 8px; overflow: hidden;
-  background: var(--campo-mapa); box-shadow: 2px 2px 0 rgba(163, 18, 29, .16);
+  background: var(--campo-mapa); box-shadow: 2px 2px 0 rgba(178, 58, 64, .16);
 }
 .mapa .leaflet-container .leaflet-bar a {
   width: 44px; height: 44px; line-height: 42px;
@@ -74,7 +74,7 @@
   text-shadow: 0 0 2px var(--papel-3), 0 0 3px var(--papel-3), 0 0 6px var(--papel-3), 0 0 9px var(--papel-3);
 }
 
-/* ---------- Rótulo del círculo ---------- */
+/* ---------- Rótulo del óvalo ---------- */
 .mapa .mapa-rotulo { background: none; border: 0; }
 .mapa .mapa-rotulo span {
   position: absolute; left: 0; top: 0; transform: translate(-50%, -50%) rotate(-5deg);
@@ -87,7 +87,7 @@
 .mapa .leaflet-popup-content-wrapper {
   background: var(--campo-mapa); color: var(--tinta);
   border: 1.5px solid var(--rojo); border-radius: 8px;
-  box-shadow: 3px 3px 0 rgba(163, 18, 29, .18);
+  box-shadow: 3px 3px 0 rgba(178, 58, 64, .18);
 }
 .mapa .leaflet-popup-tip { background: var(--campo-mapa); box-shadow: none; border: 1.5px solid var(--rojo); }
 .mapa .leaflet-popup-content { margin: .9rem 2.75rem .95rem 1.1rem; font: 400 1rem/1.25 var(--f-serif); }
@@ -114,7 +114,7 @@
 }
 .mapa--aviso .mapa__aviso { opacity: 1; transform: none; }
 
-/* ---------- Si el mapa no carga: se quita el círculo y queda el aviso con su enlace ---------- */
+/* ---------- Si el mapa no carga: se quita el óvalo y queda el aviso con su enlace ---------- */
 .mapa[data-mapa="error"] { background-image: none; }
 .mapa .mapa__error {
   position: absolute; inset: 0; display: grid; place-content: center;
