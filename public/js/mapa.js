@@ -8,11 +8,11 @@
  * El tamaño del contenedor lo da el CSS (aspect-ratio), así que no hay saltos de layout.
  *
  * Carga perezosa: Leaflet (JS + CSS, vendor/leaflet/) solo se descarga cuando el mapa está a
- * ~300 px de entrar en pantalla. Si no hay JS o falla la descarga, queda el círculo dibujado
+ * ~300 px de entrar en pantalla. Si no hay JS o falla la descarga, queda el óvalo dibujado
  * (CSS) y el enlace «Abrir en Google Maps» que hay debajo.
  *
- * Qué dibuja: la zona recomendada para alojarse (círculo «a rotulador»: contorno irregular
- * ±2–4 % con semilla fija, trazo discontinuo rojo, relleno suave y rótulo manuscrito) y dos
+ * Qué dibuja: la zona recomendada para alojarse (óvalo «a pincel»: contorno irregular ±2–3 %
+ * con semilla fija, dos pasadas de pincel rojo, relleno suave y rótulo manuscrito) y dos
  * marcadores (Iglesia de San Pablo y parking de la Plaza de Portugalete) con «¿Cómo llegar?».
  * Sin secuestrar el scroll: la rueda solo hace zoom tras hacer clic; en táctil se mueve el mapa
  * con DOS dedos (con uno se desplaza la página y sale un aviso).
@@ -31,18 +31,19 @@
      Configuración
      --------------------------------------------------------------------------------------- */
   var CFG = {
-    // Baricentro de Plaza Mayor · Catedral/Plaza de Portugalete · Iglesia de San Pablo.
-    centro: [41.65423, -4.72563],
-    radio: 900,                 // metros (≈ 11 min andando); cubre también la Plaza del Poniente
+    // Óvalo que pidieron los novios sobre su captura: el centro entre la Plaza del Poniente (borde oeste)
+    // y la Iglesia de San Pablo (justo dentro del borde noreste), con Plaza Mayor, Catedral y Portugalete dentro.
+    centro: [41.6540, -4.7268],
+    semiejes: [380, 420],       // metros [este-oeste, norte-sur]
     semilla: 20270508,          // fija: el trazo «a mano» sale siempre igual (fecha de la boda)
     color: '#a3121d',           // --rojo
-    zoomMin: 14, zoomMax: 18, zoomMaxEncuadre: 15,
+    zoomMin: 14, zoomMax: 18, zoomMaxEncuadre: 16,
     teselas: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
     atribucion:
       '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors ' +
       '© <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>',
     rotulo: ['Zona recomendada', 'para alojarse'],
-    rotuloPos: [-0.06, -0.50],  // desplazamiento del rótulo desde el centro, en fracciones del radio [este, norte]
+    rotuloPos: [-0.04, -0.56],  // desplazamiento del rótulo desde el centro, en fracciones de los semiejes [este, norte]
     puntos: [
       {
         tipo: 'iglesia', nombre: 'Iglesia de San Pablo', etiqueta: 'San Pablo',
@@ -78,7 +79,7 @@
   }
 
   /* ---------------------------------------------------------------------------------------
-     Geometría: círculo «a rotulador»
+     Geometría: óvalo «a pincel»
      --------------------------------------------------------------------------------------- */
   var TAU = Math.PI * 2;
 
@@ -92,26 +93,28 @@
     };
   }
 
-  // Punto a «metros» del centro en el ángulo ang (0 = este, π/2 = norte).
-  function desplazar(c, metros, ang) {
+  // Punto a [este, norte] metros del centro.
+  function desplazar(c, este, norte) {
     return [
-      c[0] + (metros * Math.sin(ang)) / 111320,
-      c[1] + (metros * Math.cos(ang)) / (111320 * Math.cos(c[0] * Math.PI / 180))
+      c[0] + norte / 111320,
+      c[1] + este / (111320 * Math.cos(c[0] * Math.PI / 180))
     ];
   }
 
-  // Devuelve { relleno: anillo cerrado, trazo: una vuelta y un poco más (el rotulador «se pasa») }.
-  function circuloARotulador(c, R, semilla) {
+  // Devuelve { relleno: anillo cerrado, trazo: una vuelta y un poco más (el pincel «se pasa») }.
+  // ejes = [semieje este-oeste, semieje norte-sur] en metros.
+  function ovaloAPincel(c, ejes, semilla) {
     var rnd = prng(semilla);
-    // Irregularidad suave: armónicos de baja frecuencia (≈ ±2,5 % del radio) + un temblor muy fino.
+    // Irregularidad suave: armónicos de baja frecuencia (≈ ±2,5 % del tamaño) + un temblor muy fino.
     var h = [[2, 0.009], [3, 0.008], [5, 0.005], [9, 0.002], [14, 0.0012]].map(function (p) {
       return { k: p[0], a: p[1] * (0.75 + 0.5 * rnd()), f: rnd() * TAU };
     });
-    function radio(ang) {
+    function factor(ang) {
       var s = 0;
       for (var i = 0; i < h.length; i++) s += h[i].a * Math.sin(h[i].k * ang + h[i].f);
-      return R * (1 + s);
+      return 1 + s;
     }
+    function punto(ang, f) { return desplazar(c, ejes[0] * f * Math.cos(ang), ejes[1] * f * Math.sin(ang)); }
     var inicio = rnd() * TAU;
     var N = 150;
     var solape = 0.33;                 // radianes de más (≈ 19°)
@@ -119,7 +122,7 @@
     var relleno = [], trazo = [], i, ang;
     for (i = 0; i < N; i++) {
       ang = inicio + (i / N) * TAU;
-      relleno.push(desplazar(c, radio(ang), ang));
+      relleno.push(punto(ang, factor(ang)));
     }
     var M = N + Math.round(N * solape / TAU);
     for (i = 0; i <= M; i++) {
@@ -127,7 +130,7 @@
       var u = i / N;                                    // 0 … 1,05
       var s = Math.min(1, Math.max(0, (u - 0.72) / (1 + solape / TAU - 0.72)));
       s = s * s * (3 - 2 * s);
-      trazo.push(desplazar(c, radio(ang) * (1 + deriva * s), ang));
+      trazo.push(punto(ang, factor(ang) * (1 + deriva * s)));
     }
     return { relleno: relleno, trazo: trazo };
   }
@@ -254,19 +257,23 @@
     L.control.attribution({ prefix: '<a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a>' }).addTo(map);
     L.control.zoom({ position: 'topleft', zoomInTitle: TXT.acercar, zoomOutTitle: TXT.alejar }).addTo(map);
 
-    /* Círculo a rotulador */
-    var geo = circuloARotulador(CFG.centro, CFG.radio, CFG.semilla);
+    /* Óvalo a pincel: una pasada ancha y otra fina que no coincide del todo (como dos golpes de pincel) */
+    var geo = ovaloAPincel(CFG.centro, CFG.semiejes, CFG.semilla);
+    var geo2 = ovaloAPincel(CFG.centro, [CFG.semiejes[0] * 1.012, CFG.semiejes[1] * 0.992], CFG.semilla + 7);
     L.polygon(geo.relleno, {
       stroke: false, fillColor: CFG.color, fillOpacity: 0.1, interactive: false, smoothFactor: 0.4
     }).addTo(map);
     L.polyline(geo.trazo, {
-      color: CFG.color, weight: 3, opacity: 0.95, dashArray: '10 9', lineCap: 'round', lineJoin: 'round',
+      color: CFG.color, weight: 4.5, opacity: 0.72, lineCap: 'round', lineJoin: 'round',
+      interactive: false, smoothFactor: 0.4, className: 'mapa-trazo'
+    }).addTo(map);
+    L.polyline(geo2.trazo.slice(0, Math.round(geo2.trazo.length * 0.8)), {
+      color: CFG.color, weight: 1.8, opacity: 0.5, lineCap: 'round', lineJoin: 'round',
       interactive: false, smoothFactor: 0.4, className: 'mapa-trazo'
     }).addTo(map);
 
     /* Rótulo manuscrito */
-    var posRotulo = desplazar(CFG.centro, CFG.radio * Math.hypot(CFG.rotuloPos[0], CFG.rotuloPos[1]),
-      Math.atan2(CFG.rotuloPos[1], CFG.rotuloPos[0]));
+    var posRotulo = desplazar(CFG.centro, CFG.semiejes[0] * CFG.rotuloPos[0], CFG.semiejes[1] * CFG.rotuloPos[1]);
     L.marker(posRotulo, {
       interactive: false, keyboard: false, zIndexOffset: -500,
       icon: L.divIcon({
@@ -323,7 +330,7 @@
       if (e.key === 'Escape' && lienzo.querySelector('.leaflet-popup')) { e.stopPropagation(); map.closePopup(); }
     });
 
-    /* Encuadre: el mayor zoom entero en el que cabe el círculo entero */
+    /* Encuadre: el mayor zoom entero en el que cabe el óvalo entero */
     var limites = L.latLngBounds(geo.relleno);
     var tocado = false;
     function encuadrar() {
@@ -384,7 +391,7 @@
     el.classList.add('mapa--lista');
     el.setAttribute('data-mapa', 'listo');
     el.mapaLeaflet = map;
-    // Una pasada más cuando ya están las fuentes (Cormorant) y el layout asentado.
+    // Una pasada más cuando ya están las fuentes y el layout asentado.
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (!tocado) encuadrar(); });
     el.dispatchEvent(new CustomEvent('mapa:listo', { detail: { map: map, capaTeselas: capa } }));
   }

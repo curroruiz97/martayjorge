@@ -12,7 +12,7 @@ Verificado el 8-oct-2026. Sirve de fuente para `js/mapa.js` (constantes `CFG`), 
 | Celebración | La Posada Real del Pinar (también «La Posada del Pinar») | Pinar de San Rafael, s/n · 47450 Pozal de Gallinas (Valladolid) | **41.29956, -4.81734** | Media-alta (±50 m; la dirección es segura, el punto viene de portales de reservas) |
 | Parking | Plaza de Portugalete (aparcamiento «IC Plaza de Portugalete») | Plaza de Portugalete · 47002 Valladolid (acceso: Plaza Portugalete 5 / Plaza de la Libertad 5, según el portal) | **41.65335, -4.72386** (centro de la plaza, no la boca del garaje) | Media-alta (±30 m; es el punto de Google Maps de la plaza) |
 | Autocar de vuelta | Plaza del Poniente (Valladolid, Centro) | Plaza del Poniente · 47003 (algunas fuentes 47001) | **41.65316, -4.73128** | Media-alta para el lugar; **sin confirmar que sea la que quiere el cliente** (ver §5) |
-| Zona de alojamiento | Círculo centrado en el baricentro Plaza Mayor–Catedral–San Pablo | — | **41.65423, -4.72563**, radio **900 m** | Decisión de diseño (ver §6) |
+| Zona de alojamiento | Óvalo entre la Plaza del Poniente y San Pablo (lo pidieron los novios sobre una captura, V2) | — | **41.6540, -4.7268**, semiejes **380 m (E-O) × 420 m (N-S)** | Decisión de los novios (ver §6) |
 
 ## 2. Iglesia de San Pablo
 
@@ -47,11 +47,20 @@ Verificado el 8-oct-2026. Sirve de fuente para `js/mapa.js` (constantes `CFG`), 
 - **DUDA ABIERTA (preguntar al cliente):** ¿«Plaza del Poniente» es esta plaza de Valladolid Centro (Paseo de Isabel la Católica)? ¿Es de verdad donde parará el autocar de vuelta? ¿Y dónde recoge el de ida: delante de San Pablo o en otro punto? El mapa de alojamiento **no** la marca.
 - URL de búsqueda: `https://www.google.com/maps/search/?api=1&query=Plaza%20del%20Poniente%2C%20Valladolid`.
 
-## 6. Zona recomendada para alojarse (círculo del mapa)
+## 6. Zona recomendada para alojarse (óvalo del mapa)
 
-- **Centro: 41.65423, -4.72563.** Baricentro de Plaza Mayor (41.65225, -4.72861; Google), Catedral/Plaza de Portugalete y San Pablo. Distancias al centro: San Pablo 335 m, Plaza Mayor 331 m, Plaza de Portugalete 177 m, Catedral 270 m.
-- **Radio: 900 m** (≈ 11 min andando). Deja dentro, con margen, todos los puntos de la boda en la ciudad (el más lejano, la Plaza del Poniente, a 484 m) y hacia el sur llega a la zona de la Plaza de Zorrilla y el Campo Grande (aproximado, no contrastado sobre mapa). Se eligió 900 y no 1000–1100 para que el círculo entero quepa a zoom 14 en el mapa del móvil (≈ 343×304 px); en pantallas ≥ 600 px cabe a zoom 15.
-- Es una recomendación visual («entorno del centro»), no un límite. El texto del cliente no fija distancia.
+- **V2 (comentarios de los novios):** en vez del círculo de 900 m piden «un óvalo o círculo que coja un poco toda la zona
+  centro entre Poniente y San Pablo» y mandan una captura de Google Maps con una elipse verde dibujada encima.
+- **Medida sobre su captura:** la escala sale de dos puntos conocidos, Plaza Mayor (41.65225, -4.72861) y Plaza del
+  Poniente (41.65316, -4.73128): ≈ 1,25 m por píxel en los dos ejes (norte arriba). Su elipse mide ≈ 345 × 390 m de
+  semiejes con centro ≈ 41.6535, -4.7270; deja la Plaza del Poniente en el borde oeste y San Pablo justo fuera, al
+  noreste. Como el texto dice «entre Poniente y San Pablo», se agranda un poco y se sube para que San Pablo quede justo
+  dentro.
+- **Valores usados (`js/mapa.js`, `CFG.centro` y `CFG.semiejes`):** centro **41.6540, -4.7268**, semiejes **380 m
+  este-oeste × 420 m norte-sur**. Distancia normalizada al óvalo (1 = el borde; el trazo «a mano» varía ±2,5 %): Plaza
+  del Poniente 1,01 · San Pablo 0,97 · Plaza Mayor 0,61 · Catedral (lateral) 0,66 · Plaza de Portugalete 0,67.
+- Encuadre: cabe entero a zoom 15 en el mapa del móvil (≈ 343×304 px) y a zoom 16 en pantallas ≥ 600 px.
+- Es una recomendación visual («entorno del centro»), no un límite.
 
 ## 7. URLs de Google Maps (bien codificadas; no se han podido probar contra Google)
 
