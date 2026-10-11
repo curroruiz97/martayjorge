@@ -225,7 +225,7 @@
 .cierre__foto img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 78%;
   -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 30%); mask-image: linear-gradient(to bottom, transparent 0, #000 30%); }
 .cierre__texto { position: relative; z-index: 1; display: grid; justify-items: center; gap: .9rem; }
-.cierre__titulo { font-size: min(clamp(2.6rem, 1.6rem + 5vw, 5.5rem), 12vw); line-height: 1.15; overflow-wrap: anywhere; text-shadow: 0 0 .5em rgba(251, 249, 241, .75); }
+.cierre__titulo .rotulo { --cap: min(3.4rem, 9vw); }
 .cierre__firma { max-width: 100%; color: var(--tinta); font-size: 1.15rem; letter-spacing: .02em; text-shadow: 0 0 .9em rgba(245, 240, 228, .9); }
 @media (min-width: 900px) { .cierre__foto img { object-position: 50% 62%; } }
 
@@ -234,8 +234,6 @@
 .acuarela { display: block; width: 100%; height: auto; }
 .acuarela-fig { margin: 0 auto; display: grid; justify-items: center; }
 .acuarela-fig .acuarela { width: var(--w); }
-.acuarela-fig--almohada { --w: min(76vw, 22rem); margin-bottom: clamp(1.25rem, 4vw, 2rem); }
-.acuarela-fig--maleta { --w: min(58vw, 14rem); margin-bottom: 1rem; }
 
 /* Mesa puesta entre la portada y la agenda: una guirnalda que se repite a todo el ancho y, debajo, el dibujo */
 .mesa { --tile: clamp(180px, 46vw, 300px); display: grid; justify-items: center; margin-top: 1.25rem; }

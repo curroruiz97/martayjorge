@@ -6,6 +6,8 @@
   almohada     almohada y llave de habitación (Alojamiento)                             640 × 400
   maleta       maleta antigua con pegatinas (Lista de bodas)                            520 × 400
   granadas     par de granadas con hojas (pie de página)                                380 × 220
+  alianzas-icono  dos alianzas, icono junto al título «Lista de bodas»                  240 × 170
+  almohada-icono  almohada y llave, icono junto al título «Alojamiento»                 300 × 220
 """
 import math
 
@@ -93,4 +95,18 @@ def granadas():
     return L
 
 
-ESCENAS = {"guirnalda": guirnalda, "bodegon": bodegon, "ramo": ramo, "almohada": almohada, "maleta": maleta, "granadas": granadas}
+def alianzas_icono():
+    L = Lienzo(240, 170, 29)
+    O.anillos(L, 122, 92, 56)
+    return L
+
+
+def almohada_icono():
+    L = Lienzo(300, 220, 37)
+    O.almohada(L, 150, 92, 230, 140, -4)
+    O.llave(L, 92, 172, 150, 6, etiqueta=False)
+    return L
+
+
+ESCENAS = {"guirnalda": guirnalda, "bodegon": bodegon, "ramo": ramo, "almohada": almohada, "maleta": maleta, "granadas": granadas,
+           "alianzas-icono": alianzas_icono, "almohada-icono": almohada_icono}

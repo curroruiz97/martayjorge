@@ -20,18 +20,24 @@
 .intro { animation: entrar 1s var(--ev) var(--d, 0s) backwards; }
 @keyframes entrar { from { opacity: 0; transform: translateY(.9rem); filter: blur(4px); } }
 
-/* ---- Nombres escritos a pluma ---- */
+/* ---- Nombres pintados a pincel (imagen y ejes de cada trazo: scripts/rotulos/generar.py) ----
+   Mientras se pintan, una máscara con los ejes de los trazos (se dibujan uno tras otro) descubre la imagen; al acabar
+   (--fin, lo escribe el generador) se funde con la imagen entera, sin máscara. Si un navegador no animara la máscara,
+   los nombres aparecen igual en ese fundido. Reposo (sin animación): solo la imagen entera. */
 .nombres { display: block; margin: 0; line-height: 0; }
-.nombres__svg { display: block; width: var(--n); height: auto; margin-inline: auto; overflow: visible; color: var(--rojo); }
-.tz {
-  fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round;
+.nombres__svg { display: block; width: var(--n); height: auto; margin-inline: auto; overflow: visible; }
+.nombres__svg mask .tz {
+  fill: none; stroke: #fff; stroke-linecap: round; stroke-linejoin: round;
   stroke-dasharray: 1 2; stroke-dashoffset: 0;
   animation: pluma var(--t) var(--ev-pluma) calc(var(--d) + var(--escritura)) backwards;
 }
 @keyframes pluma { from { stroke-dashoffset: 1; } }
-/* el relleno real de la letra entra al terminar su trazo y remata cualquier hueco */
-.rl { fill: currentColor; animation: relleno .5s ease-out calc(var(--d) + var(--escritura)) backwards; }
+.nombres__pinta { opacity: 0; animation: pinta-fuera .5s linear calc(var(--escritura) + var(--fin)) both; }
+@keyframes pinta-fuera { from { opacity: 1; } to { opacity: 0; } }
+.nombres__final { animation: relleno .5s ease-out calc(var(--escritura) + var(--fin)) backwards; }
 @keyframes relleno { from { opacity: 0; } }
+/* la entrada no arranca hasta tener la imagen de los nombres (lo quita js/intro.js; como mucho 2,5 s, ver boot.js) */
+.espera-nombres .portada *, .espera-nombres .portada *::before { animation-play-state: paused !important; }
 
 /* ---- Ventana en arco con puertas de papel ---- */
 .ventana { position: relative; overflow: hidden; border-radius: inherit; perspective: 1500px; perspective-origin: 50% 38%; isolation: isolate; transform: translateZ(0); }
@@ -73,10 +79,6 @@
 /* ---- Foto sin llegar todavía (conexión lenta): las puertas y el enfoque esperan (lo activa js/intro.js) ---- */
 .espera-foto .postigo, .espera-foto .postigo__sombra, .espera-foto .ventana img, .espera-foto .portada__foto.marco::before { animation-play-state: paused; }
 
-/* ---- Alto contraste de Windows (forced-colors): el color de los nombres va en SVG y no se fuerza solo ---- */
-@media (forced-colors: active) {
-  .nombres__svg { color: CanvasText; }
-}
 
 /* ---- Sin movimiento: la portada sale completa, sin esperar a ningún retardo ---- */
 @media (prefers-reduced-motion: reduce) {

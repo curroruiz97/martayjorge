@@ -349,8 +349,8 @@ def almohada(L, cx, cy, w, h, rot=0.0):
         L.linea(L.suave([(p[0] + L.jit(0, 2), p[1] + L.jit(0, 2)) for p in pts], True, .3), 1.5, "#4d6e82", .75)
 
 
-def llave(L, cx, cy, largo, rot=0.0, numero="1005"):
-    """Llave antigua con etiqueta; (cx, cy) es el centro de la anilla."""
+def llave(L, cx, cy, largo, rot=0.0, numero="1005", etiqueta=True):
+    """Llave antigua con etiqueta (opcional); (cx, cy) es el centro de la anilla."""
     with L.grupo(rot, cx, cy):
         r = largo * .16
         L.trazo_color(L.blob(cx, cy, r, r, 10, .03), PAL["oro"], r * .55, .92, rim=PAL["oro_osc"])
@@ -360,6 +360,8 @@ def llave(L, cx, cy, largo, rot=0.0, numero="1005"):
         for k, f in enumerate((.72, .85)):
             L.trazo_color(L.curva([(cx + largo * f, cy), (cx + largo * f, cy + r * (.9 if k == 0 else .7))]), PAL["oro"], r * .34, .92, rim=PAL["oro_osc"])
         L.linea(L.curva([(cx + r * 1.1, cy - r * .2), (cx + largo * .9, cy - r * .2)]), 1.2, "#6b5210", .6)
+        if not etiqueta:
+            return
         # etiqueta colgando de un hilo
         L.linea(L.curva([(cx, cy + r * 1.1), (cx - largo * .08, cy + largo * .22), (cx - largo * .1, cy + largo * .32)]), 1.3, TINTA, .7)
         tag = [(cx - largo * .2, cy + largo * .3), (cx + largo * .04, cy + largo * .28), (cx + largo * .06, cy + largo * .46), (cx - largo * .18, cy + largo * .48)]

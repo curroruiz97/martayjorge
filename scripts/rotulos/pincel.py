@@ -29,15 +29,19 @@ from pluma import catmull_denso  # noqa: E402
 
 import alfabeto  # noqa: E402
 
-ROJO_LADRILLO = (160, 58, 40)    # #a03a28 (= --rojo de la web)
-NEGRO = (35, 31, 28)             # negro cálido de tinta china
+# Tintas de acuarela, claras y suaves (lo pidieron así tras ver las muestras con rojo ladrillo y negro)
+TERRACOTA = (186, 98, 76)        # #ba624c · títulos y nombres
+GRIS_PAYNE = (104, 112, 122)     # #68707a · acentos (la «y» de los nombres, «S.R.C.»): el negro, aguado
+ROJO_LADRILLO = (168, 74, 51)    # #a84a33 (= --rojo de la web): botones, más denso para que el texto blanco se lea
+NEGRO = (35, 31, 28)             # negro cálido de tinta china (solo para pruebas)
 BLANCO = (255, 255, 255)         # para máscaras
 
 # Estilos de pincel (todas las medidas relativas a la altura de la mayúscula o del trazo)
 ESTILOS = {
     # rotulado de títulos y nombres
+    # (densidad baja: la tinta es transparente, como una acuarela, y los cruces se notan)
     'rotulo': dict(ancho=0.19, cerdas=72, carga=1.55, recorrido=1.5, fin=(0.42, 0.62), seco=0.55,
-                   umbral=(0.16, 0.62), suavidad=0.07, densidad=2.6, temblor=0.012),
+                   umbral=(0.16, 0.62), suavidad=0.07, densidad=1.7, temblor=0.012),
     # más seco: más estrías y bordes más rotos
     'rotulo-seco': dict(ancho=0.19, cerdas=72, carga=1.35, recorrido=1.15, fin=(0.32, 0.5), seco=0.7,
                         umbral=(0.18, 0.66), suavidad=0.06, densidad=2.5, temblor=0.014),
@@ -72,10 +76,11 @@ def ruido_valor(h, w, celda, rng):
 
 
 def papel(h, w, ss, semilla):
-    """Relieve del papel de acuarela en [0, 1] (1 = pico). Tres escalas de grano."""
+    """Relieve del papel de acuarela en [0, 1] (1 = pico). Tres escalas de grano (en px finales; el más fino no
+    baja de 1,3 px: por debajo del píxel solo añade ruido que encarece las imágenes sin verse)."""
     rng = np.random.RandomState(semilla)
     g = np.zeros((h, w), np.float32)
-    for celda, peso in ((0.7, 0.5), (2.5, 0.35), (9.0, 0.15)):
+    for celda, peso in ((1.3, 0.45), (3.0, 0.4), (9.0, 0.15)):
         g += peso * ruido_valor(h, w, celda * ss, rng)
     lo, hi = np.percentile(g, [2, 98])
     return np.clip((g - lo) / (hi - lo), 0.0, 1.0)
@@ -249,17 +254,19 @@ class Lienzo:
 
 
 def rotular(lineas, cap, estilo='rotulo', semilla=1, tinta=None, ss=4, interlinea=0.42, margen=0.3,
-            ancho_fijo=None):
+            margen_x=None, ancho_fijo=None, pintar=True):
     """Rotula `lineas` (lista de textos) con mayúsculas de pincel seco.
 
     cap      altura de la mayúscula en px finales
-    tinta    función (linea, indice, caracter) → color; por defecto, rojo ladrillo
+    tinta    función (linea, indice, caracter) → color; por defecto, terracota
+    margen   aire arriba y abajo (en mayúsculas; deja sitio a tildes y al ¡); margen_x, a los lados
+    pintar   False: solo mide (devuelve el lienzo vacío)
     Devuelve (Lienzo, info) con info = {'u': ancho/cap, 'letras': [...]} y, en el lienzo, los ejes
     de cada trazo (para animar la escritura).
     """
     est = ESTILOS[estilo]
     rng = np.random.RandomState(semilla)
-    tinta = tinta or (lambda *_: ROJO_LADRILLO)
+    tinta = tinta or (lambda *_: TERRACOTA)
     # 1) maquetación en unidades de mayúscula (con la irregularidad de cada letra)
     disposicion = []
     anchos = []
@@ -277,14 +284,17 @@ def rotular(lineas, cap, estilo='rotulo', semilla=1, tinta=None, ss=4, interline
             pen += av * sx + tr
         anchos.append(pen - tr if fila else 0)
         disposicion.append(fila)
+    mx = margen if margen_x is None else margen_x
     ancho_u = max(anchos) if ancho_fijo is None else ancho_fijo
     alto_u = 2 * margen + len(lineas) + (len(lineas) - 1) * interlinea
-    W = int(math.ceil((ancho_u + 2 * margen) * cap))
+    info = {'u': ancho_u + 2 * mx, 'alto_u': alto_u, 'letras': []}
+    W = int(math.ceil((ancho_u + 2 * mx) * cap))
     H = int(math.ceil(alto_u * cap))
+    if not pintar:
+        return None, info
     lz = Lienzo(W, H, ss=ss, densidad=est['densidad'])
-    letras = []
     for li, fila in enumerate(disposicion):
-        x_ini = margen + (ancho_u - anchos[li]) / 2
+        x_ini = mx + (ancho_u - anchos[li]) / 2
         y_base = margen + li * (1 + interlinea)
         for ch, av, trazos, pen, sx, sy, rot, dy, _, ci in fila:
             cxg, cyg = av / 2, 0.5
@@ -307,5 +317,5 @@ def rotular(lineas, cap, estilo='rotulo', semilla=1, tinta=None, ss=4, interline
                 lz.trazo(px, color, est, rng, est['ancho'] * cap, tipo=tipo,
                          recorte=rng.uniform(0.03, 0.08) if op.get('cerrado') else 0.0,
                          punto=bool(op.get('punto')))
-            letras.append((ch, li, ci, n0, len(lz.trazos)))
-    return lz, {'u': (ancho_u + 2 * margen), 'alto_u': alto_u, 'letras': letras}
+            info['letras'].append((ch, li, ci, n0, len(lz.trazos)))
+    return lz, info

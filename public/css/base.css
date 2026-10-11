@@ -141,6 +141,13 @@ a:hover { text-decoration-thickness: 2px; }
 }
 .titulo { position: relative; display: inline-block; padding-bottom: .38em; font-size: min(var(--fs-h2), 11.5vw); text-wrap: balance; overflow-wrap: anywhere; }   /* el tope en vw evita que una palabra larga se salga con la letra muy ampliada */
 .titulo::after { content: ""; position: absolute; left: -3%; right: -3%; bottom: 0; height: .3em; background: var(--subrayado) center / 100% 100% no-repeat; }
+/* Rótulos a pincel seco (imágenes de scripts/rotulos): todos con la misma altura de mayúscula (--cap); el ancho sale
+   de --u (ancho de la imagen en mayúsculas), que el generador escribe en cada <img>. El texto va en un .sr-only. */
+.titulo--rotulo { display: flex; justify-content: center; align-items: center; gap: .3rem; width: 100%; padding-bottom: 0; font-size: 1rem; }
+.titulo--rotulo::after { content: none; }
+.rotulo { --cap: min(2.75rem, 8.4vw); width: min(100%, calc(var(--cap) * var(--u))); height: auto; min-width: 0; flex: 0 1 auto; }
+/* icono de acuarela a la izquierda del título, del alto de las mayúsculas */
+.titulo__icono { height: calc(min(2.75rem, 8.4vw) * 1.15); width: auto; flex: none; }
 /* Texto en cursiva serif (ya es el estilo base de la página) */
 .cursiva { font-style: italic; font-weight: 400; }
 .suave { color: var(--tinta-suave); }
@@ -161,8 +168,13 @@ a { color: var(--tinta-suave); }
 }
 .boton:hover { background: var(--rojo); color: var(--papel); text-decoration: none; }
 .boton:active { transform: scale(.98); }
-.boton--solido { background: var(--rojo); color: var(--papel); }
-.boton--solido:hover { background: var(--rojo-hover); border-color: var(--rojo-hover); }
+/* El botón principal va sobre una pincelada (scripts/rotulos/piezas.py), más ancha que el texto */
+.boton--solido {
+  border-color: transparent; border-radius: 0; color: var(--papel); padding-inline: min(2.4rem, 7vw);
+  background: url("../assets/rotulos/pincelada-boton.webp") center / 100% 100% no-repeat;
+  text-shadow: 0 0 .6em rgba(110, 40, 24, .35);
+}
+.boton--solido:hover { background: url("../assets/rotulos/pincelada-boton.webp") center / 100% 100% no-repeat; border-color: transparent; filter: brightness(.9) saturate(1.08); }
 .boton[disabled], .boton[aria-disabled="true"] { opacity: .5; pointer-events: none; }
 /* Enlace rotulado: sin caja, con el subrayado a rotulador (como CÓMO LLEGAR / LISTA DE BODAS en la referencia) */
 .boton--enlace {

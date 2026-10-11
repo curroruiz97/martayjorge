@@ -283,7 +283,7 @@
   animation: rsvp-giro .8s linear infinite;
 }
 .rsvp-enviar--enviando .rsvp-enviar__giro { display: inline-block; }
-.rsvp .rsvp-enviar.rsvp-enviar--enviando { opacity: 1; background: var(--rojo-hover); color: var(--papel); }
+.rsvp .rsvp-enviar.rsvp-enviar--enviando { opacity: 1; filter: brightness(.88); color: var(--papel); }
 @keyframes rsvp-giro { to { transform: rotate(1turn); } }
 
 /* Avisos (error, sin conexión) */

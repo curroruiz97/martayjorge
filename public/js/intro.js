@@ -15,7 +15,20 @@
   window.addEventListener('scroll', alBajar, { passive: true });
   alBajar();
 
-  /* ---------- 0. Conexión lenta: las puertas no se abren hasta que la foto esté lista ---------- */
+  /* ---------- 0. Los nombres: la entrada espera a tener su imagen decodificada (boot.js pone el tope de 2,5 s) ---------- */
+  if (root.classList.contains('espera-nombres')) {
+    const listo = () => root.classList.remove('espera-nombres');
+    const fin = hero.querySelector('.nombres__final');
+    const src = fin && fin.getAttribute('href');
+    if (!src) listo();
+    else {
+      const im = new Image();
+      im.src = src;
+      (im.decode ? im.decode() : Promise.reject(new Error('sin decode'))).then(listo, () => { im.complete ? listo() : im.addEventListener('load', listo, { once: true }); });
+    }
+  }
+
+  /* ---------- 0b. Conexión lenta: las puertas no se abren hasta que la foto esté lista ---------- */
   const fotoHero = hero.querySelector('.ventana img');
   if (!reducir && !vista && fotoHero && !fotoHero.complete) {
     // tiempo que lleva sonando la entrada (todas las animaciones arrancan en el primer fotograma)

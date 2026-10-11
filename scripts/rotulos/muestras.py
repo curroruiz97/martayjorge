@@ -57,7 +57,7 @@ def main(salida):
         filas.append(('txt', titulo))
         a, _ = pincel.rotular(['AGENDA'], 72, estilo=est, semilla=3)
         n, _ = pincel.rotular(['MARTA Y JORGE'], 72, estilo=est, semilla=5,
-                              tinta=lambda li, ci, ch: pincel.NEGRO if ch == 'Y' else pincel.ROJO_LADRILLO)
+                              tinta=lambda li, ci, ch: pincel.GRIS_PAYNE if ch == 'Y' else pincel.TERRACOTA)
         filas.append(('img', [a.imagen(), n.imagen()]))
     filas.append(('txt', 'Botón con pincelada · fotos de lado a lado con el borde a pincel seco'))
     boton = piezas.pincelada_boton().resize((380, 95), Image.LANCZOS)
