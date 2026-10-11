@@ -17,21 +17,49 @@
   border: 1px solid var(--linea-fuerte); border-radius: inherit;
   transform: translate(min(.65rem, 3vw), min(.65rem, 3vw));   /* con la letra muy ampliada el desfase no pasa del margen */
 }
-/* Arco (ventana de iglesia) */
-.arco { border-radius: 999px 999px .5rem .5rem; }
-.arco img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: inherit; filter: saturate(.93) contrast(.99); }
+/* ---------- Fotos a pincel: de lado a lado, con los bordes deshechos en pinceladas sobre el lino ----------
+   Máscaras de scripts/rotulos/piezas.py (blanco con alfa): una tira arriba, otra abajo y un relleno sólido en medio,
+   para que el borde no se deforme aunque cambie la altura de la foto. --b: alto de cada tira (≈ 1/10 del ancho, como
+   la imagen de la tira). En caja (escritorio, apaisado) la máscara es una sola con los cuatro lados rasgados. */
+.foto-pincel { margin: 0; container-type: inline-size; --b: 9vw; --b: 10cqw; }
+.foto-pincel img {
+  display: block; width: 100%; height: 100%; object-fit: cover; object-position: var(--foco, 50% 45%);
+  -webkit-mask-image: url("../assets/rotulos/borde-sup.webp"), url("../assets/rotulos/borde-inf.webp"), linear-gradient(#000, #000);
+          mask-image: url("../assets/rotulos/borde-sup.webp"), url("../assets/rotulos/borde-inf.webp"), linear-gradient(#000, #000);
+  -webkit-mask-size: 100% var(--b), 100% var(--b), 100% calc(100% - 2 * var(--b) + 2px);
+          mask-size: 100% var(--b), 100% var(--b), 100% calc(100% - 2 * var(--b) + 2px);
+  -webkit-mask-position: 0 0, 0 100%, 0 50%;
+          mask-position: 0 0, 0 100%, 0 50%;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+}
+.foto-pincel--arriba img {
+  -webkit-mask-image: url("../assets/rotulos/borde-sup.webp"), linear-gradient(#000, #000);
+          mask-image: url("../assets/rotulos/borde-sup.webp"), linear-gradient(#000, #000);
+  -webkit-mask-size: 100% var(--b), 100% calc(100% - var(--b) + 1px);
+          mask-size: 100% var(--b), 100% calc(100% - var(--b) + 1px);
+  -webkit-mask-position: 0 0, 0 100%;
+          mask-position: 0 0, 0 100%;
+}
+.foto-pincel--caja img {
+  -webkit-mask-image: url("../assets/rotulos/borde-4.webp");
+          mask-image: url("../assets/rotulos/borde-4.webp");
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%;
+  -webkit-mask-position: 0 0; mask-position: 0 0;
+}
 
 /* ---------- PORTADA ---------- */
-/* Todo se dimensiona con el ancho (vw) Y con el alto de la pantalla (svh), para que la portada quede bien en
-   móviles bajos, apaisados, tablets y monitores:
-     --n     ancho de la línea de nombres (el adorno de arriba mide ≈ la mitad)
-     --foto  ancho de la foto en arco (proporción 4:5)
-   Una columna (la composición del móvil) en cualquier pantalla con alto suficiente; dos columnas solo en apaisado bajo. */
+/* Todo se dimensiona con el ancho (vw) Y con el alto de la pantalla (svh), para que la portada quepa entera en una
+   pantalla en móviles bajos, apaisados, tablets y monitores:
+     --n       ancho de la línea de nombres;  --rn  su alto/ancho (lo escribe scripts/rotulos/generar.py en el <header>)
+     --foto-h  alto de la foto: se lleva todo lo que sobra después de lo que mide cada cosa
+   Móvil (< 700 px): la foto va a sangre, de lado a lado, con los bordes de arriba y abajo a pincel. Pantallas anchas:
+   la foto en una caja 4:5 con los cuatro bordes a pincel. Apaisado bajo (móvil girado): dos columnas. */
 .portada {
   --alto: var(--alto-pantalla, 100vh);   /* 100svh donde existe (ver base.css), 100vh en navegadores antiguos */
   --pad-v: clamp(1.25rem, 4vh, 3.5rem);
   --n: min(88vw, 28rem);
-  --foto: min(70vw, 20rem);
+  --foto-h: min(110vw, 30rem);
   --k: 1;                                /* tamaño de las cifras de la cuenta atrás respecto a --D */
   position: relative;
   min-height: 100vh; min-height: 100svh;
@@ -44,10 +72,22 @@
 }
 .portada__texto { grid-area: texto; display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; gap: .3rem; max-width: 100%; }
 .portada__aviso { font-size: 1.0625rem; letter-spacing: .02em; color: var(--tinta-suave); }
-.portada__foto { grid-area: foto; width: var(--foto); margin: 0; }
 .portada__extra { grid-area: extra; display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 1.75rem; max-width: 100%; }
 
-/* Fecha en rotulado a mano (como en la referencia) y la ciudad debajo en cursiva */
+/* La foto: a sangre (los márgenes negativos la llevan al borde de la pantalla sin usar 100vw) */
+.portada__foto { grid-area: foto; justify-self: stretch; margin-inline: calc(-1 * var(--gutter)); height: var(--foto-h); --foco: 50% 42%; }
+/* Pantallas anchas: caja 4:5 centrada con los cuatro bordes a pincel */
+@media (min-width: 700px) {
+  .portada__foto { justify-self: center; margin-inline: 0; width: calc(var(--foto-h) * .8); }
+}
+@media (min-width: 700px), (orientation: landscape) and (min-width: 560px) and (max-height: 620px) {
+  .portada__foto img {
+  -webkit-mask-image: url("../assets/rotulos/borde-4.webp"); mask-image: url("../assets/rotulos/borde-4.webp");
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%; -webkit-mask-position: 0 0; mask-position: 0 0;
+  }
+}
+
+/* Fecha en rotulado a mano y la ciudad debajo en cursiva */
 .portada__fecha { margin-top: .35rem; display: grid; justify-items: center; gap: .05rem; }
 .portada__fecha time { font: 400 clamp(1.3rem, 1.05rem + 1.2vw, 1.75rem)/1.2 var(--f-mano); letter-spacing: .12em; text-transform: uppercase; color: var(--rojo); }
 .portada__ciudad { font: italic 400 1.0625rem/1.3 var(--f-serif); color: var(--tinta-suave); }
@@ -62,14 +102,11 @@
 .cuenta__txt { margin-top: .25rem; font: italic 400 min(1rem, 4.2vw)/1.1 var(--f-serif); letter-spacing: .02em; text-transform: none; color: var(--tinta-suave); }
 .cuenta__estado { font-size: clamp(2rem, 1.5rem + 2vw, 2.75rem); color: var(--rojo); }
 
-/* Pista para seguir bajando (solo cuando la portada cabe entera en la pantalla; se apaga al hacer scroll) */
-.portada__baja { display: none; }
-.portada.scrolled .portada__baja { opacity: 0; transition: opacity .4s var(--ease); }
-
-/* Vertical (móvil y tablet) y pantallas con alto suficiente (portátiles, monitores): la portada ocupa EXACTAMENTE la pantalla;
-   sin hacer scroll se ve todo (nombres, fecha, foto, cuenta atrás y botón). La foto se lleva todo el alto que sobra después de lo que mide cada cosa:
+/* Vertical (móvil y tablet) y pantallas con alto suficiente (portátiles, monitores): la portada ocupa EXACTAMENTE la
+   pantalla; sin hacer scroll se ve todo (nombres, fecha, foto, cuenta atrás y botón). La foto se lleva el alto que sobra:
      --D  alto de las cifras de la cuenta atrás      --C  alto del botón
-   Lo que sobre (pantallas muy altas, donde la foto topa con el ancho) se reparte por igual entre los bloques. */
+   9,9 rem = etiqueta, fecha y ciudad (6,2) + textos de la cuenta atrás y huecos (2,2) + huecos entre bloques (1,5).
+   Lo que sobre (pantallas muy altas, donde la foto topa con su máximo) se reparte por igual entre los bloques. */
 @media (orientation: portrait), (min-height: 621px) {
   .portada {
     --pad-t: max(.6rem, calc(var(--alto) * .022));
@@ -77,8 +114,7 @@
     --D: min(clamp(1.6rem, calc(var(--alto) * .052), 2.8rem), 11vw);   /* tope por ancho: con la letra al 200 % las cifras no se salen */
     --C: clamp(2.4rem, calc(var(--alto) * .062), 3rem);
     --n: min(88vw, 28rem);
-    /* alto fijo ≈ adorno + etiqueta + nombres + fecha + ciudad (n × .313 + 6,2 rem), cuenta atrás y botón (k·D + C + 2,2 rem), huecos (1,5 rem) y el marco (.65 rem) */
-    --foto: min(70vw, 26rem, max(9rem, calc((var(--alto) - var(--pad-t) - var(--pad-b) - var(--n) * .313 - var(--k) * var(--D) - var(--C) - 10.6rem) * .8)));
+    --foto-h: clamp(min(60vw, 15rem), calc(var(--alto) - var(--pad-t) - var(--pad-b) - var(--n) * var(--rn, .18) - var(--k) * var(--D) - var(--C) - 9.9rem), min(125vw, 40rem));
     align-content: space-evenly;
     gap: .5rem;
     padding: var(--pad-t) var(--gutter) var(--pad-b);
@@ -90,61 +126,34 @@
   .portada__cta { min-height: var(--C); padding-block: 0; }
 }
 
-/* Apaisado bajo (móvil girado): dos columnas, para que todo quepa sin hacer scroll */
+/* Apaisado bajo (móvil girado): dos columnas, para que todo quepa sin hacer scroll; la foto, en caja 4:5 */
 @media (orientation: landscape) and (min-width: 560px) and (max-height: 620px) {
   .portada {
-    --pad-v: clamp(.75rem, calc(var(--alto) * .045), 3.5rem);
-    --n: min(36vw, 30rem, max(12rem, calc((var(--alto) - 2 * var(--pad-v) - 14rem) * 3.2)));
-    --foto: min(34vw, 28.75rem, max(9rem, calc((var(--alto) - 2 * var(--pad-v) - 1.5rem) * .8)));
+    --pad-v: clamp(.6rem, calc(var(--alto) * .045), 1.5rem);
+    --n: min(36vw, 30rem, max(9rem, calc((var(--alto) - 2 * var(--pad-v) - 10.5rem) * 3.4)));
+    --foto-h: calc(var(--alto) - 2 * var(--pad-v));
     grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
     grid-template-areas: "texto foto" "extra foto";
     grid-template-rows: auto auto;
     align-content: center; justify-items: center; align-items: center;
     column-gap: clamp(1.25rem, 5vw, 5.5rem);
-    row-gap: clamp(1rem, 4vh, 2.75rem);
+    row-gap: .5rem;
     width: min(100%, 77.5rem); margin-inline: auto;
     padding-block: var(--pad-v);
     padding-inline: var(--gutter);
   }
-  .portada__texto { align-self: end; }
-  .portada__extra { align-self: start; }
-  .portada__foto { justify-self: center; }
-  /* la columna de texto es más estrecha que la pantalla: la cuenta atrás no puede depender solo del tamaño de letra */
-  .cuenta__item { min-width: min(4.4rem, 9vw); }
-  .cuenta__num { font-size: calc(var(--k) * min(clamp(2.4rem, 1.7rem + 2.8vw, 3.3rem), 6.5vw)); }
-}
-/* Pantallas apaisadas muy bajas (móvil girado, portátiles pequeños): se compacta para que nombres, fecha y foto
-   quepan sin hacer scroll; el adorno de arriba se omite y la cuenta atrás se reduce */
-@media (orientation: landscape) and (min-width: 560px) and (max-height: 620px) {
-  .portada {
-    --pad-v: clamp(.6rem, calc(var(--alto) * .045), 1.5rem);
-    --n: min(36vw, 30rem, max(9rem, calc((var(--alto) - 2 * var(--pad-v) - 10.5rem) * 3.4)));
-    --foto: min(34vw, 28.75rem, max(7rem, calc((var(--alto) - 2 * var(--pad-v)) * .8)));
-    row-gap: .5rem;
-  }
-  .portada__texto { gap: .2rem; }
+  .portada__foto { justify-self: center; margin-inline: 0; width: min(34vw, calc(var(--foto-h) * .8)); height: auto; aspect-ratio: 4 / 5; }
+  .portada__texto { align-self: end; gap: .2rem; }
+  .portada__extra { align-self: start; gap: .6rem; }
   .portada__fecha { margin-top: .2rem; }
   .portada__fecha time { font-size: 1.15rem; }
   .portada__ciudad { font-size: .9375rem; line-height: 1.2; }
-  .portada__extra { gap: .6rem; }
   .cuenta { gap: .2rem; }
   .cuenta__num { font-size: calc(var(--k) * min(1.9rem, 6.5vw)); }
   .cuenta__txt { margin-top: .15rem; font-size: .875rem; }
   .cuenta__item { min-width: min(3.6rem, 9vw); }
   .portada__cta { min-height: 2.5rem; padding: .45rem 1.4rem .4rem; }
 }
-@media (orientation: landscape) and (min-width: 900px) and (min-height: 640px) {
-  .portada__baja {
-    display: block; position: absolute; left: 50%; bottom: clamp(.75rem, calc(var(--alto) * .026), 1.5rem);
-    width: 1px; height: 2.6rem; margin-left: -.5px; pointer-events: none;
-    background: linear-gradient(var(--linea-fuerte), transparent);
-  }
-  .portada__baja::after {
-    content: ""; position: absolute; left: -2px; top: 0; width: 5px; height: 5px; border-radius: 50%;
-    background: var(--rojo); animation: baja 2.8s var(--ease) infinite;
-  }
-}
-@keyframes baja { 0% { transform: translateY(0); opacity: 0; } 25% { opacity: 1; } 75% { opacity: 1; } 100% { transform: translateY(2.4rem); opacity: 0; } }
 
 /* ---------- AGENDA ---------- */
 .agenda__grid { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; row-gap: 1.25rem; }
@@ -195,9 +204,27 @@
 .mapa__pie a { color: var(--rojo); }
 .mapa__pie a { display: inline-block; padding: .55rem .25rem; }   /* zona táctil de al menos 24 px de alto */
 
-/* ---------- INTERLUDIO (foto) ---------- */
-.interludio { margin: 0; display: grid; justify-items: center; padding-inline: var(--gutter); padding-bottom: 1.5rem; overflow: clip; }
-.interludio__marco { width: min(72vw, 21rem); transform: rotate(-1.2deg); margin-bottom: .75rem; }
+/* ---------- INTERLUDIO (foto de la playa): de lado a lado, aparece con una aguada al entrar en pantalla ---------- */
+.interludio { --foco: 50% 62%; }
+.interludio img { aspect-ratio: 1; }
+@media (min-width: 700px) {
+  .interludio { width: 30rem; margin-inline: auto; }
+  .interludio img {
+    aspect-ratio: 4 / 5;
+  -webkit-mask-image: url("../assets/rotulos/borde-4.webp"); mask-image: url("../assets/rotulos/borde-4.webp");
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%; -webkit-mask-position: 0 0; mask-position: 0 0;
+  }
+}
+/* la aguada: la máscara (un tercio opaco, un frente rasgado, un tercio transparente) baja al hacerse visible */
+.js .interludio {
+  -webkit-mask-image: url("../assets/rotulos/aguada.webp"); mask-image: url("../assets/rotulos/aguada.webp");
+  -webkit-mask-size: 100% 300%; mask-size: 100% 300%; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-position: 0 100%; mask-position: 0 100%;
+  transition: opacity .9s var(--ease), transform .9s var(--ease), -webkit-mask-position 1.7s var(--ease), mask-position 1.7s var(--ease);
+}
+.js .interludio.visible, .reveal-fallback .interludio { -webkit-mask-position: 0 0; mask-position: 0 0; }
+.js .interludio.pintada, .reveal-fallback .interludio { -webkit-mask-image: none; mask-image: none; }   /* main.js: al acabar, sin máscara */
+@media (prefers-reduced-motion: reduce) { .js .interludio { -webkit-mask-image: none; mask-image: none; } }
 
 /* ---------- LISTA DE BODAS ---------- */
 .regalo__texto { max-width: 36ch; margin-inline: auto; text-wrap: pretty; }
@@ -215,20 +242,13 @@
 .iban__copiar.copiado { background: var(--rojo); color: var(--papel); }
 .regalo__gracias { font-size: min(clamp(1.9rem, 1.5rem + 2vw, 2.6rem), 9vw); margin-top: 1.5rem; color: var(--rojo); }
 
-/* ---------- CIERRE ---------- */
-.cierre {
-  position: relative; display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; align-content: start;
-  min-height: min(100vh, 62rem); min-height: min(100svh, 62rem); text-align: center; overflow: hidden;
-  padding: clamp(2.5rem, 9vh, 5.5rem) var(--gutter) env(safe-area-inset-bottom);
-}
-.cierre__foto { position: absolute; inset: 0; z-index: 0; }
-.cierre__foto img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 78%;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 30%); mask-image: linear-gradient(to bottom, transparent 0, #000 30%); }
-.cierre__texto { position: relative; z-index: 1; display: grid; justify-items: center; gap: .9rem; }
-.cierre__titulo .rotulo { --cap: min(3.4rem, 9vw); }
-.cierre__firma { max-width: 100%; color: var(--tinta); font-size: 1.15rem; letter-spacing: .02em; text-shadow: 0 0 .9em rgba(245, 240, 228, .9); }
-@media (min-width: 900px) { .cierre__foto img { object-position: 50% 62%; } }
-
+/* ---------- CIERRE: «¡Os esperamos!» sobre el cielo de la foto, que se ve entera (desde más lejos). Es el final de la página. ---------- */
+.cierre { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-areas: "todo"; padding-bottom: env(safe-area-inset-bottom); }
+.cierre__foto, .cierre__texto { grid-area: todo; }
+.cierre__foto img { height: auto; aspect-ratio: 1600 / 1304; max-height: 92vh; max-height: 92svh; --foco: 50% 70%; }
+.cierre__texto { position: relative; z-index: 1; align-self: start; display: grid; justify-items: center; gap: .3rem; padding: clamp(1.5rem, 8vw, 4rem) var(--gutter) 0; text-align: center; }
+.cierre__titulo .rotulo { --cap: min(3.4rem, 9vw); filter: drop-shadow(0 0 .45rem rgba(251, 249, 241, .9)); }
+.cierre__firma { max-width: 100%; color: var(--tinta); font-size: 1.15rem; letter-spacing: .02em; text-shadow: 0 0 .9em rgba(245, 240, 228, .95), 0 0 .3em rgba(245, 240, 228, .9); }
 
 /* ---------- ILUSTRACIONES DE ACUARELA (decorativas; se generan con scripts/acuarela) ---------- */
 .acuarela { display: block; width: 100%; height: auto; }

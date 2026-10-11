@@ -43,7 +43,12 @@
     if (!('IntersectionObserver' in window)) { els.forEach((e) => e.classList.add('visible')); return; }
     const io = new IntersectionObserver((entradas) => {
       entradas.forEach((e) => {
-        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+          // foto que aparece con una aguada: al terminar se le quita la máscara (ver .interludio en site.css)
+          if ('aguada' in e.target.dataset) setTimeout(() => e.target.classList.add('pintada'), 1900);
+        }
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
     els.forEach((e) => io.observe(e));
@@ -207,7 +212,7 @@
       const eventos = ['wheel', 'touchstart', 'pointerdown', 'keydown', 'scroll'];
       const abrir = () => { eventos.forEach((e) => window.removeEventListener(e, abrir)); abierta(); };
       eventos.forEach((e) => window.addEventListener(e, abrir, { passive: true }));
-      setTimeout(abrir, Math.max(0, 4300 - performance.now()));
+      setTimeout(abrir, Math.max(0, 3700 - performance.now()));
     });
   }
 
