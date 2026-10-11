@@ -1,5 +1,6 @@
 """
-rutas.py · ruta discontinua con lazo en forma de corazón + avioncito de papel.
+rutas.py · ruta discontinua que serpentea entre la iglesia y el Palomar + avioncito de papel.
+(La V1 llevaba un lazo en forma de corazón y una versión horizontal: siguen en la etiqueta git v1.)
 
 Estructura (la usa el JS de la web):
   <path id="ruta">  UN solo trazo continuo, sin subtrazos, discontinuo (stroke-dasharray).
@@ -16,7 +17,7 @@ GUIONES = "9 6.5 7 7 10.5 6 6.5 7.5 8 6"
 
 
 def _mano(pts, semilla, amp=0.6):
-    """Leve temblor sobre los puntos de paso (los extremos y la punta del corazón quedan fijos)."""
+    """Leve temblor sobre los puntos de paso (los extremos quedan fijos)."""
     rng = random.Random(semilla)
     out = []
     for i, (x, y) in enumerate(pts):
@@ -62,41 +63,13 @@ def _svg(w, h, d, titulo, grosor=2.1):
     return "\n".join(o) + "\n"
 
 
-def horizontal():
-    """viewBox 480 x 150 (pensada para verse a ~260-420 px de ancho, en la columna central
-    de la agenda). De izquierda a derecha; corazón hacia el primer tercio."""
-    T = (168.0, 108.0)
-    pts = [
-        (14.0, 96.0), (44.0, 90.0), (76.0, 93.5), (104.0, 102.0), (126.0, 110.0), (146.0, 113.5),
-        (158.0, 112.0),
-        T,                                   # punta del corazón (entrada, subiendo)
-        (184.0, 94.0), (197.5, 77.0), (202.0, 60.0), (195.0, 47.5), (181.5, 44.5), (171.5, 52.0),
-        (167.5, 63.0),                       # hendidura (pico)
-        (163.0, 52.0), (152.0, 44.0), (138.5, 46.5), (130.5, 59.5), (134.5, 78.0), (149.0, 95.0),
-        T,                                   # punta (salida, bajando)
-        (184.0, 119.0), (204.0, 127.0), (236.0, 127.5), (276.0, 119.0), (322.0, 108.5), (366.0, 105.0),
-        (406.0, 107.5), (440.0, 102.0), (462.0, 94.0),
-    ]
-    pts = _mano(pts, 8, amp=0.4)
-    pts[7] = pts[21] = T
-    d = _ruta_d(pts, [14])
-    return _svg(480, 150, d, "Ruta de la iglesia de San Pablo al Palomar", grosor=2.4)
-
-
 def vertical():
-    """viewBox 170 x 560. De arriba abajo; corazón hacia el primer tercio."""
+    """viewBox 220 x 560. De arriba abajo: un caminito que serpentea en cuatro curvas amplias (sin corazón; V2)."""
     pts = [
-        (86.0, 18.0), (91.0, 50.0), (79.0, 88.0), (58.0, 132.0), (42.0, 176.0), (36.5, 214.0),
-        (42.0, 240.0), (59.0, 252.0), (80.0, 248.5),
-        (100.0, 236.0),                      # punta del corazón (entrada)
-        (115.0, 222.0), (128.5, 205.0), (133.0, 188.0), (126.0, 175.5), (112.5, 172.5), (102.5, 180.0),
-        (99.5, 191.0),                       # hendidura
-        (95.0, 180.0), (84.0, 172.0), (70.5, 174.5), (62.5, 187.5), (66.5, 206.0), (81.0, 223.0),
-        (100.0, 236.0),                      # punta (salida)
-        (115.0, 251.0), (126.0, 274.0), (122.0, 308.0), (105.0, 347.0), (89.0, 390.0), (90.0, 440.0),
-        (97.0, 484.0), (90.0, 516.0), (86.0, 540.0),
+        (110.0, 18.0), (140.0, 48.0), (176.0, 88.0), (182.0, 126.0), (152.0, 160.0), (88.0, 190.0),
+        (44.0, 226.0), (42.0, 266.0), (86.0, 296.0), (148.0, 322.0), (182.0, 358.0), (178.0, 398.0),
+        (134.0, 428.0), (72.0, 452.0), (46.0, 484.0), (68.0, 514.0), (108.0, 540.0),
     ]
-    pts = _mano(pts, 11, amp=0.45)
-    pts[9] = pts[23] = (100.0, 236.0)
-    d = _ruta_d(pts, [16])
-    return _svg(170, 560, d, "Ruta de la iglesia de San Pablo al Palomar")
+    pts = _mano(pts, 11, amp=0.8)
+    d = _ruta_d(pts, [])
+    return _svg(220, 560, d, "Ruta de la iglesia de San Pablo al Palomar", grosor=2.3)

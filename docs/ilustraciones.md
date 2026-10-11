@@ -1,54 +1,110 @@
 # Ilustraciones · Marta y Jorge
 
-> **Nota de ubicación:** esta guía vive en `docs/` para no publicarse con la web. Las variantes solo tinta (`san-pablo-linea.svg`, `palomar-linea.svg`) están en `docs/ilustraciones/` por la misma razón; las ilustraciones que usa la web están en `public/assets/ilustraciones/`.
+> **Nota de ubicación:** esta guía vive en `docs/` para no publicarse con la web. Los dibujos a pluma de la V1
+> (`san-pablo.svg`, `palomar.svg` y sus variantes `-linea.svg`) están en `docs/ilustraciones/` y `docs/ilustraciones/v1/`
+> por la misma razón; lo que usa la web está en `public/assets/`.
 
-Hay **dos familias** de dibujos:
+En la **V2** (comentarios de los novios: «efecto general de acuarela, hecho a mano, con irregularidades a pincel seco») hay
+**tres familias**, todas hechas con código, propias y reproducibles (mismas semillas → mismas imágenes):
 
-1. **A pluma** (este documento, §1 en adelante): San Pablo, el Palomar, la ruta con el corazón, adornos, iconos y favicon. SVG vectorial.
-2. **De acuarela** (§0, justo debajo): la guirnalda y la mesa puesta entre la portada y la Agenda, el ramo con las alianzas, la
-   almohada con la llave, la maleta y las granadas del pie. Se dibujan con código y se publican como WebP con transparencia.
+1. **Rotulado a pincel** (§R): títulos de sección, los nombres y la fecha de la portada (pincel de acuarela fino), los
+   bordes de las fotos, la aguada de la entrada y la pincelada de los botones (pincel seco).
+   `scripts/rotulos/` → `public/assets/rotulos/`.
+2. **Acuarelas** (§0): la guirnalda y el bodegón entre la portada y la Agenda, San Pablo y el Palomar (§A) y los iconos
+   de Alojamiento y Lista de bodas. `scripts/acuarela/` → `public/assets/ilustraciones/acuarela/`.
+3. **A pluma** (§1 en adelante): la ruta con el avión de la Agenda, adornos, iconos y favicon (SVG). San Pablo y el
+   Palomar a pluma eran de la V1 y se conservan fuera de la web.
+
+
+## R. Rotulado a pincel (`scripts/rotulos/` → `public/assets/rotulos/`)
+
+> **Estilo definitivo** (segunda vuelta de la V2): los novios mandaron una invitación de referencia (rotulado a acuarela
+> rojo, con subrayados a mano) y pidieron ese estilo pero más legible y estiloso. Se usa `ESTILOS['acuarela-gracia']`:
+> pincel redondo fino y cargado de agua, sin estrías secas, más grueso al bajar que al subir, tinta roja transparente
+> (`#b23a40`) que se acumula en los bordes y donde se levanta el pincel, letras más anchas y espaciadas con alguna algo
+> más pequeña y un poco de rebote; los títulos llevan un subrayado a mano. La primera vuelta (pincel seco grueso, que se
+> describe abajo) sigue en `ESTILOS['rotulo']` y se usa para los bordes de las fotos y la pincelada de los botones.
+
+- **`alfabeto.py`**: mayúsculas de **un solo trazo**, en el orden y el sentido en que las pinta un rotulista, condensadas
+  (avance ≈ 0,62 de la altura) para que los títulos largos quepan en el móvil. Las vocales con tilde, `¡ ! . ·` incluidos.
+- **`pincel.py`**: el pincel. Cada trazo se muestrea por longitud de arco; la presión tiene ataque, cuerpo con ruido y
+  salida afilada; el pincel son 72 cerdas con su carga, que se van secando con la distancia (flancos más secos,
+  deshilachado al final, alguna cerda suelta); el **grano del papel** decide dónde agarra el pigmento, así salen las
+  estrías y los bordes rasgados que siguen la dirección del trazo. Cada letra lleva su escala, giro y línea base algo
+  distintos, y las curvas cerradas (O, D, B, P, R) se quedan un poco sin cerrar. Solo numpy y Pillow.
+- **Tinta**: rojo acuarela `#b23a40` (el rojo de la referencia, medido sobre su captura) en títulos, nombres y fecha; es
+  también el `--rojo` de la web (botones, fechas, enlaces, mapa y ruta). En la primera vuelta se probaron terracota y gris
+  Payne (`TERRACOTA`, `GRIS_PAYNE` en `pincel.py`).
+- **`generar.py`** escribe los WebP y **el marcado en `public/index.html`** entre `<!-- rotulo:ID -->` y
+  `<!-- /rotulo:ID -->` (la imagen de cada título con su texto en un `.sr-only`, y el SVG de los nombres con los ejes de
+  sus trazos para la animación). Los títulos están en `TITULOS` (texto, semilla, tinta, icono). Comprueba que los ejes de
+  los nombres cubren toda la tinta de la imagen.
+- **`piezas.py`**: bordes de foto (`borde-sup`, `borde-inf`, `borde-4`, blancos con alfa: se usan como máscaras), la
+  aguada de la entrada y la pincelada de los botones.
+- **`muestras.py`**: hojas de muestras para elegir (`--acuarela`: variantes del pincel de acuarela y la tinta; sin
+  opciones: las del pincel seco de la primera vuelta).
+- Pesos: cada título 11–38 KB (una sola imagen con la mayúscula a 104 px, nítida en móviles 3× y pantallas 2×), nombres
+  ≈ 18 KB, fecha ≈ 12 KB, máscaras 3–16 KB.
+
+```bash
+python3 scripts/rotulos/generar.py       # ≈ 10 s
+python3 scripts/rotulos/muestras.py hoja.png
+```
 
 
 ## 0. Acuarelas (`public/assets/ilustraciones/acuarela/*.webp`)
 
-Son dibujos **propios**, hechos con código (no están calcados ni copiados de ninguna otra web): la misma idea —una mesa puesta, una
-boda, un viaje— con trazo propio. Cada objeto (tomate, vela, copa, gerbera, maleta…) se compone de manchas de color con el borde
-irregular y el pigmento acumulado en el contorno (filtros SVG: desplazamiento, desenfoque, granulado de papel) y unas líneas de tinta
-finas y algo temblorosas, ligeramente «desregistradas» como en una ilustración impresa.
+Cada objeto (tomate, vela, copa, girasol, jarra…) se compone de manchas de color con el borde irregular y el pigmento
+acumulado en el contorno (filtros SVG que pinta Chromium) y unas líneas de tinta finas. En la V2 la librería (`lib.py`)
+pinta más «a mano»: **saturación desigual** dentro de cada mancha, **bordes que a ratos se pierden** en el papel,
+**floraciones** (zonas más claras donde el agua empujó el pigmento), grano de papel más visible y **tinta a trazos, fina y
+desalineada** con el color (`DESREGISTRO`), como en un boceto de tinta y acuarela. Paleta cálida y apagada (`objetos.PAL`):
+terracota, mostaza, verde salvia, rosa polvoriento y crema, más el turquesa del candelabro y el verde botella.
 
 | Fichero | Dónde sale | Tamaños |
 |---|---|---|
-| `guirnalda-630.webp` | tira de banderines que se repite a todo el ancho, sobre la mesa puesta | 630 px (se muestra a 180–300 px) |
-| `bodegon-640/1000.webp` | mesa puesta: narcisos, vela, copa, gerberas, botella, tomates… (entre la portada y la Agenda) | 640 y 1000 px |
-| `ramo-480/760.webp` | ramo de flores rojas con las alianzas (final de la Agenda) | 480 y 760 px |
-| `almohada-460/700.webp` | almohada y llave de habitación (Alojamiento) | 460 y 700 px |
-| `maleta-380/560.webp` | maleta antigua con etiqueta «luna de miel» (Lista de bodas) | 380 y 560 px |
-| `granadas-300/420.webp` | dos granadas con hojas (pie de página) | 300 y 420 px |
+| `guirnalda-v2-630.webp` | tira de banderines que se repite a todo el ancho, sobre el bodegón | 630 px |
+| `bodegon-v2-640/1000.webp` | bodegón de boda rústica: narcisos en un jarrón, vela en candelabro turquesa, copa de rosado, menú, tomates cherry, rodajas de naranja, uvas, girasoles en una jarra de barro, botella verde y tarta | 640 y 1000 px |
+| `san-pablo-acuarela-640/960.webp`, `palomar-acuarela-640/960.webp` | Agenda (§A) | 640 y 960 px |
+| `almohada-icono-2x/3x.webp`, `alianzas-icono-2x/3x.webp` | iconos a la izquierda de «Alojamiento» y «Lista de bodas», del alto de las mayúsculas | 2× y 3× |
 
-- **Regenerar**: `python3 scripts/acuarela/generar.py` (necesita Pillow, Node con Playwright y Chromium; variables
-  `PLAYWRIGHT_PATH` y `CHROME_PATH` si no están instalados globalmente). Es determinista: salen siempre las mismas imágenes.
-  Dibuja cada escena de `escenas.py` como SVG, Chromium lo convierte en PNG transparente (`exportar.cjs`) y Pillow lo guarda como WebP.
-- **Retocar**: los objetos están en `scripts/acuarela/objetos.py` (`tomate`, `vela`, `copa`, `gerbera`, `maleta`…) y su
-  composición en `scripts/acuarela/escenas.py` (posiciones y tamaños, en unidades de lienzo). Los colores salen de `PAL`.
-  La librería de acuarela (manchas, filtros, líneas) está en `lib.py`.
-- **Calidad y peso**: se guardan con calidad 66 y alfa 62 (`generar.py`): pesan la mitad que con 82/90 y no se nota. Con los tamaños
-  pequeños, un móvil se descarga unos 100 KB de acuarelas en total, y todas se piden solo al acercarse (`loading="lazy"`).
-- Son **decorativas** (`alt=""` y `aria-hidden`): no cuentan nada que no esté ya en el texto.
-- El fondo de lino con rayas **no** es una acuarela: la textura (`public/assets/img/lino.webp`) sale de `scripts/fondo/generar.py` y
-  las rayas rosas son un degradado CSS en `base.css` (`--rosa`, `--p`).
+- **Regenerar**: `python3 scripts/acuarela/generar.py` (todas) o `… generar.py bodegon guirnalda` (algunas), y
+  `python3 scripts/acuarela/arquitectura.py` (San Pablo y el Palomar). Necesitan Pillow, Node con Playwright y Chromium
+  (variables `PLAYWRIGHT_PATH` y `CHROME_PATH` si no están instalados globalmente).
+- **Sobre blanco y multiplicadas**: el bodegón, la guirnalda, San Pablo y el Palomar se guardan **sin transparencia**
+  (sobre blanco: pesan la tercera parte) y en la página llevan `.acuarela-plana` (`mix-blend-mode: multiply`): el blanco
+  desaparece y el color queda transparente sobre el lino, como el pigmento sobre el papel. La animación de aparición
+  (`.revelar`) va en la propia imagen, no en un contenedor (si no, mientras este se funde se vería el blanco).
+- Los iconos llevan transparencia (son pequeños) y se recortan al dibujo.
+- Las escenas de la V1 que ya no salen (ramo con alianzas, almohada grande, maleta, granadas) siguen en `escenas.py`
+  (`ESCENAS_V1`) y en la historia del repositorio.
+- El fondo de lino con rayas **no** es una acuarela: la textura (`public/assets/img/lino.webp`) sale de
+  `scripts/fondo/generar.py` y las rayas rosas son un degradado CSS en `base.css` (`--rosa`, `--p`).
+
+
+## A. San Pablo y el Palomar en acuarela y a pincel (`scripts/acuarela/arquitectura.py`)
+
+Reutilizan la geometría de los dibujos a pluma de la V1 (`scripts/ilustraciones/san_pablo.py` y `palomar.py`, que no se
+tocan): una subclase de `pluma.Lienzo` apunta, mientras se dibujan, los trazos, los polígonos que se iban a rayar y las
+aguadas. Con eso se pinta otra cosa: **aguadas de acuarela** (`lib.py`) con la paleta de la V2, **veladuras frías** donde
+el dibujo llevaba rayado y un cielo apenas insinuado; y **líneas de pincel** (`scripts/rotulos/pincel.py`): contornos y
+detalles con un pincel de tinta, y el rayado y las texturas (sillería, tejas…) con un pincel muy fino y una tinta más
+suave. La tinta va un poco desplazada respecto al color.
+
+---
 
 ---
 
 ## A pluma (resto del documento)
 
-Dibujos a pluma propios (no calcados): San Pablo, el Palomar, la ruta con el corazón y el
-avioncito, adornos, iconos y favicon. Todo es SVG vectorial, transparente, sin `<text>`, sin
+Dibujos a pluma propios (no calcados): la ruta con el avioncito, adornos, iconos y favicon (y San Pablo y el Palomar
+de la V1, que ya no se publican: `generar.py` los deja en `docs/ilustraciones/v1/`). Todo es SVG vectorial, transparente, sin `<text>`, sin
 imágenes incrustadas, sin `<filter>` y solo con `viewBox` (sin width/height).
 
 - **Regenerar** (determinista, mismas semillas → mismos SVG):
   `python3 scripts/ilustraciones/generar.py` (o `… generar.py san_pablo palomar rutas adornos iconos favicon`).
   Solo usa la biblioteca estándar de Python 3. El motor del trazo está en `scripts/ilustraciones/pluma.py`.
-- **Tinta**: `#4b3c37` (marrón grisáceo oscuro, `TINTA` en `pluma.py`) fija en las ilustraciones grandes; rojo `#a3121d` (`ROJO`) en la ruta, el avión y el favicon; `currentColor` en los sprites.
+- **Tinta**: `#4b3c37` (marrón grisáceo oscuro, `TINTA` en `pluma.py`) fija en las ilustraciones grandes; rojo `#a84a33` (`ROJO`, el `--rojo` de la V2) en la ruta y el avión (el favicon conserva el `#a3121d` de la V1); `currentColor` en los sprites.
 - **Aguadas**: ocre `#c3a063` (piedra/revoco), terracota `#a4563a` (teja, ladrillo, puerta), oliva
   `#6c7550` (árboles, césped), con poca opacidad y desplazadas 2–4 unidades del trazo (desregistro).
 
@@ -56,8 +112,7 @@ imágenes incrustadas, sin `<filter>` y solo con `viewBox` (sin width/height).
 |---|---|---|
 | `san-pablo.svg` / `san-pablo-linea.svg` | `0 0 520 620` | 59 / 56 KB |
 | `palomar.svg` / `palomar-linea.svg` | `0 0 700 440` | 51 / 48 KB |
-| `ruta-horizontal.svg` | `0 0 480 150` | 1,2 KB |
-| `ruta-vertical.svg` | `0 0 170 560` | 1,3 KB |
+| `ruta-vertical.svg` | `0 0 220 560` | 1,3 KB |
 | `adornos.svg` (sprite) | por símbolo | 4 KB |
 | `iconos.svg` (sprite) | `0 0 48 48` | 5 KB |
 | `favicon.svg` | `0 0 64 64` | 0,6 KB |
@@ -67,7 +122,7 @@ son la misma línea sin color, por si se prefiere un acabado solo a tinta.
 
 ---
 
-## 1. `san-pablo.svg` y `palomar.svg` (Agenda)
+## 1. `san-pablo.svg` y `palomar.svg` (V1, ya no se publican: ver §A)
 
 Estructura (idéntica en ambos y en sus versiones `-linea`):
 
@@ -165,7 +220,12 @@ document.querySelectorAll('.ilustracion[data-svg]').forEach(async (fig) => {
 
 ---
 
-## 2. `ruta-horizontal.svg` y `ruta-vertical.svg`
+## 2. `ruta-vertical.svg`
+
+> **V2:** los novios pidieron quitar el corazón y que el camino fuera «más serpeante/zigzag para darle volumen»: ahora
+> serpentea en cuatro curvas amplias (`rutas.vertical()`, viewBox 220 × 560) y la versión horizontal ya no existe (la
+> web usa la misma composición de una columna en todas las pantallas). Lo que sigue describe la V1 y sigue valiendo
+> para la estructura (`#ruta` + `#avion`) y el JS del vuelo.
 
 - `<path id="ruta">`: UN trazo continuo, sin subtrazos ni `pathLength`. Lleva
   `stroke-dasharray="9 6.5 7 7 10.5 6 6.5 7.5 8 6"` (guiones irregulares, a mano) y tinta.

@@ -5,22 +5,40 @@ Web de **una sola página** (sin menú, todo en scroll) para la boda del **sába
 - **12:00** · Ceremonia en la Iglesia de San Pablo
 - **14:00** · Celebración en La Posada Real del Pinar (Pozal de Gallinas)
 
-Estilo de papelería de boda: **lino crema con rayas rosas**, rotulado a mano en tinta roja, cursiva con serifas, ilustraciones
-propias (a pluma y de acuarela) y formulario de confirmación con acompañantes, autocar y alergias.
+Estilo de papelería de boda pintada a mano: **lino crema con rayas rosas**, **rotulado a pincel de acuarela en rojo** (con
+subrayados a mano, como la invitación de referencia que mandaron los novios), cursiva con serifas, **acuarelas propias** y
+fotos de lado a lado con los bordes a pincel; formulario de confirmación con acompañantes, autocar y alergias.
+
+> **Versiones** · En producción conviven las dos versiones con un **selector «V1 · V2»** fijo arriba a la derecha:
+> - **V2** (la nueva: comentarios de los novios sobre la V1, más acuarela, menos espacio en blanco, pensada para el
+>   móvil) es la página de siempre, `public/index.html`, en `/`.
+> - **V1** (la anterior, congelada tal cual estaba en el commit `db679a3`) vive en `public/v1/`, en `/v1/`. Lleva
+>   `<base href="/v1/">` para cargar sus propios estilos, scripts e imágenes.
+> - Quien llega a `/` sin haber elegido ve la **V1** (la que había); al pulsar **V2** se queda en la nueva y se
+>   recuerda en el navegador. Enlaces directos: `/?v=2` (nueva) y `/v1/?v=1` (anterior). Lo hacen
+>   `public/version/elegir.js` (en el `<head>` de la V2) y `public/version/selector.js` + `selector.css` (en las dos).
+> - Las dos versiones envían las confirmaciones a la misma API (`/api/rsvp`).
+> - **Para quedarse solo con la V2**: borrar `public/v1/` y `public/version/`, y en `public/index.html` las tres
+>   líneas que los cargan (`/version/elegir.js`, `/version/selector.css` y `/version/selector.js`).
+>   **Para que por defecto se vea la V2** (sin quitar el selector): borrar solo la línea de `elegir.js`.
 
 ## Qué incluye
 
 | Sección | Qué hace |
 |---|---|
-| **Portada** | Entrada animada (un avión de papel traza la ruta, los nombres se escriben a mano en rojo y unas puertas en arco se abren sobre la foto), cuenta atrás sobria (días · horas · minutos) y botón para confirmar. Guía en [`docs/animacion-entrada.md`](docs/animacion-entrada.md) |
-| **Mesa puesta** | Ilustración de acuarela (guirnalda, narcisos, vela, copa, gerberas, tomates…) entre la portada y la Agenda |
-| **Agenda** | Ilustraciones a pluma de San Pablo y del Palomar unidas por una ruta roja con un lazo en forma de corazón y un avión que la recorre; enlaces «¿Cómo llegar?» a Google Maps, «Añadir al calendario» y un ramo con las alianzas, en acuarela |
+| **Portada** | Entrada animada (los nombres se pintan a pincel de acuarela trazo a trazo, la fecha también va rotulada y la foto, de lado a lado con los bordes a pincel, aparece con una aguada), cuenta atrás sobria (días · horas · minutos) y botón para confirmar. Cabe entera en una pantalla. Guía en [`docs/animacion-entrada.md`](docs/animacion-entrada.md) |
+| **Mesa puesta** | Bodegón de acuarela (narcisos, vela en candelabro turquesa, copa de rosado, menú, tomates cherry, naranjas, uvas, girasoles, botella y tarta) bajo una guirnalda, entre la portada y la Agenda |
+| **Agenda** | San Pablo y el Palomar en acuarela y a pincel, unidos por un caminito rojo que serpentea y un avión que lo recorre; enlaces «¿Cómo llegar?» a Google Maps y «Añadir al calendario» |
 | **Transporte** | Coche (parking recomendado junto a la Catedral) y autocar |
-| **Alojamiento** | Almohada y llave en acuarela, texto y mapa con la zona recomendada marcada con un círculo «a rotulador» |
-| **S.R.C.** | Formulario: nombre, asistencia, acompañantes con sus nombres, plazas de autocar por trayecto, alergias por persona y mensaje. No pide correo |
-| **Lista de bodas** | Maleta en acuarela e IBAN en una sola línea con botón para copiarlo |
-| **Cierre** | «¡Os esperamos!» sobre la foto del atardecer y, en el pie, un par de granadas |
+| **Alojamiento** | Texto y mapa con la zona recomendada: un óvalo a pincel entre la Plaza del Poniente y San Pablo. Icono de acuarela (almohada y llave) junto al título |
+| **Foto de la playa** | De lado a lado, aparece con una aguada |
+| **S.R.C.** | «S.R.C. · Se ruega confirmación» y el formulario: nombre, asistencia, acompañantes con sus nombres, plazas de autocar por trayecto, alergias por persona y mensaje. No pide correo |
+| **Lista de bodas** | Dos alianzas en acuarela junto al título e IBAN en una sola línea con botón para copiarlo |
+| **Cierre** | «¡Os esperamos!» sobre el cielo de la foto del atardecer, que se ve entera. Es el final de la página |
 | **`/admin`** | Panel privado (con contraseña) para que los novios vean totales, filtren y descarguen CSV |
+
+Todos los títulos son rótulos pintados con el motor de pincel de `scripts/rotulos/` (el texto va en un `.sr-only`
+para lectores de pantalla). Una sola composición, la del móvil, en todas las pantallas (en escritorio, centrada).
 
 Stack: HTML/CSS/JS **sin build ni frameworks** · hosting y funciones en **Vercel** · datos en **Supabase** (Postgres).
 
@@ -28,18 +46,20 @@ Stack: HTML/CSS/JS **sin build ni frameworks** · hosting y funciones en **Verce
 
 ```
 public/                 ← lo que se publica
-  index.html            la página entera
+  index.html            la página entera (V2)
+  v1/                   la V1 congelada (commit db679a3), para compararla con el selector · version/ (el selector)
   boda-marta-y-jorge.ics   «Añadir al calendario» (ceremonia y celebración)
   css/                  base.css (diseño: colores, fuentes) · site.css (secciones) · intro.css (entrada de la portada) · rsvp.css · mapa.css
   js/                   boot.js · main.js (animaciones, cuenta atrás, copiar IBAN) · intro.js (saltar la entrada, parallax) · rsvp.js · mapa.js
   assets/fonts/         tipografías autoalojadas y recortadas (Covered By Your Grace, Playfair Display cursiva, Inter 400/500: ~58 KB)
   assets/img/           fotos optimizadas (WebP), textura de lino (lino.webp), imagen para compartir (og.jpg) e icono del móvil
-  assets/ilustraciones/ SVG a pluma (San Pablo, Palomar, ruta, adornos, iconos, favicon) y acuarela/ (WebP con transparencia); guía: docs/ilustraciones.md
+  assets/rotulos/       rótulos a pincel de acuarela (títulos, nombres y fecha), máscaras de los bordes de las fotos, aguada y pincelada de botón
+  assets/ilustraciones/ acuarela/ (bodegón, San Pablo, Palomar, iconos…) y SVG a pluma (ruta, adornos, iconos, favicon); guía: docs/ilustraciones.md
   admin/                panel de respuestas
 api/                    funciones serverless de Vercel (rsvp, admin, ping)
 supabase/               schema.sql (tabla y vistas) · consultas.sql (consultas listas para pegar)
-scripts/                dev.mjs (servidor local) · test-rsvp.mjs · ilustraciones/ (SVG a pluma) · acuarela/ (acuarelas) · fondo/ (textura de lino) · intro/ (nombres escritos a mano) · og/ (imagen para compartir el enlace y el icono del móvil)
-docs/                   rsvp.md (guía completa del formulario y los datos) · animacion-entrada.md · ilustraciones.md · contenido-original.md (brief)
+scripts/                dev.mjs (servidor local) · test-rsvp.mjs · rotulos/ (pincel: rótulos, nombres, fecha, bordes de foto) · acuarela/ (acuarelas, San Pablo y Palomar) · ilustraciones/ (SVG a pluma) · fondo/ (textura de lino) · og/ (imagen para compartir el enlace y el icono del móvil)
+docs/                   rsvp.md (guía completa del formulario y los datos) · animacion-entrada.md · ilustraciones.md · contenido-original.md (brief) · datos-verificados.md · ilustraciones/v1/ (dibujos a pluma de la V1)
 vercel.json             salida en public/, cabeceras de seguridad, cron diario
 ```
 
@@ -57,7 +77,8 @@ Los envíos de prueba se guardan en `.dev-data/rsvps.json` (ignorado por git). E
 
 ## Publicarla (GitHub + Vercel + Supabase + dominio)
 
-> **Estado actual** · El WhatsApp de contacto ya está puesto (`data-whatsapp` en `public/index.html`). Pendiente:
+> **Estado actual** · El WhatsApp de contacto ya está puesto (`data-whatsapp` en la sección `#confirmacion` de
+> `public/index.html`: lo usa el formulario si falla un envío). Pendiente:
 > conectar **Supabase** (hasta entonces, si alguien pulsa «Enviar confirmación», la web le ofrece mandar la respuesta
 > por WhatsApp, ya escrita, y no se guarda nada) y elegir el **dominio** definitivo (mientras tanto sirve el
 > `martayjorge-eta.vercel.app` que da Vercel; las metaetiquetas `og:` de `index.html` llevan ese mismo dominio temporal).
@@ -114,28 +135,32 @@ boda y, después, exportad lo que queráis conservar y vaciad la tabla. Guía co
 | Fecha u hora de la cuenta atrás | `data-cuenta` en `public/index.html` (hora de Madrid, formato `2027-05-08T12:00:00+02:00`) |
 | Quitar la cuenta atrás | borrar el bloque `<div class="cuenta" …>` de la portada |
 | Textos, horarios, enlaces «¿Cómo llegar?» | `public/index.html` |
-| Teléfono (WhatsApp) o correo de contacto | atributos `data-whatsapp` / `data-email` de `<section id="alojamiento">`: aparece el botón de contacto y, si falla un envío, el formulario ofrece mandar la respuesta por ahí |
+| Teléfono (WhatsApp) o correo de contacto | atributos `data-whatsapp` / `data-email` de `<section id="confirmacion">`: si falla un envío, el formulario ofrece mandar la respuesta por ahí (en la V2 ya no hay botón de contacto visible) |
 | IBAN | `public/index.html`, sección *Lista de bodas* (texto visible y atributo `data-copiar`). Se ve siempre en una sola línea: el tamaño de la letra se adapta al ancho disponible (`.iban__numero` en `site.css`) |
-| Colores y tipografías | variables de `:root` en `public/css/base.css` (`--rojo` es la tinta de los títulos, botones y subrayados; `--rosa` y `--p` las rayas del fondo). Los fondos claros de tarjeta, opciones, botones e IBAN son translúcidos (`--campo`, `--campo-activo`, `--campo-mapa`) para que se vea el lino |
+| Colores y tipografías | variables de `:root` en `public/css/base.css` (`--rojo`, rojo acuarela `#b23a40`, es la tinta de botones, fechas y subrayados; `--rosa` y `--p` las rayas del fondo). Los fondos claros de tarjeta, opciones, botones e IBAN son translúcidos (`--campo`, `--campo-activo`, `--campo-mapa`) para que se vea el lino |
+| Títulos, nombres, bordes de las fotos, pincelada de los botones | `scripts/rotulos/` (textos, semillas y tintas en `generar.py`); `python3 scripts/rotulos/generar.py` rehace las imágenes y el marcado en `index.html`. Guía en [`docs/ilustraciones.md`](docs/ilustraciones.md) §R |
 | Fondo (lino y rayas) | la textura sale de `python3 scripts/fondo/generar.py` (`public/assets/img/lino.webp`); las rayas son un degradado CSS en el `body` de `base.css` (ancho de cada pareja: `--p`; color e intensidad: `--rosa` y `--rosa-hueco`, cuanto menor es el último número, más suaves se ven) |
-| Ilustraciones de acuarela | `scripts/acuarela/` (objetos y escenas; se regeneran con `python3 scripts/acuarela/generar.py`); la guía está en [`docs/ilustraciones.md`](docs/ilustraciones.md) |
+| Ilustraciones de acuarela | `scripts/acuarela/` (objetos y escenas; se regeneran con `python3 scripts/acuarela/generar.py`; San Pablo y el Palomar, con `arquitectura.py`); la guía está en [`docs/ilustraciones.md`](docs/ilustraciones.md) |
 | Fotos | `public/assets/img/` (WebP; la de la portada es un recorte 4:5). Si cambian los nombres o la foto, `node scripts/og/generar.cjs` rehace la imagen para compartir y el icono |
-| Ilustraciones | `public/assets/ilustraciones/` (guía en [`docs/ilustraciones.md`](docs/ilustraciones.md)); se regeneran con `python3 scripts/ilustraciones/generar.py` |
+| Ruta de la Agenda, iconos y adornos (SVG a pluma) | `public/assets/ilustraciones/` (guía en [`docs/ilustraciones.md`](docs/ilustraciones.md)); se regeneran con `python3 scripts/ilustraciones/generar.py` |
 | Mensajes del formulario | arriba de `public/js/rsvp.js` y atributos `data-texto-si` / `data-texto-no` en `index.html` |
 | Horas del «Añadir al calendario» | `public/boda-marta-y-jorge.ics` (texto plano; las horas están en UTC: 12:00 de Madrid en mayo = `10:00Z`. La ceremonia dura 1 h y la celebración está marcada hasta las 23:00: cambiad `DTEND` si queréis otra hora) |
-| Tamaño de la portada según la pantalla | variables `--n` (nombres) y `--foto` en el bloque `.portada` de `public/css/site.css` |
+| Tamaño de la portada según la pantalla | variables `--n` (ancho de los nombres) y `--foto-h` (alto de la foto) en el bloque `.portada` de `public/css/site.css` |
+| Zona recomendada del mapa (óvalo) | `CFG.centro` y `CFG.semiejes` en `public/js/mapa.js` (medidas y criterios en [`docs/datos-verificados.md`](docs/datos-verificados.md) §6) |
 | Entrada de la portada | tiempos en `public/css/intro.css`; ver [`docs/animacion-entrada.md`](docs/animacion-entrada.md). Se reproduce en cada carga (se acelera con un toque o un scroll); `?intro=0` en la dirección la omite |
 
 ## Rendimiento y pantallas
 
-- **Carga ligera**: la primera visita descarga ≈ 190–210 KB en un móvil (comprimido; antes ≈ 360 KB) y ≈ 380–450 KB
-  si se recorre la página entera (antes ≈ 550–650 KB). Las fotos van en WebP con varios tamaños (el navegador
-  elige el que necesita su pantalla) y las ilustraciones, el mapa y la foto del cierre se piden solo al
-  acercarse. Las fuentes están recortadas al español: de ≈ 190 KB a ≈ 60 KB.
-  Si añadís fuentes o fotos, comprimidlas igual (WebP, anchos de 480/600/840 px) para no perder esto.
+- **Peso** (medido en un móvil 3× de 390 px, con HTML/CSS/JS comprimidos como los sirve Vercel): la portada y lo que se
+  pide en los primeros segundos ≈ 390 KB; la página entera ≈ 820 KB (la V1, medida igual: ≈ 310 y ≈ 640 KB). La
+  diferencia son las acuarelas en imagen (San Pablo, el Palomar) y los rótulos a pincel. Las fotos van en WebP con varios
+  tamaños (el navegador elige el que necesita su pantalla), las acuarelas grandes van sobre blanco y se multiplican con el
+  lino (pesan la tercera parte que con transparencia) y todo lo que está por debajo de la portada se pide al acercarse.
+  Las fuentes están recortadas al español (≈ 57 KB). Si añadís fotos, comprimidlas igual (WebP, anchos de 480/600/840 px).
 - **Pantallas**: la portada se dimensiona con el ancho **y el alto** de la pantalla. En el móvil en vertical ocupa
-  exactamente la pantalla (nombres, fecha, foto, cuenta atrás y botón se ven sin hacer scroll, de 320×548 a tablets) y
-  también entra entera en móviles apaisados, portátiles bajos y monitores grandes (probada de 240 a 3440 px de ancho).
+  exactamente la pantalla (nombres, fecha, foto de lado a lado, cuenta atrás y botón se ven sin hacer scroll) y también
+  entra entera en móviles apaisados, tablets y monitores (comprobada de 320×568 a 1440×900). La página entera mide en un
+  móvil de 390 px ≈ 5.700 px de alto (la V1, ≈ 8.200).
   Con la letra del sistema ampliada no se sale nada de la pantalla en ≥ 320 px de ancho.
 - **Entrada animada**: se reproduce en cada carga y se puede saltar con un toque o un scroll; ver [`docs/animacion-entrada.md`](docs/animacion-entrada.md).
 
@@ -146,8 +171,13 @@ boda y, después, exportad lo que queráis conservar y vaciad la tabla. Guía co
   recreado el *estilo*, no sus dibujos: **las ilustraciones son propias** y las letras son tipografías libres parecidas
   (Covered By Your Grace y Playfair Display, licencia OFL; las licencias están junto a las fuentes). Si queréis exactamente
   las ilustraciones de esa web, hay que encargárselas o comprarlas a su autora. Todo el aspecto sale de variables en `base.css`.
-- Las ilustraciones de **San Pablo** y del **Palomar** son dibujos propios hechos a pluma (no calcados de la acuarela
-  ni del render con IA). Si contratáis al ilustrador para las invitaciones en papel, basta con sustituir `san-pablo.svg`
-  por su versión (mismo `viewBox`) o dejar esta.
+- **V2** (comentarios de los novios): efecto general de acuarela hecha a mano. Los títulos, los nombres y la fecha son
+  **rótulos pintados con un pincel de acuarela simulado** (`scripts/rotulos/`), en rojo acuarela y con subrayados a mano,
+  en el estilo de la invitación de referencia pero más legibles (lo eligieron con dos hojas de muestras); no es una
+  tipografía, así que cada letra es algo distinta.
+- Las ilustraciones de **San Pablo** y del **Palomar** son dibujos propios (no calcados de la acuarela ni del render con
+  IA): en la V1 a pluma; en la V2, la misma geometría pintada en acuarela y a pincel (`scripts/acuarela/arquitectura.py`).
+  Si contratáis al ilustrador para las invitaciones en papel, basta con sustituir `san-pablo-acuarela-*.webp` por su
+  versión (sobre blanco, se multiplica con el lino) o dejar esta.
 - La página lleva `noindex` y `robots.txt` cerrado: es una invitación privada y no debe salir en buscadores.
 - Todo está autoalojado (fuentes, imágenes, scripts): solo se piden a terceros las teselas del mapa.
