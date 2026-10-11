@@ -1,6 +1,7 @@
-"""Hoja de muestras del rotulado a pincel seco (para revisar antes de integrar).
+"""Hojas de muestras del rotulado (para revisar antes de integrar).
 
-Uso: python3 scripts/rotulos/muestras.py salida.png
+Uso: python3 scripts/rotulos/muestras.py salida.png               (pincel seco: primera vuelta)
+     python3 scripts/rotulos/muestras.py --acuarela salida.png    (pincel de acuarela: segunda vuelta)
 """
 import os
 import sys
@@ -89,5 +90,47 @@ def main(salida):
     print(salida, hoja.size)
 
 
+ROJO_ACUARELA = (178, 58, 64)
+
+
+def main_acuarela(salida):
+    """Segunda hoja (estilo de la invitación de referencia): pincel de acuarela fino, más legible."""
+    leyenda = fuente('playfair-display-latin-400-italic.woff2', 28)
+    filas = []
+    for titulo, est, color in (('A · acuarela legible (rojo como la referencia)', 'acuarela', ROJO_ACUARELA),
+                               ('B · acuarela con gracia: alguna letra más pequeña, más rebote (rojo)', 'acuarela-gracia', ROJO_ACUARELA),
+                               ('B en terracota suave (la tinta de la versión anterior)', 'acuarela-gracia', pincel.TERRACOTA)):
+        t = lambda *a, c=color: c
+        filas.append(('txt', titulo))
+        n, _ = pincel.rotular(['MARTA y JORGE'], 62, estilo=est, semilla=5, tinta=t, margen_x=.2)
+        f, _ = pincel.rotular(['8 DE MAYO DE 2027'], 30, estilo=est, semilla=9, tinta=t, margen_x=.2)
+        filas.append(('img', [n.imagen(granulado=False), f.imagen(granulado=False)]))
+        ims = []
+        for lineas, sem in ((['AGENDA'], 3), (['LISTA DE BODAS'], 8), (['CONFIRMACIÓN'], 11)):
+            lz, _ = pincel.rotular(lineas, 40, estilo=est, semilla=sem, tinta=t, margen_x=.2, subrayado=True)
+            ims.append(lz.imagen(granulado=False))
+        filas.append(('img', ims))
+    alto = 30 + sum(56 if t == 'txt' else max(i.height for i in c) + 18 for t, c in filas)
+    hoja = lino(ANCHO, alto)
+    dib = ImageDraw.Draw(hoja)
+    y = 20
+    for tipo, cont in filas:
+        if tipo == 'txt':
+            dib.text((36, y + 12), cont, font=leyenda, fill=(90, 75, 69, 255))
+            y += 56
+        else:
+            total = sum(i.width for i in cont) + 24 * (len(cont) - 1)
+            x = (ANCHO - total) // 2
+            for i in cont:
+                hoja.alpha_composite(i, (x, y + (max(j.height for j in cont) - i.height) // 2))
+                x += i.width + 24
+            y += max(i.height for i in cont) + 18
+    hoja.convert('RGB').save(salida)
+    print(salida, hoja.size)
+
+
 if __name__ == '__main__':
-    main(sys.argv[1] if len(sys.argv) > 1 else 'muestras-rotulado.png')
+    if '--acuarela' in sys.argv:
+        main_acuarela(next((a for a in sys.argv[1:] if not a.startswith('--')), 'muestras-acuarela.png'))
+    else:
+        main(sys.argv[1] if len(sys.argv) > 1 else 'muestras-rotulado.png')

@@ -48,6 +48,20 @@ ESTILOS = {
     # más cargado: casi lleno, la textura solo en los finales
     'rotulo-cargado': dict(ancho=0.2, cerdas=72, carga=1.85, recorrido=2.0, fin=(0.55, 0.75), seco=0.45,
                            umbral=(0.15, 0.6), suavidad=0.08, densidad=2.8, temblor=0.01),
+    # ACUARELA (V2, segunda vuelta: el estilo de la invitación de referencia, más legible): pincel redondo fino y
+    # cargado de agua, sin estrías secas; más grueso al bajar que al subir (contraste); la tinta es transparente,
+    # irregular, y se acumula en los bordes y donde se levanta el pincel (charco). Letras más anchas y espaciadas,
+    # curvas cerradas y poco giro: se leen de un vistazo.
+    'acuarela': dict(ancho=0.11, cerdas=28, carga=2.6, recorrido=14.0, fin=(0.78, 0.92), seco=0.12,
+                     umbral=(0.06, 0.26), suavidad=0.1, densidad=1.4, temblor=0.007, contraste=0.6, charco=1.6,
+                     cierre=(0.0, 0.015), escala_x=1.1, interletra=(0.2, 0.26),
+                     variacion=dict(sx=(0.96, 1.04), sy=(0.96, 1.04), rot=1.8, dy=0.03), acuarela=True),
+    # la misma, con más gracia: alguna letra algo más pequeña, más rebote sobre la línea y algo más de giro
+    'acuarela-gracia': dict(ancho=0.11, cerdas=28, carga=2.6, recorrido=14.0, fin=(0.78, 0.92), seco=0.12,
+                            umbral=(0.06, 0.26), suavidad=0.1, densidad=1.4, temblor=0.01, contraste=0.72,
+                            charco=1.8, cierre=(0.0, 0.02), escala_x=1.06, interletra=(0.18, 0.26),
+                            variacion=dict(sx=(0.92, 1.08), sy=(0.92, 1.1), rot=3.5, dy=0.06), pequenas=0.25,
+                            acuarela=True),
 }
 
 
@@ -123,13 +137,16 @@ def remuestrear(P, paso=1.0):
 class Lienzo:
     """Lienzo transparente de ancho × alto px finales, pintado a ss× por dentro."""
 
-    def __init__(self, ancho, alto, ss=4, semilla_papel=8052027, densidad=2.6):
+    def __init__(self, ancho, alto, ss=4, semilla_papel=8052027, densidad=2.6, acuarela=False, mancha=None):
         self.ancho, self.alto, self.ss = int(ancho), int(alto), ss
         self.W, self.H = self.ancho * ss, self.alto * ss
         self.G = papel(self.H, self.W, ss, semilla_papel)
         self.capas = {}          # color → densidad óptica acumulada
         self.densidad = densidad
         self.trazos = []         # (color, centro en px finales [n×2], ancho máximo en px finales)
+        # acuarela: la tinta no es uniforme (manchas de densidad de ≈ `mancha` px) y se acumula en los bordes
+        self.acuarela = acuarela
+        self.N = ruido_valor(self.H, self.W, (mancha or 40) * ss, np.random.RandomState(semilla_papel + 1)) if acuarela else None
 
     def _capa(self, color):
         if color not in self.capas:
@@ -178,6 +195,9 @@ class Lienzo:
         else:
             presion = presion(u)
         w = W0 * (0.35 + 0.65 * presion) * rng.uniform(0.88, 1.12)
+        c = est.get('contraste', 0.0)
+        if c:                                             # pincel: grueso al bajar, fino al subir
+            w = w * ((1 - c) + c * (0.6 + 0.4 * (0.5 + 0.5 * T[:, 1])))
 
         # tinta: se agota con la distancia (en alturas de pincel), con un mínimo
         recorrido = est['recorrido'] * (W0 / est['ancho']) * rng.uniform(0.8, 1.25)
@@ -218,12 +238,20 @@ class Lienzo:
             return
         F = np.zeros((y1 - y0, x1 - x0), np.float32)
         salpicar(F, X - x0, Y - y0, V)
-        F = caja(caja(F, rad), rad) * est['carga']
+        Fb = caja(caja(F, rad), rad)
+        F = Fb * est['carga']
         G = self.G[y0:y1, x0:x1]
         lo, hi = est['umbral']
         th = lo + (hi - lo) * (1 - G)
         A = suave(th - est['suavidad'], th + est['suavidad'], F)
-        self._capa(color)[y0:y1, x0:x1] += A * rng.uniform(0.85, 1.0)
+        extra = 1.0
+        if est.get('charco'):
+            # el pigmento se acumula donde se levanta el pincel (y algo donde se apoya): más densidad ahí
+            cw = est['charco'] * (np.exp(-((1 - u) / 0.07) ** 2) + 0.5 * np.exp(-(u / 0.05) ** 2))
+            F2 = np.zeros_like(F)
+            salpicar(F2, X - x0, Y - y0, (V.reshape(N, -1) * cw[None, :]).ravel().astype(np.float32))
+            extra = 1 + caja(caja(F2, rad), rad) / np.maximum(Fb, 1e-6)
+        self._capa(color)[y0:y1, x0:x1] += A * extra * rng.uniform(0.85, 1.0)
         self.trazos.append((color, P / ss, float(w.max() / ss)))
 
     def relleno(self, mascara, color):
@@ -239,8 +267,18 @@ class Lienzo:
         alfa = np.zeros((self.H, self.W), np.float32)
         gr = (1 - 0.06 * (self.G - 0.5)) if granulado else np.ones_like(self.G)
         for color, D in self.capas.items():
+            if self.acuarela:
+                # borde húmedo: el pigmento se acumula en el contorno al secarse; densidad irregular en manchas
+                D = caja(D, max(1, ss // 2))
+                a0 = 1 - np.exp(-self.densidad * D)
+                r = 3 * ss
+                borde = np.clip(a0 - caja(caja(a0, r), r), 0, 1)
+                D = D * (0.62 + 0.76 * self.N) * (1 + 1.6 * borde)
             a = 1 - np.exp(-self.densidad * D)
-            osc = ((1 - 0.1 * np.clip(D - 1, 0, 1)) if oscurecer else 1.0) * gr
+            if self.acuarela:
+                osc = (1 - 0.22 * np.clip(D - 0.8, 0, 1.2)) * gr        # más pigmento: más oscuro
+            else:
+                osc = ((1 - 0.1 * np.clip(D - 1, 0, 1)) if oscurecer else 1.0) * gr
             rgb = np.array(color, np.float32) / 255
             for k in range(3):
                 acc[:, :, k] = rgb[k] * osc * a + acc[:, :, k] * (1 - a)
@@ -254,13 +292,14 @@ class Lienzo:
 
 
 def rotular(lineas, cap, estilo='rotulo', semilla=1, tinta=None, ss=4, interlinea=0.42, margen=0.3,
-            margen_x=None, ancho_fijo=None, pintar=True):
+            margen_x=None, ancho_fijo=None, pintar=True, subrayado=False):
     """Rotula `lineas` (lista de textos) con mayúsculas de pincel seco.
 
     cap      altura de la mayúscula en px finales
     tinta    función (linea, indice, caracter) → color; por defecto, terracota
     margen   aire arriba y abajo (en mayúsculas; deja sitio a tildes y al ¡); margen_x, a los lados
     pintar   False: solo mide (devuelve el lienzo vacío)
+    subrayado  una pincelada fina bajo la última línea (como los títulos de las invitaciones rotuladas)
     Devuelve (Lienzo, info) con info = {'u': ancho/cap, 'letras': [...]} y, en el lienzo, los ejes
     de cada trazo (para animar la escritura).
     """
@@ -270,29 +309,36 @@ def rotular(lineas, cap, estilo='rotulo', semilla=1, tinta=None, ss=4, interline
     # 1) maquetación en unidades de mayúscula (con la irregularidad de cada letra)
     disposicion = []
     anchos = []
+    var = est.get('variacion', dict(sx=(0.9, 1.1), sy=(0.92, 1.08), rot=3, dy=0.04))
+    ex = est.get('escala_x', 1.0)
     for li, texto in enumerate(lineas):
         pen = 0.0
         fila = []
         for ci, ch in enumerate(texto):
             av, trazos = alfabeto.letra(ch)
-            sx = rng.uniform(0.9, 1.1)
-            sy = rng.uniform(0.92, 1.08)
-            rot = math.radians(rng.uniform(-3, 3))
-            dy = rng.uniform(-0.04, 0.04)
-            tr = rng.uniform(0.13, 0.19)
+            sx = rng.uniform(*var['sx']) * ex
+            sy = rng.uniform(*var['sy'])
+            rot = math.radians(rng.uniform(-var['rot'], var['rot']))
+            dy = rng.uniform(-var['dy'], var['dy'])
+            tr = rng.uniform(*est.get('interletra', (0.13, 0.19)))
+            # con gracia: alguna letra (no la primera de cada palabra) algo más pequeña, apoyada en la línea
+            if est.get('pequenas') and ci and texto[ci - 1] != ' ' and ch.isalpha() and rng.random_sample() < est['pequenas']:
+                sx *= 0.9
+                sy *= 0.82
+                dy += 0.09
             fila.append((ch, av, trazos, pen, sx, sy, rot, dy, li, ci))
             pen += av * sx + tr
         anchos.append(pen - tr if fila else 0)
         disposicion.append(fila)
     mx = margen if margen_x is None else margen_x
     ancho_u = max(anchos) if ancho_fijo is None else ancho_fijo
-    alto_u = 2 * margen + len(lineas) + (len(lineas) - 1) * interlinea
+    alto_u = 2 * margen + len(lineas) + (len(lineas) - 1) * interlinea + (0.14 if subrayado else 0)
     info = {'u': ancho_u + 2 * mx, 'alto_u': alto_u, 'letras': []}
     W = int(math.ceil((ancho_u + 2 * mx) * cap))
     H = int(math.ceil(alto_u * cap))
     if not pintar:
         return None, info
-    lz = Lienzo(W, H, ss=ss, densidad=est['densidad'])
+    lz = Lienzo(W, H, ss=ss, densidad=est['densidad'], acuarela=est.get('acuarela', False), mancha=0.45 * cap)
     for li, fila in enumerate(disposicion):
         x_ini = mx + (ancho_u - anchos[li]) / 2
         y_base = margen + li * (1 + interlinea)
@@ -315,7 +361,17 @@ def rotular(lineas, cap, estilo='rotulo', semilla=1, tinta=None, ss=4, interline
                     x, y = x * cr - y * sr, x * sr + y * cr
                     px.append(((ox + x) * cap, (oy + y) * cap))
                 lz.trazo(px, color, est, rng, est['ancho'] * cap, tipo=tipo,
-                         recorte=rng.uniform(0.03, 0.08) if op.get('cerrado') else 0.0,
+                         recorte=rng.uniform(*est.get('cierre', (0.03, 0.08))) if op.get('cerrado') else 0.0,
                          punto=bool(op.get('punto')))
             info['letras'].append((ch, li, ci, n0, len(lz.trazos)))
+    if subrayado:
+        li = len(lineas) - 1
+        x0 = mx + (ancho_u - anchos[li]) / 2 - 0.06
+        x1 = x0 + anchos[li] + 0.14
+        yb = margen + li * (1 + interlinea) + 1.24
+        pts = [(x0, yb + rng.uniform(-.02, .02)), (x0 + (x1 - x0) * 0.35, yb + rng.uniform(.0, .04)),
+               (x0 + (x1 - x0) * 0.7, yb + rng.uniform(-.02, .02)), (x1, yb - rng.uniform(.02, .06))]
+        color = tinta(li, len(lineas[li]), '_')
+        lz.trazo([(x * cap, y * cap) for x, y in pts], color, est, rng, est['ancho'] * cap * 0.72, tipo='c')
+        info['subrayado'] = True
     return lz, info
