@@ -233,7 +233,8 @@ truncate table public.rsvps;
 - **WhatsApp/correo de rescate**: si el envío fallara, el formulario puede ofrecer «Envíanosla por
   WhatsApp» con la respuesta ya escrita. Basta con poner el teléfono (con prefijo, sin espacios) en
   la sección `#confirmacion` de `public/index.html`: `data-whatsapp="34600111222"` (o `data-email="…"`).
-  Si no se pone, usa el de la sección `#alojamiento`, si lo tiene.
+  Ya está puesto ahí (V2: el botón «Escribirnos por WhatsApp» de Alojamiento se quitó y el teléfono pasó a esta
+  sección). Si no estuviera, usaría el de la sección `#alojamiento`, si lo tuviera.
 - **Textos**: los mensajes de agradecimiento están en `public/index.html`, sección `#confirmacion`
   (`data-texto-si` / `data-texto-no`); los de error, al principio de `public/js/rsvp.js` (`TXT`).
 

@@ -36,7 +36,7 @@
     centro: [41.6540, -4.7268],
     semiejes: [380, 420],       // metros [este-oeste, norte-sur]
     semilla: 20270508,          // fija: el trazo «a mano» sale siempre igual (fecha de la boda)
-    color: '#a3121d',           // --rojo
+    color: '#a84a33',           // --rojo
     zoomMin: 14, zoomMax: 18, zoomMaxEncuadre: 16,
     teselas: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
     atribucion:
@@ -140,7 +140,7 @@
      --------------------------------------------------------------------------------------- */
   var GOTA = 'M22.4 49.4C21.3 48.1 6.7 33.6 6.5 20.7 6.3 11.4 13.1 3.7 22.1 3.5 31.2 3.3 38 10.6 37.7 20.2 37.3 33 23.6 48 22.4 49.4Z';
   var PIN = {
-    iglesia: { fill: '#a3121d', glifo: 'M22 10.8v18.2M15.2 17.6h13.6' },
+    iglesia: { fill: '#a84a33', glifo: 'M22 10.8v18.2M15.2 17.6h13.6' },
     parking: { fill: '#6c7550', glifo: 'M17.6 28.6V12.2h6c3.9 0 5.7 2.4 5.7 5.2 0 2.9-1.9 5.3-5.8 5.3h-5.9' }
   };
   function svgPin(tipo) {

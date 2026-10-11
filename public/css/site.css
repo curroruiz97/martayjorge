@@ -238,7 +238,8 @@
 .cierre__foto, .cierre__texto { grid-area: todo; }
 .cierre__foto img { height: auto; aspect-ratio: 1600 / 1304; max-height: 92vh; max-height: 92svh; --foco: 50% 70%; }
 .cierre__texto { position: relative; z-index: 1; align-self: start; display: grid; justify-items: center; gap: .3rem; padding: clamp(1.5rem, 8vw, 4rem) var(--gutter) 0; text-align: center; }
-.cierre__titulo .rotulo { --cap: min(3.4rem, 9vw); filter: drop-shadow(0 0 .45rem rgba(251, 249, 241, .9)); }
+.cierre__titulo { --cap: min(3.4rem, 9vw); }
+.cierre__titulo .rotulo { filter: drop-shadow(0 0 .45rem rgba(251, 249, 241, .9)); }
 .cierre__firma { max-width: 100%; color: var(--tinta); font-size: 1.15rem; letter-spacing: .02em; text-shadow: 0 0 .9em rgba(245, 240, 228, .95), 0 0 .3em rgba(245, 240, 228, .9); }
 
 /* ---------- ILUSTRACIONES DE ACUARELA (se generan con scripts/acuarela) ---------- */
