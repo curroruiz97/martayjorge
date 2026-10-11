@@ -61,8 +61,8 @@
 
   /* espaciado y layout */
   --gutter: clamp(min(1.25rem, 5.5vw), 6vw, 3rem);   /* con la letra muy ampliada el margen no se come la pantalla */
-  --max: 67.5rem;
-  --seccion: clamp(4.5rem, 11vw, 9rem);
+  --max: 42.5rem;                 /* una sola columna (la composición del móvil) también en escritorio */
+  --seccion: clamp(3rem, 12vw, 4rem);   /* hueco entre dos secciones (cada una pone la mitad arriba y la mitad abajo) */
   --radio: 6px;
   /* ancho de cada pareja de rayas del lino: ≈ 1/5 de la pantalla en el móvil, con tope en pantallas grandes */
   --p: clamp(72px, 20vw, 150px);
@@ -120,7 +120,7 @@ a:hover { text-decoration-thickness: 2px; }
 /* ---------- Layout ---------- */
 .contenedor { width: min(100% - 2 * var(--gutter), var(--max)); margin-inline: auto; }
 .contenedor--estrecho { --max: 42.5rem; }
-.seccion { padding-block: var(--seccion); position: relative; }
+.seccion { padding-block: calc(var(--seccion) / 2); position: relative; }
 .seccion[id] { scroll-margin-top: 1rem; }
 
 /* ---------- Tipografía ---------- */
@@ -172,8 +172,6 @@ a { color: var(--tinta-suave); }
 .boton--enlace::after { content: ""; position: absolute; left: 0; right: -4%; bottom: .2rem; height: .55rem; background: var(--subrayado) left center / 100% 100% no-repeat; transition: transform .3s var(--ease); transform-origin: left center; }
 .boton--enlace:hover { background: none; color: var(--rojo-hover); }
 .boton--enlace:hover::after { transform: scaleX(1.04) rotate(-.6deg); }
-
-/* ---------- Separadores ---------- */
 
 /* ---------- Revelado al hacer scroll (lo activa js/boot.js + js/main.js) ---------- */
 .js .revelar { opacity: 0; transform: translateY(1.25rem); transition: opacity .9s var(--ease), transform .9s var(--ease); transition-delay: var(--d, 0s); }
