@@ -1,0 +1,18 @@
+/* Selector de versión (V1 · V2) mientras se comparan las dos. Lo añade /version/selector.js en las dos páginas.
+   Usa la letra del sistema para verse igual en las dos versiones. Para quitarlo: ver README («Versiones»). */
+.mj-version {
+  position: fixed; z-index: 1000;
+  top: max(.6rem, env(safe-area-inset-top)); right: max(.6rem, env(safe-area-inset-right));
+  display: flex; gap: 2px; padding: 3px;
+  border: 1px solid rgba(178, 58, 64, .35); border-radius: 999px;
+  background: rgba(251, 249, 241, .94); box-shadow: 0 2px 10px rgba(70, 30, 30, .16);
+  font: 600 .8125rem/1 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; letter-spacing: .04em;
+}
+.mj-version a {
+  display: flex; align-items: center; justify-content: center; min-width: 2.75rem; min-height: 2.25rem; padding: 0 .75rem;
+  border-radius: 999px; color: #b23a40; text-decoration: none;
+}
+.mj-version a[aria-current="page"] { background: #b23a40; color: #fff; }
+.mj-version a:not([aria-current]):hover { background: rgba(178, 58, 64, .1); }
+.mj-version a:focus-visible { outline: 2px solid #b23a40; outline-offset: 2px; }
+@media print { .mj-version { display: none; } }

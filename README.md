@@ -9,9 +9,18 @@ Estilo de papelería de boda pintada a mano: **lino crema con rayas rosas**, **r
 subrayados a mano, como la invitación de referencia que mandaron los novios), cursiva con serifas, **acuarelas propias** y
 fotos de lado a lado con los bordes a pincel; formulario de confirmación con acompañantes, autocar y alergias.
 
-> **Versiones** · La **V2** (comentarios de los novios sobre la V1: más acuarela y pincel seco, menos espacio en blanco,
-> pensada para el móvil) está en la rama **`v2`**; Vercel la publica como vista previa sin tocar producción. La **V1**
-> sigue en `main` (producción) y en el commit `db679a3` (etiqueta local `v1`).
+> **Versiones** · En producción conviven las dos versiones con un **selector «V1 · V2»** fijo arriba a la derecha:
+> - **V2** (la nueva: comentarios de los novios sobre la V1, más acuarela, menos espacio en blanco, pensada para el
+>   móvil) es la página de siempre, `public/index.html`, en `/`.
+> - **V1** (la anterior, congelada tal cual estaba en el commit `db679a3`) vive en `public/v1/`, en `/v1/`. Lleva
+>   `<base href="/v1/">` para cargar sus propios estilos, scripts e imágenes.
+> - Quien llega a `/` sin haber elegido ve la **V1** (la que había); al pulsar **V2** se queda en la nueva y se
+>   recuerda en el navegador. Enlaces directos: `/?v=2` (nueva) y `/v1/?v=1` (anterior). Lo hacen
+>   `public/version/elegir.js` (en el `<head>` de la V2) y `public/version/selector.js` + `selector.css` (en las dos).
+> - Las dos versiones envían las confirmaciones a la misma API (`/api/rsvp`).
+> - **Para quedarse solo con la V2**: borrar `public/v1/` y `public/version/`, y en `public/index.html` las tres
+>   líneas que los cargan (`/version/elegir.js`, `/version/selector.css` y `/version/selector.js`).
+>   **Para que por defecto se vea la V2** (sin quitar el selector): borrar solo la línea de `elegir.js`.
 
 ## Qué incluye
 
@@ -37,7 +46,8 @@ Stack: HTML/CSS/JS **sin build ni frameworks** · hosting y funciones en **Verce
 
 ```
 public/                 ← lo que se publica
-  index.html            la página entera
+  index.html            la página entera (V2)
+  v1/                   la V1 congelada (commit db679a3), para compararla con el selector · version/ (el selector)
   boda-marta-y-jorge.ics   «Añadir al calendario» (ceremonia y celebración)
   css/                  base.css (diseño: colores, fuentes) · site.css (secciones) · intro.css (entrada de la portada) · rsvp.css · mapa.css
   js/                   boot.js · main.js (animaciones, cuenta atrás, copiar IBAN) · intro.js (saltar la entrada, parallax) · rsvp.js · mapa.js
