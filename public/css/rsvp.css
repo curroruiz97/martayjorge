@@ -14,8 +14,6 @@
 }
 .rsvp [hidden] { display: none !important; }
 
-.rsvp .cabecera .rsvp__entradilla { max-width: 32ch; margin-top: .35rem; color: var(--tinta-suave); text-wrap: balance; }
-
 /* ---------- Tarjeta de papel (en pantallas anchas) ---------- */
 .rsvp__tarjeta { position: relative; }
 @media (min-width: 640px) {
@@ -287,7 +285,6 @@
 .rsvp-enviar--enviando .rsvp-enviar__giro { display: inline-block; }
 .rsvp .rsvp-enviar.rsvp-enviar--enviando { opacity: 1; background: var(--rojo-hover); color: var(--papel); }
 @keyframes rsvp-giro { to { transform: rotate(1turn); } }
-.rsvp-privacidad { font: italic 400 1.0625rem/1.4 var(--f-serif); color: var(--tinta-suave); }
 
 /* Avisos (error, sin conexión) */
 .rsvp-aviso {

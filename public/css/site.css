@@ -10,8 +10,6 @@
 
 .icono { width: 1.5rem; height: 1.5rem; flex: none; fill: none; stroke: currentColor; color: var(--rojo); }
 
-.floritura { width: 10rem; height: 2rem; color: var(--rojo); margin-inline: auto; }
-
 /* Marco "impreso": el contorno fino desplazado, como una copia a mano alzada */
 .marco { position: relative; isolation: isolate; }
 .marco::before {
@@ -85,7 +83,6 @@
     gap: .5rem;
     padding: var(--pad-t) var(--gutter) var(--pad-b);
   }
-  .portada .portada__ruta { width: calc(var(--n) * .55); margin: 0 auto; }
   .portada__extra { gap: .6rem; }
   .cuenta { gap: .3rem; }
   .cuenta__num { font-size: calc(var(--k) * var(--D)); }
@@ -112,7 +109,6 @@
   .portada__texto { align-self: end; }
   .portada__extra { align-self: start; }
   .portada__foto { justify-self: center; }
-  .portada .portada__ruta { width: calc(var(--n) * .55); margin: 0 auto .4rem; }
   /* la columna de texto es más estrecha que la pantalla: la cuenta atrás no puede depender solo del tamaño de letra */
   .cuenta__item { min-width: min(4.4rem, 9vw); }
   .cuenta__num { font-size: calc(var(--k) * min(clamp(2.4rem, 1.7rem + 2.8vw, 3.3rem), 6.5vw)); }
@@ -126,7 +122,6 @@
     --foto: min(34vw, 28.75rem, max(7rem, calc((var(--alto) - 2 * var(--pad-v)) * .8)));
     row-gap: .5rem;
   }
-  .portada__ruta { display: none; }
   .portada__texto { gap: .2rem; }
   .portada__fecha { margin-top: .2rem; }
   .portada__fecha time { font-size: 1.15rem; }
@@ -162,7 +157,6 @@
 .evento .boton { margin-top: .75rem; }
 .evento .etiqueta { font-size: 1.2rem; color: var(--rojo); }              /* «12:00h» */
 .evento__lugar { font-family: var(--f-serif); font-style: italic; font-weight: 400; font-size: min(var(--fs-h3), 9.5vw); color: var(--rojo); overflow-wrap: anywhere; line-height: 1.15; margin-top: .1rem; text-wrap: balance; }
-.evento__direccion { color: var(--tinta-suave); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .22em; text-decoration-color: currentColor; padding: .2rem .25rem; }
 
 .ruta { width: 100%; display: grid; justify-items: center; margin-block: .75rem; }
 .ruta__v { width: min(6.25rem, 28vw); aspect-ratio: 170 / 560; }
@@ -213,7 +207,6 @@
 
 /* ---------- ALOJAMIENTO ---------- */
 .alojamiento__texto { max-width: 36ch; margin-inline: auto; text-align: center; text-wrap: pretty; }
-.alojamiento__contacto { display: flex; justify-content: center; margin-top: 1.5rem; }
 .alojamiento__mapa { --max: 56.25rem; margin-top: clamp(2.25rem, 6vw, 3.5rem); }
 .alojamiento__mapa .mapa { width: 100%; max-width: 100%; aspect-ratio: 4 / 3; min-height: 19rem; border-radius: var(--radio); background-color: var(--papel-2); }
 .mapa__pie { margin-top: 1.5rem; text-align: center; font: 400 min(1.3rem, 5.6vw)/1.4 var(--f-mano); letter-spacing: .08em; text-transform: uppercase; }
@@ -245,7 +238,7 @@
 .cierre {
   position: relative; display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; align-content: start;
   min-height: min(100vh, 62rem); min-height: min(100svh, 62rem); text-align: center; overflow: hidden;
-  padding: clamp(2.5rem, 9vh, 5.5rem) var(--gutter) 0;
+  padding: clamp(2.5rem, 9vh, 5.5rem) var(--gutter) env(safe-area-inset-bottom);
 }
 .cierre__foto { position: absolute; inset: 0; z-index: 0; }
 .cierre__foto img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 78%;
@@ -255,17 +248,13 @@
 .cierre__firma { max-width: 100%; color: var(--tinta); font-size: 1.15rem; letter-spacing: .02em; text-shadow: 0 0 .9em rgba(245, 240, 228, .9); }
 @media (min-width: 900px) { .cierre__foto img { object-position: 50% 62%; } }
 
-.pie { display: grid; justify-items: center; gap: .6rem; padding: 2.25rem var(--gutter) 2.75rem; text-align: center; }
-
 
 /* ---------- ILUSTRACIONES DE ACUARELA (decorativas; se generan con scripts/acuarela) ---------- */
 .acuarela { display: block; width: 100%; height: auto; }
 .acuarela-fig { margin: 0 auto; display: grid; justify-items: center; }
 .acuarela-fig .acuarela { width: var(--w); }
-.acuarela-fig--ramo { --w: min(82vw, 25rem); margin-top: clamp(2.5rem, 7vw, 4.5rem); }
 .acuarela-fig--almohada { --w: min(76vw, 22rem); margin-bottom: clamp(1.25rem, 4vw, 2rem); }
 .acuarela-fig--maleta { --w: min(58vw, 14rem); margin-bottom: 1rem; }
-.pie__granadas { width: min(52vw, 13rem); }
 
 /* Mesa puesta entre la portada y la agenda: una guirnalda que se repite a todo el ancho y, debajo, el dibujo */
 /* margin-top: el parallax de la portada baja la cuenta atrás y el botón hasta 72 px; este hueco evita que pasen por encima de la guirnalda */

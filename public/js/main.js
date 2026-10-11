@@ -1,6 +1,6 @@
 /* Marta & Jorge · comportamiento de la página (sin dependencias).
    Cuenta atrás, revelado al hacer scroll, ilustraciones que se dibujan,
-   avión que vuela por la ruta, copiar IBAN y botón de contacto. */
+   avión que vuela por la ruta y copiar IBAN. */
 (() => {
   'use strict';
 
@@ -261,37 +261,11 @@
     });
   }
 
-  /* ---------- Botón de contacto (solo si hay teléfono/correo configurado en #alojamiento) ---------- */
-  function initContacto() {
-    const sec = $('#alojamiento');
-    const caja = sec && $('[data-contacto]', sec);
-    if (!caja) return;
-    const tel = (sec.dataset.whatsapp || '').replace(/\D+/g, '');
-    const mail = (sec.dataset.email || '').trim();
-    let a;
-    if (tel) {
-      a = document.createElement('a');
-      a.href = `https://wa.me/${tel}?text=${encodeURIComponent('Hola Marta y Jorge, os escribo sobre el alojamiento para la boda.')}`;
-      a.textContent = 'Escribirnos por WhatsApp';
-    } else if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) {
-      a = document.createElement('a');
-      a.href = `mailto:${mail}?subject=${encodeURIComponent('Alojamiento para la boda')}`;
-      a.textContent = 'Escribirnos un correo';
-    }
-    if (!a) return;
-    a.className = 'boton';
-    a.rel = 'noopener';
-    if (tel) a.target = '_blank';
-    caja.appendChild(a);
-    caja.hidden = false;
-  }
-
   /* ---------- Arranque ---------- */
   initRevelado();
   initCuenta();
   initIlustraciones();
   initCopiar();
-  initContacto();
   // main.js ha arrancado: ya no hace falta el plan B que muestra todo pasados 4 s
   if (window.__revealTimer) clearTimeout(window.__revealTimer);
 })();

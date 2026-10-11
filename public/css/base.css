@@ -62,7 +62,6 @@
   /* espaciado y layout */
   --gutter: clamp(min(1.25rem, 5.5vw), 6vw, 3rem);   /* con la letra muy ampliada el margen no se come la pantalla */
   --max: 67.5rem;
-  --sp-1: .5rem; --sp-2: 1rem; --sp-3: 1.5rem; --sp-4: 2.5rem; --sp-5: 4rem; --sp-6: 6rem;
   --seccion: clamp(4.5rem, 11vw, 9rem);
   --radio: 6px;
   /* ancho de cada pareja de rayas del lino: ≈ 1/5 de la pantalla en el móvil, con tope en pantallas grandes */
@@ -142,7 +141,6 @@ a:hover { text-decoration-thickness: 2px; }
 }
 .titulo { position: relative; display: inline-block; padding-bottom: .38em; font-size: min(var(--fs-h2), 11.5vw); text-wrap: balance; overflow-wrap: anywhere; }   /* el tope en vw evita que una palabra larga se salga con la letra muy ampliada */
 .titulo::after { content: ""; position: absolute; left: -3%; right: -3%; bottom: 0; height: .3em; background: var(--subrayado) center / 100% 100% no-repeat; }
-.titulo--m { font-size: min(var(--fs-h3), 10vw); }
 /* Texto en cursiva serif (ya es el estilo base de la página) */
 .cursiva { font-style: italic; font-weight: 400; }
 .suave { color: var(--tinta-suave); }
@@ -176,7 +174,6 @@ a { color: var(--tinta-suave); }
 .boton--enlace:hover::after { transform: scaleX(1.04) rotate(-.6deg); }
 
 /* ---------- Separadores ---------- */
-.divisor { border: 0; border-top: 1.5px dotted var(--linea-fuerte); width: min(100%, 22rem); margin: var(--sp-5) auto; }
 
 /* ---------- Revelado al hacer scroll (lo activa js/boot.js + js/main.js) ---------- */
 .js .revelar { opacity: 0; transform: translateY(1.25rem); transition: opacity .9s var(--ease), transform .9s var(--ease); transition-delay: var(--d, 0s); }
