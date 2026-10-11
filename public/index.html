@@ -78,10 +78,10 @@
     </div>
   </header>
 
-  <!-- ============ MESA PUESTA (ilustración de acuarela, solo decorativa) ============ -->
-  <div class="mesa revelar" aria-hidden="true">
-    <div class="mesa__guirnalda"></div>
-    <img class="acuarela mesa__img" src="assets/ilustraciones/acuarela/bodegon-640.webp" srcset="assets/ilustraciones/acuarela/bodegon-640.webp 640w, assets/ilustraciones/acuarela/bodegon-1000.webp 1000w" sizes="(min-width: 700px) 40rem, 100vw" width="1000" height="720" alt="" loading="lazy" decoding="async">
+  <!-- ============ MESA PUESTA (bodegón de acuarela, solo decorativo; se funde con el lino: .acuarela-plana) ============ -->
+  <div class="mesa" aria-hidden="true">
+    <div class="mesa__guirnalda acuarela-plana revelar"></div>
+    <img class="acuarela acuarela-plana mesa__img revelar" src="assets/ilustraciones/acuarela/bodegon-v2-640.webp" srcset="assets/ilustraciones/acuarela/bodegon-v2-640.webp 640w, assets/ilustraciones/acuarela/bodegon-v2-1000.webp 1000w" sizes="(min-width: 700px) 40rem, 100vw" width="1000" height="545" alt="" loading="lazy" decoding="async">
   </div>
 
   <!-- ============ AGENDA ============ -->
@@ -94,9 +94,7 @@
 
       <div class="agenda__grid">
         <!-- Ceremonia -->
-        <div class="ilu ilu--san-pablo" data-svg="assets/ilustraciones/san-pablo.svg" role="img" aria-label="Dibujo de la fachada de la Iglesia de San Pablo de Valladolid">
-          <noscript><img src="assets/ilustraciones/san-pablo.svg" alt="Dibujo de la fachada de la Iglesia de San Pablo de Valladolid" width="520" height="620"></noscript>
-        </div>
+        <img class="ilu ilu--san-pablo acuarela-plana revelar" src="assets/ilustraciones/acuarela/san-pablo-acuarela-640.webp" srcset="assets/ilustraciones/acuarela/san-pablo-acuarela-640.webp 640w, assets/ilustraciones/acuarela/san-pablo-acuarela-960.webp 960w" sizes="(min-width: 600px) 24rem, 84vw" width="960" height="1145" alt="La fachada de la Iglesia de San Pablo de Valladolid, pintada a la acuarela" loading="lazy" decoding="async">
         <article class="evento evento--ceremonia revelar">
           <p class="etiqueta">Ceremonia · 12:00h</p>
           <h3 class="evento__lugar">Iglesia de San Pablo</h3>
@@ -110,9 +108,7 @@
         </div>
 
         <!-- Celebración -->
-        <div class="ilu ilu--palomar" data-svg="assets/ilustraciones/palomar.svg" role="img" aria-label="Dibujo del Palomar de La Posada Real del Pinar">
-          <noscript><img src="assets/ilustraciones/palomar.svg" alt="Dibujo del Palomar de La Posada Real del Pinar" width="700" height="440"></noscript>
-        </div>
+        <img class="ilu ilu--palomar acuarela-plana revelar" src="assets/ilustraciones/acuarela/palomar-acuarela-640.webp" srcset="assets/ilustraciones/acuarela/palomar-acuarela-640.webp 640w, assets/ilustraciones/acuarela/palomar-acuarela-960.webp 960w" sizes="(min-width: 600px) 30rem, 92vw" width="960" height="603" alt="El Palomar de La Posada Real del Pinar entre pinos, pintado a la acuarela" loading="lazy" decoding="async">
         <article class="evento evento--celebracion revelar">
           <p class="etiqueta">Celebración · 14:00h</p>
           <h3 class="evento__lugar">La Posada Real del Pinar</h3>
@@ -161,7 +157,7 @@
   <section class="seccion alojamiento" id="alojamiento" aria-labelledby="t-alojamiento">
     <div class="contenedor contenedor--estrecho">
       <header class="cabecera revelar">
-        <h2 class="titulo titulo--rotulo" id="t-alojamiento"><!-- rotulo:alojamiento --><img class="titulo__icono" src="assets/ilustraciones/acuarela/almohada-icono-3x.webp" srcset="assets/ilustraciones/acuarela/almohada-icono-2x.webp 2x, assets/ilustraciones/acuarela/almohada-icono-3x.webp 3x" width="59" height="51" alt="" decoding="async" loading="lazy"><span class="sr-only">Alojamiento</span><img class="rotulo" src="assets/rotulos/alojamiento.webp" width="355" height="71" style="--u:8.068" alt="" decoding="async" loading="lazy"><!-- /rotulo:alojamiento --></h2>
+        <h2 class="titulo titulo--rotulo" id="t-alojamiento"><!-- rotulo:alojamiento --><img class="titulo__icono" src="assets/ilustraciones/acuarela/almohada-icono-3x.webp" srcset="assets/ilustraciones/acuarela/almohada-icono-2x.webp 2x, assets/ilustraciones/acuarela/almohada-icono-3x.webp 3x" width="60" height="51" alt="" decoding="async" loading="lazy"><span class="sr-only">Alojamiento</span><img class="rotulo" src="assets/rotulos/alojamiento.webp" width="355" height="71" style="--u:8.068" alt="" decoding="async" loading="lazy"><!-- /rotulo:alojamiento --></h2>
       </header>
       <p class="cursiva alojamiento__texto revelar">En Valladolid tenéis muchísimas opciones de alojamiento en el entorno del centro. Escribidnos y os ayudaremos y aconsejaremos para encontrar el mejor sitio&nbsp;posible.</p>
     </div>
@@ -397,7 +393,7 @@
   <section class="seccion regalo" id="lista-de-bodas" aria-labelledby="t-regalo">
     <div class="contenedor contenedor--estrecho centrado">
       <header class="cabecera revelar">
-        <h2 class="titulo titulo--rotulo" id="t-regalo"><!-- rotulo:lista-de-bodas --><img class="titulo__icono" src="assets/ilustraciones/acuarela/alianzas-icono-3x.webp" srcset="assets/ilustraciones/acuarela/alianzas-icono-2x.webp 2x, assets/ilustraciones/acuarela/alianzas-icono-3x.webp 3x" width="69" height="51" alt="" decoding="async" loading="lazy"><span class="sr-only">Lista de bodas</span><img class="rotulo" src="assets/rotulos/lista-de-bodas.webp" width="403" height="71" style="--u:9.155" alt="" decoding="async" loading="lazy"><!-- /rotulo:lista-de-bodas --></h2>
+        <h2 class="titulo titulo--rotulo" id="t-regalo"><!-- rotulo:lista-de-bodas --><img class="titulo__icono" src="assets/ilustraciones/acuarela/alianzas-icono-3x.webp" srcset="assets/ilustraciones/acuarela/alianzas-icono-2x.webp 2x, assets/ilustraciones/acuarela/alianzas-icono-3x.webp 3x" width="71" height="51" alt="" decoding="async" loading="lazy"><span class="sr-only">Lista de bodas</span><img class="rotulo" src="assets/rotulos/lista-de-bodas.webp" width="403" height="71" style="--u:9.155" alt="" decoding="async" loading="lazy"><!-- /rotulo:lista-de-bodas --></h2>
       </header>
       <div class="revelar">
         <p class="cursiva regalo__texto">Vuestra presencia será el mejor regalo. Si además queréis tener un detalle con nosotros, hemos habilitado el siguiente espacio para quienes así lo&nbsp;deseéis:</p>

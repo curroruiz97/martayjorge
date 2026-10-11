@@ -157,10 +157,9 @@
 
 /* ---------- AGENDA ---------- */
 .agenda__grid { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; row-gap: 1.25rem; }
-.ilu { position: relative; width: var(--w, 100%); }
-.ilu > svg { width: 100%; height: auto; overflow: visible; }
-.ilu--san-pablo { --w: min(84vw, 20rem); aspect-ratio: 520 / 620; }
-.ilu--palomar { --w: min(92vw, 23rem); aspect-ratio: 700 / 440; margin-top: .5rem; }
+.ilu { width: var(--w, 100%); height: auto; }
+.ilu--san-pablo { --w: min(84vw, 20rem); }
+.ilu--palomar { --w: min(92vw, 23rem); margin-top: .5rem; }
 
 .evento { display: grid; justify-items: center; gap: .3rem; text-align: center; margin-bottom: clamp(.5rem, 3vw, 1.5rem); }
 .evento .boton { margin-top: .75rem; }
@@ -168,7 +167,7 @@
 .evento__lugar { font-family: var(--f-serif); font-style: italic; font-weight: 400; font-size: min(var(--fs-h3), 9.5vw); color: var(--rojo); overflow-wrap: anywhere; line-height: 1.15; margin-top: .1rem; text-wrap: balance; }
 
 .ruta { width: 100%; display: grid; justify-items: center; margin-block: .75rem; }
-.ruta__v { width: min(6.25rem, 28vw); aspect-ratio: 170 / 560; }
+.ruta__v { width: min(8rem, 36vw); aspect-ratio: 220 / 560; }
 .ruta svg { width: 100%; height: auto; overflow: visible; }
 .ruta__linea { stroke: var(--rojo); }
 
@@ -180,14 +179,6 @@
 }
 .agenda__calendario .icono { width: 1.5rem; height: 1.5rem; }
 
-/* Ilustraciones que "se dibujan" al entrar en pantalla (js/main.js añade .dibuja) */
-.js .ilu svg .l { stroke-dasharray: 1 2; stroke-dashoffset: 1; }
-.js .ilu.dibuja svg .l { stroke-dashoffset: 0; transition: stroke-dashoffset 1.6s var(--ease); }
-.js .ilu svg .color { opacity: 0; }
-.js .ilu.dibuja svg .color { opacity: 1; transition: opacity 1.6s ease 1.1s; }
-.reveal-fallback .ilu svg .l { stroke-dashoffset: 0 !important; }
-.reveal-fallback .ilu svg .color { opacity: 1 !important; }
-.ilu noscript img { width: 100%; height: auto; }
 
 /* ---------- TRANSPORTE ---------- */
 .transporte__lista { display: grid; gap: clamp(1.5rem, 5vw, 2rem); }
@@ -250,8 +241,12 @@
 .cierre__titulo .rotulo { --cap: min(3.4rem, 9vw); filter: drop-shadow(0 0 .45rem rgba(251, 249, 241, .9)); }
 .cierre__firma { max-width: 100%; color: var(--tinta); font-size: 1.15rem; letter-spacing: .02em; text-shadow: 0 0 .9em rgba(245, 240, 228, .95), 0 0 .3em rgba(245, 240, 228, .9); }
 
-/* ---------- ILUSTRACIONES DE ACUARELA (decorativas; se generan con scripts/acuarela) ---------- */
+/* ---------- ILUSTRACIONES DE ACUARELA (se generan con scripts/acuarela) ---------- */
 .acuarela { display: block; width: 100%; height: auto; }
+/* Pintadas sobre blanco (pesan la tercera parte que con transparencia): el blanco desaparece al multiplicar con el lino
+   y el color queda transparente, como el pigmento sobre el papel. La clase .revelar va en la propia imagen: si fuera en
+   un contenedor, mientras este se funde el blanco se vería. */
+.acuarela-plana { mix-blend-mode: multiply; }
 .acuarela-fig { margin: 0 auto; display: grid; justify-items: center; }
 .acuarela-fig .acuarela { width: var(--w); }
 
@@ -259,7 +254,7 @@
 .mesa { --tile: clamp(180px, 46vw, 300px); display: grid; justify-items: center; margin-top: 1.25rem; }
 .mesa__guirnalda {
   width: 100%; height: calc(var(--tile) * 130 / 420);
-  background: url("../assets/ilustraciones/acuarela/guirnalda-630.webp") repeat-x 50% 0 / var(--tile) auto;
+  background: url("../assets/ilustraciones/acuarela/guirnalda-v2-630.webp") repeat-x 50% 0 / var(--tile) auto;
 }
 .mesa__img { width: min(100%, 40rem); margin-top: clamp(.25rem, 2vw, 1rem); }
 
@@ -277,5 +272,5 @@
 @media (min-width: 600px) {
   .ilu--san-pablo { --w: min(24rem, 84vw); }
   .ilu--palomar { --w: min(30rem, 92vw); }
-  .ruta__v { width: min(7.5rem, 28vw); }
+  .ruta__v { width: min(9.5rem, 36vw); }
 }

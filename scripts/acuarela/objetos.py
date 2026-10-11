@@ -7,15 +7,19 @@ import math
 
 from lib import TINTA, oscurece
 
+# Paleta cálida y apagada (V2): terracota, mostaza, verde salvia, rosa polvoriento y crema, más el turquesa del
+# candelabro y el verde botella
 PAL = {
-    "tomate": "#d63a30", "tomate_osc": "#b3202a", "brillo": "#f7bfae",
-    "hoja": "#5f8a34", "hoja_clara": "#8fae57", "hoja_osc": "#46692a",
-    "naranja": "#f08a24", "naranja_clara": "#f8b85c", "amarillo": "#f2c230", "amarillo_claro": "#f7dd7e",
-    "crema": "#f3e7cb", "crema_osc": "#dcc593", "rosa": "#ec8f94", "rosado": "#f2b6b0", "vino": "#d9737b",
-    "turquesa": "#2f8f8a", "turquesa_osc": "#1f6a68", "verde_botella": "#44702f",
-    "morado": "#5b3552", "morado_claro": "#8b5a7d", "oro": "#cfa52b", "oro_osc": "#9c7a1d",
+    "tomate": "#cf5640", "tomate_osc": "#a8402f", "brillo": "#f2c6b6",
+    "hoja": "#7f9a64", "hoja_clara": "#a7b98f", "hoja_osc": "#5d7650",
+    "naranja": "#e38d3d", "naranja_clara": "#efb46a", "amarillo": "#d9a83c", "amarillo_claro": "#ebd08c",
+    "crema": "#f1e6d0", "crema_osc": "#d9c59c", "rosa": "#e0a3a0", "rosado": "#eac0b9", "vino": "#d48e90",
+    "turquesa": "#4a9e98", "turquesa_osc": "#2f7a76", "verde_botella": "#3a5a40",
+    "morado": "#6c4a63", "morado_claro": "#9a7690", "oro": "#cfa52b", "oro_osc": "#9c7a1d",
     "marron": "#b4814a", "marron_osc": "#7c5226", "azul": "#cfe3ef", "azul_osc": "#5f9bbf", "gris": "#7d6d6a",
-    "rojo": "#c3262f", "rojo_osc": "#8f1a22", "carmin": "#a3121d",
+    "rojo": "#c0503f", "rojo_osc": "#8f3a2c", "carmin": "#a84a33",
+    "terracota": "#c0603f", "terracota_osc": "#9a4a31", "mostaza": "#d6a23a", "salvia": "#9aab8a",
+    "rosa_polvo": "#d8a7a2", "semilla": "#6b4a2b",
 }
 
 
@@ -213,6 +217,42 @@ def amapola(L, cx, cy, r, rot=0.0):
         for i in range(7):
             a = i * 2 * math.pi / 7
             L.punto(cx + math.cos(a) * r * .32, cy + math.sin(a) * r * .32, r * .035, "#2a1414", .8)
+
+
+def girasol(L, cx, cy, r, rot=0.0, inclinado=0.0):
+    """Girasol: dos coronas de pétalos mostaza y el disco de semillas con su granulado.
+    inclinado (0–0,6) aplasta la flor en vertical, como si mirase un poco de lado."""
+    sy = 1 - inclinado
+    with L.grupo(rot, cx, cy):
+        n = 21
+        for capa, (col, op, k) in enumerate(((PAL["mostaza"], .5, 1.1), ("#e2b54c", .9, 1.0))):
+            for i in range(n):
+                a = (i + .5 * capa) * 2 * math.pi / n + L.jit(0, .06)
+                largo = r * L.rng.uniform(.88, 1.12) * k
+                px, py = cx + math.cos(a) * r * .28, cy + math.sin(a) * r * .28 * sy
+                ex, ey = cx + math.cos(a) * (r * .28 + largo), cy + math.sin(a) * (r * .28 + largo) * sy
+                L.mancha(L.petalo(px, py, math.atan2(ey - py, ex - px), math.hypot(ex - px, ey - py), r * .26), col, op)
+        L.mancha(L.blob(cx, cy, r * .42, r * .42 * sy, 10, .06), PAL["semilla"], .92)
+        L.mancha(L.blob(cx - r * .06, cy - r * .06 * sy, r * .26, r * .26 * sy, 9, .08), "#3e2a1a", .7)
+        for i in range(18):
+            a = i * 2.39996
+            rr = r * .36 * math.sqrt((i + .5) / 18)
+            L.punto(cx + math.cos(a) * rr, cy + math.sin(a) * rr * sy, r * .025, "#2b1d12", .55)
+        L.linea(L.blob(cx + L.jit(0, 2), cy + L.jit(0, 2), r * .44, r * .44 * sy, 10, .05), 1.3)
+
+
+def jarra(L, cx, cy, alto, color=None):
+    """Jarra de barro (terracota) con asa; (cx, cy) es la base."""
+    color = color or PAL["terracota"]
+    w = alto * .62
+    d = [(cx - w * .36, cy), (cx - w * .5, cy - alto * .45), (cx - w * .34, cy - alto * .82), (cx - w * .4, cy - alto),
+         (cx + w * .36, cy - alto), (cx + w * .32, cy - alto * .82), (cx + w * .5, cy - alto * .45), (cx + w * .36, cy)]
+    L.mancha(L.suave(d, True, .25), color, .88)
+    L.mancha(L.suave([(cx + w * .05, cy), (cx + w * .2, cy - alto * .5), (cx + w * .3, cy - alto * .85), (cx + w * .5, cy - alto * .45), (cx + w * .36, cy)], True, .3), PAL["terracota_osc"], .45)
+    L.mancha(L.blob(cx - w * .24, cy - alto * .5, w * .08, alto * .2, 7, .1), "#f1c7ac", .45)
+    L.trazo_color(L.curva([(cx + w * .42, cy - alto * .78), (cx + w * .78, cy - alto * .72), (cx + w * .74, cy - alto * .38), (cx + w * .46, cy - alto * .3)]), color, alto * .06, .85)
+    L.linea(L.suave(d, True, .22), 1.6)
+    L.linea(L.blob(cx - w * .02, cy - alto, w * .38, alto * .04, 8, .04), 1.3)
 
 
 def tallo(L, pts, ancho=5, color=None):

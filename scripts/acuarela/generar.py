@@ -22,10 +22,15 @@ sys.path.insert(0, str(AQUI))
 import escenas  # noqa: E402
 
 # anchuras (px) de cada imagen: la pequeña para móviles, la grande para pantallas anchas o de mucha densidad
-ANCHOS = {"guirnalda": (630,), "bodegon": (640, 1000), "ramo": (480, 760), "almohada": (460, 700), "maleta": (380, 560), "granadas": (300, 420)}
+ANCHOS = {"guirnalda": (630,), "bodegon": (640, 1000)}
+# nombre del fichero publicado (las de la V2 llevan nombre nuevo para que nadie vea la versión anterior en caché)
+FICHERO = {"guirnalda": "guirnalda-v2", "bodegon": "bodegon-v2"}
 # iconos junto a los títulos: se recortan al dibujo y se guardan a 2× y 3× de su alto en pantalla (1,15 × la mayúscula
 # de los rótulos, que mide como mucho 44 px: ver .titulo__icono en site.css)
 ICONOS = {"alianzas-icono": 51, "almohada-icono": 51}
+# estas se guardan sobre blanco, sin transparencia (pesan la tercera parte); en la página se funden con el lino con
+# mix-blend-mode: multiply (clase .acuarela-plana en site.css)
+PLANAS = {"bodegon", "guirnalda"}
 CALIDAD, CALIDAD_ALFA = 66, 62      # con estos valores pesan la mitad que con 82/90 y no se nota (el grano del papel se suaviza algo)
 
 
@@ -58,8 +63,14 @@ def main():
                 continue
             for a in ANCHOS[nombre]:
                 im = Image.open(pngs / f"{nombre}-{a}.png").convert("RGBA")
-                destino = SALIDA / f"{nombre}-{a}.webp"
-                im.save(destino, "WEBP", quality=CALIDAD, alpha_quality=CALIDAD_ALFA, method=6)
+                destino = SALIDA / f"{FICHERO.get(nombre, nombre)}-{a}.webp"
+                if nombre in PLANAS:
+                    plano = Image.new("RGBA", im.size, (255, 255, 255, 255))
+                    plano.alpha_composite(im)
+                    im = plano.convert("RGB")
+                    im.save(destino, "WEBP", quality=72, method=6)
+                else:
+                    im.save(destino, "WEBP", quality=CALIDAD, alpha_quality=CALIDAD_ALFA, method=6)
                 kb = destino.stat().st_size / 1024
                 total += kb
                 print(f"  {destino.relative_to(RAIZ)}  {im.width}×{im.height}  {kb:.0f} KB")
