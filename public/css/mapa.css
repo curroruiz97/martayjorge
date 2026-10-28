@@ -112,6 +112,7 @@
   .mapa-pin__tarjeta, .mapa-pin--arriba .mapa-pin__tarjeta {   /* encima del icono, centrada: no se sale por los lados */
     left: 50%; right: auto; bottom: calc(100% + .3rem); transform: translateX(-50%); text-align: center;
   }
+  .mapa-pin__nombre { top: calc(100% + .2rem); left: 50%; transform: translateX(-50%); font-size: .75rem; }   /* nombre debajo del icono */
   .mapa-pin__tarjeta { max-width: 9.5rem; padding: .35rem .55rem .4rem; }
   .mapa-pin__tarjeta strong { font-size: .875rem; }
   .mapa-pin__tarjeta span { font-size: .75rem; }
@@ -120,8 +121,7 @@
   .mapa-pin--tarjeta .mapa-pin__chapa svg { width: 1.9rem; height: 1.9rem; }
   .mapa-pin__chapa { width: 2.25rem; height: 2.25rem; }
   .mapa-pin__chapa svg { width: 1.6rem; height: 1.6rem; }
-  .mapa-rotulo--zona { font-size: .6875rem; }
-  .mapa-rotulo--mano { font-size: 1.1rem; }
+  .mapa-rotulo--zona, .mapa-rotulo--mano { display: none; }   /* en el móvil no caben sin pisar nada: los explica la leyenda, justo debajo */
 }
 
 /* ---------- Si el mapa no carga: se quita el óvalo y queda el aviso con su enlace ---------- */

@@ -51,8 +51,8 @@
     },
     // Rótulos de las zonas: posición en fracciones de los semiejes del óvalo [a lo largo, a lo ancho].
     rotulos: [
-      { zona: 'recomendada', texto: 'Zona recomendada', pos: [-0.05, 0.62], clase: 'mapa-rotulo--zona' },
-      { zona: 'comoda', texto: '¡la más cómoda!', pos: [0.15, -1.25], clase: 'mapa-rotulo--mano' }
+      { zona: 'recomendada', texto: 'Zona recomendada', pos: [0.15, -1.32], clase: 'mapa-rotulo--zona' },   // justo debajo del óvalo, al sur de la Catedral
+      { zona: 'comoda', texto: '¡la más cómoda!', pos: [-0.55, -1.35], clase: 'mapa-rotulo--mano' }
     ],
     puntos: [
       {
@@ -260,7 +260,11 @@
       var span = document.createElement('span');
       span.className = 'mapa-rotulo ' + r.clase;
       span.textContent = r.texto;
-      new Marker({ map: map, position: enOvalo(CFG.zonas[r.zona], r.pos[0], r.pos[1]), content: span, zIndex: 5 });
+      new Marker({
+        map: map, position: enOvalo(CFG.zonas[r.zona], r.pos[0], r.pos[1]), content: span, zIndex: 5,
+        // Si al alejar el mapa choca con una tarjeta o un icono, el rótulo se esconde (los lugares mandan).
+        collisionBehavior: g.CollisionBehavior.OPTIONAL_AND_HIDES_LOWER_PRIORITY
+      });
     });
 
     /* Puntos de referencia */
@@ -288,6 +292,7 @@
       var m = new Marker({
         map: map, position: { lat: p.pos[0], lng: p.pos[1] }, content: c,
         title: conRuta ? p.nombre + ' · ' + TXT.comoLlegar : '', gmpClickable: conRuta,
+        collisionBehavior: g.CollisionBehavior.REQUIRED,
         zIndex: p.tipo === 'tarjeta' ? 30 : p.tipo === 'etiqueta' ? 20 : 10
       });
       if (!conRuta) return;
@@ -310,18 +315,23 @@
     /* Encuadre: que se vea el óvalo grande entero (y lo vuelve a hacer al girar el móvil, si no se ha tocado) */
     var limites = new g.LatLngBounds();
     contornoR.forEach(function (pt) { limites.extend(pt); });
+    // En el móvil el óvalo entero obliga a alejar tanto que los lugares se pisan: se encuadran los
+    // lugares con «¿Cómo llegar?» y el óvalo puede salirse un poco por los bordes.
+    var limitesMovil = new g.LatLngBounds();
+    CFG.puntos.forEach(function (p) { if (p.destino) limitesMovil.extend({ lat: p.pos[0], lng: p.pos[1] }); });
     var tocado = false;
     var leyenda = document.querySelector('.mapa-leyenda');
     function margenes() {
       var m = { top: 16, right: 16, bottom: 16, left: 16 };
       // Pantalla ancha: la leyenda está encima del mapa, a la derecha; que no tape el óvalo.
       if (leyenda && getComputedStyle(leyenda).position === 'absolute') m.right = leyenda.offsetWidth + 32;
-      // Móvil: las tarjetas van encima de su icono; deja sitio arriba para la de San Pablo.
-      if (lienzo.clientWidth < 600) m.top = 64;
+      // Móvil: las tarjetas van encima de su icono (sitio arriba) y los nombres debajo.
+      if (esMovil()) m = { top: 64, right: 56, bottom: 48, left: 60 };
       return m;
     }
+    function esMovil() { return lienzo.clientWidth < 600; }
     function encuadrar() {
-      map.fitBounds(limites, margenes());
+      map.fitBounds(esMovil() ? limitesMovil : limites, margenes());
       g.event.addListenerOnce(map, 'idle', function () {
         if (map.getZoom() > CFG.zoomMaxEncuadre) map.setZoom(CFG.zoomMaxEncuadre);
       });
