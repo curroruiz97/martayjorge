@@ -56,6 +56,7 @@ def pieza_palomar(carpeta):
 def pieza_rutas(carpeta):
     import rutas
     escribir(carpeta, "ruta-vertical.svg", rutas.vertical())
+    escribir(carpeta, "ruta-vertical-v3.svg", rutas.vertical_v3())
 
 
 def pieza_adornos(carpeta):

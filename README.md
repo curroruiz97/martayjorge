@@ -9,17 +9,21 @@ Estilo de papelería de boda pintada a mano: **lino crema con rayas rosas**, **r
 subrayados a mano, como la invitación de referencia que mandaron los novios), cursiva con serifas, **acuarelas propias** y
 fotos de lado a lado con los bordes a pincel; formulario de confirmación con acompañantes, autocar y alergias.
 
-> **Versiones** · En producción conviven las dos versiones con un **selector «V1 · V2»** fijo arriba a la derecha:
-> - **V2** (la nueva: comentarios de los novios sobre la V1, más acuarela, menos espacio en blanco, pensada para el
->   móvil) es la página de siempre, `public/index.html`, en `/`.
-> - **V1** (la anterior, congelada tal cual estaba en el commit `db679a3`) vive en `public/v1/`, en `/v1/`. Lleva
->   `<base href="/v1/">` para cargar sus propios estilos, scripts e imágenes.
-> - Quien llega a `/` sin haber elegido ve la **V1** (la que había); al pulsar **V2** se queda en la nueva y se
->   recuerda en el navegador. Enlaces directos: `/?v=2` (nueva) y `/v1/?v=1` (anterior). Lo hacen
->   `public/version/elegir.js` (en el `<head>` de la V2) y `public/version/selector.js` + `selector.css` (en las dos).
-> - Las dos versiones envían las confirmaciones a la misma API (`/api/rsvp`).
-> - **Para quedarse solo con la V2**: borrar `public/v1/` y `public/version/`, y en `public/index.html` las tres
->   líneas que los cargan (`/version/elegir.js`, `/version/selector.css` y `/version/selector.js`).
+> **Versiones** · En producción conviven tres versiones con un **selector «V1 · V2 · V3»** fijo arriba a la derecha:
+> - **V3** (la más nueva: la V2 con los cambios de los novios del 28-oct-2026) vive en `public/v3/index.html`, en
+>   `/v3/`. Usa rutas absolutas y comparte estilos, scripts e imágenes con la V2; lo suyo está en `public/css/v3.css`
+>   y en los ficheros `*-v3`. Cambios: bodegón sin la guirnalda de banderines, ruta San Pablo → Posada un 30 % más
+>   corta (`ruta-vertical-v3.svg`), alianzas con el diamante por fuera del aro (`alianzas-icono-v3-*.webp`) y, en
+>   Alojamiento, un **plano ilustrado fijo** en lugar de Google Maps (sin API ni clave; ver «Plano de la V3» abajo).
+> - **V2** es la página de siempre, `public/index.html`, en `/` (con el mapa de Google Maps).
+> - **V1** (la primera, congelada en el commit `db679a3`, con el mapa de Google Maps) vive en `public/v1/`, en `/v1/`.
+>   Lleva `<base href="/v1/">` para cargar sus propios estilos, scripts e imágenes.
+> - Quien llega a `/` sin haber elegido ve la **V1**; al pulsar otra versión se queda en ella y se recuerda en el
+>   navegador. Enlaces directos: `/v1/?v=1`, `/?v=2` y `/v3/?v=3`. Lo hacen `public/version/elegir.js` (en el
+>   `<head>` de la V2) y `public/version/selector.js` + `selector.css` (en las tres).
+> - Las tres versiones envían las confirmaciones a la misma API (`/api/rsvp`).
+> - **Para quedarse con una sola**: borrar las carpetas de las otras y `public/version/`, y quitar de la página que
+>   quede las líneas que cargan `/version/…`. Si se queda la V3, lo más limpio es moverla a `public/index.html`.
 >   **Para que por defecto se vea la V2** (sin quitar el selector): borrar solo la línea de `elegir.js`.
 
 ## Qué incluye
@@ -181,3 +185,12 @@ boda y, después, exportad lo que queráis conservar y vaciad la tabla. Guía co
   versión (sobre blanco, se multiplica con el lino) o dejar esta.
 - La página lleva `noindex` y `robots.txt` cerrado: es una invitación privada y no debe salir en buscadores.
 - Todo está autoalojado (fuentes, imágenes, scripts): solo el mapa se pide a terceros (Google Maps, con su clave y Map ID en `index.html`; ver `docs/mapa-google.md`).
+
+## Plano de la V3
+
+El mapa de Alojamiento de la V3 es una imagen fija (`public/assets/mapa/valladolid-v3.svg`) dibujada con datos de
+OpenStreetMap por `scripts/mapa/generar.py`: calles, río y parques reales, y el óvalo entre la Plaza del Poniente y
+San Pablo. No necesita API, clave ni conexión con Google. Los iconos (`san-pablo.svg`, `autocar.svg`) y los rótulos
+van en HTML encima (`v3/index.html`), colocados en % del plano. Para cambiar el óvalo o el encuadre, toca las
+constantes del script y vuelve a ejecutarlo (`python3 scripts/mapa/generar.py`); imprime las posiciones nuevas.
+La atribución «© colaboradores de OpenStreetMap» es obligatoria (licencia ODbL) y va bajo el plano.

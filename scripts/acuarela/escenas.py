@@ -108,6 +108,13 @@ def alianzas_icono():
     return L
 
 
+def alianzas_icono_v3():
+    """V3: las mismas alianzas con el diamante por fuera del aro."""
+    L = Lienzo(240, 190, 29)
+    O.anillos(L, 122, 108, 56, diamante_fuera=True)
+    return L
+
+
 def almohada_icono():
     L = Lienzo(300, 220, 37)
     O.almohada(L, 150, 92, 230, 140, -4)
@@ -116,5 +123,6 @@ def almohada_icono():
 
 
 # (ramo, almohada grande, maleta y granadas ya no salen en la V2; se quedan aquí por si se quieren recuperar)
-ESCENAS = {"guirnalda": guirnalda, "bodegon": bodegon, "alianzas-icono": alianzas_icono, "almohada-icono": almohada_icono}
+ESCENAS = {"guirnalda": guirnalda, "bodegon": bodegon, "alianzas-icono": alianzas_icono, "almohada-icono": almohada_icono,
+           "alianzas-icono-v3": alianzas_icono_v3}
 ESCENAS_V1 = {"ramo": ramo, "almohada": almohada, "maleta": maleta, "granadas": granadas}
