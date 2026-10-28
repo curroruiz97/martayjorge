@@ -315,14 +315,21 @@ def banderines(L, x0, x1, y, caida, n, colores=None, tam=None):
 
 
 # ------------------------------------------------------------------ boda
-def anillos(L, cx, cy, r):
-    """Dos alianzas de oro entrelazadas y un diamante."""
+def anillos(L, cx, cy, r, diamante_fuera=False):
+    """Dos alianzas de oro entrelazadas y un diamante. Con diamante_fuera (V3) el diamante va engastado ENCIMA del
+    aro de la derecha, por fuera, como en un anillo de pedida; si no (V2), queda dentro del aro."""
     for dx, dy, rr in [(-r * .45, r * .1, r), (r * .5, -r * .05, r * .92)]:
         L.trazo_color(L.blob(cx + dx, cy + dy, rr, rr * .96, 14, .025), PAL["oro"], r * .14, .9, rim=PAL["oro_osc"])
         L.linea(L.blob(cx + dx + L.jit(0, 2), cy + dy + L.jit(0, 2), rr * 1.07, rr * 1.03, 14, .025), 1.4, "#6b5210", .6)
         L.linea(L.blob(cx + dx + L.jit(0, 2), cy + dy + L.jit(0, 2), rr * .93, rr * .89, 14, .025), 1.2, "#6b5210", .5)
     # diamante
     dx, dy = cx + r * .72, cy - r * .68
+    if diamante_fuera:
+        # arriba del aro derecho (centro cx + .5r, cy - .05r; radio .92r; medio grosor del oro ≈ .07r): la punta de
+        # abajo del diamante toca el borde exterior; dos garras lo sujetan
+        dx, dy = cx + r * .5, cy - r * (.05 + .92 + .07 + .15)
+        for lado in (-1, 1):
+            L.linea(L.curva([(dx + lado * r * .07, dy + r * .1), (dx + lado * r * .05, dy + r * .2)]), 1.6, "#6b5210", .8)
     pts = [(dx - r * .17, dy), (dx - r * .08, dy - r * .14), (dx + r * .09, dy - r * .14), (dx + r * .18, dy), (dx, dy + r * .17)]
     L.mancha(L.suave(pts, True, .05), "#b9cdd6", .9)
     L.mancha(L.suave([(dx - r * .08, dy - r * .14), (dx + r * .09, dy - r * .14), (dx + r * .02, dy)], True, .05), "#eaf3f6", .8)

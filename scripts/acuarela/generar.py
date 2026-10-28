@@ -27,7 +27,7 @@ ANCHOS = {"guirnalda": (630,), "bodegon": (640, 1000)}
 FICHERO = {"guirnalda": "guirnalda-v2", "bodegon": "bodegon-v2"}
 # iconos junto a los títulos: se recortan al dibujo y se guardan a 2× y 3× de su alto en pantalla (1,15 × la mayúscula
 # de los rótulos, que mide como mucho 44 px: ver .titulo__icono en site.css)
-ICONOS = {"alianzas-icono": 51, "almohada-icono": 51}
+ICONOS = {"alianzas-icono": 51, "almohada-icono": 51, "alianzas-icono-v3": 51}
 # estas se guardan sobre blanco, sin transparencia (pesan la tercera parte); en la página se funden con el lino con
 # mix-blend-mode: multiply (clase .acuarela-plana en site.css)
 PLANAS = {"bodegon", "guirnalda"}

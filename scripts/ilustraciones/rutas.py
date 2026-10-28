@@ -73,3 +73,16 @@ def vertical():
     pts = _mano(pts, 11, amp=0.8)
     d = _ruta_d(pts, [])
     return _svg(220, 560, d, "Ruta de la iglesia de San Pablo al Palomar", grosor=2.3)
+
+
+def vertical_v3():
+    """V3: la misma serpiente que vertical(), un 30 % más corta. Se escalan los puntos (no el dibujo), así que el
+    grosor, los guiones y el avión quedan del mismo tamaño en pantalla si el CSS la pinta al 70 % de ancho."""
+    k = 0.7
+    pts = [
+        (110.0, 18.0), (140.0, 48.0), (176.0, 88.0), (182.0, 126.0), (152.0, 160.0), (88.0, 190.0),
+        (44.0, 226.0), (42.0, 266.0), (86.0, 296.0), (148.0, 322.0), (182.0, 358.0), (178.0, 398.0),
+        (134.0, 428.0), (72.0, 452.0), (46.0, 484.0), (68.0, 514.0), (108.0, 540.0),
+    ]
+    pts = _mano([(x * k, y * k) for x, y in pts], 11, amp=0.8 * k)
+    return _svg(154, 392, _ruta_d(pts, []), "Ruta de la iglesia de San Pablo al Palomar", grosor=2.3)

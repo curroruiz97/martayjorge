@@ -1,4 +1,4 @@
-/* Selector de versión (V1 · V2) mientras se comparan las dos. Lo añade /version/selector.js en las dos páginas.
+/* Selector de versión (V1 · V2 · V3) mientras se comparan. Lo añade /version/selector.js en las dos páginas.
    Usa la letra del sistema para verse igual en las dos versiones. Para quitarlo: ver README («Versiones»). */
 .mj-version {
   position: fixed; z-index: 1000;
