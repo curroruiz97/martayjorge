@@ -40,7 +40,7 @@
 .mapa-pin--tarjeta .mapa-pin__chapa svg { width: 2.4rem; height: 2.4rem; }
 
 /* Fachada de San Pablo (la misma ilustración de la sección Agenda) */
-.mapa-pin__ilu { width: 3.25rem; height: auto; flex: none; filter: drop-shadow(1px 2px 0 rgba(43, 42, 40, .18)); }
+.mapa-pin__ilu { display: block; width: 4.25rem; height: auto; aspect-ratio: 64 / 76; flex: none; overflow: visible; filter: drop-shadow(0 0 1.5px var(--papel-3)) drop-shadow(0 0 1.5px var(--papel-3)) drop-shadow(1px 2px 1px rgba(43, 42, 40, .25)); }
 
 /* Tarjeta blanca: nombre + detalle */
 .mapa-pin__tarjeta {
@@ -116,7 +116,8 @@
   .mapa-pin__tarjeta { max-width: 9.5rem; padding: .35rem .55rem .4rem; }
   .mapa-pin__tarjeta strong { font-size: .875rem; }
   .mapa-pin__tarjeta span { font-size: .75rem; }
-  .mapa-pin__ilu, .mapa-pin--tarjeta .mapa-pin__chapa { width: 2.6rem; }
+  .mapa-pin__ilu { width: 3.25rem; }
+  .mapa-pin--tarjeta .mapa-pin__chapa { width: 2.6rem; }
   .mapa-pin--tarjeta .mapa-pin__chapa { height: 2.6rem; }
   .mapa-pin--tarjeta .mapa-pin__chapa svg { width: 1.9rem; height: 1.9rem; }
   .mapa-pin__chapa { width: 2.25rem; height: 2.25rem; }
