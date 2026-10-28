@@ -11,8 +11,10 @@ Verificado el 8-oct-2026. Sirve de fuente para `js/mapa.js` (constantes `CFG`), 
 | Ceremonia | Iglesia Conventual de San Pablo (Dominicos) | Plaza de San Pablo, 4 · 47011 Valladolid | **41.65710, -4.72442** | Alta (±25 m, 4 fuentes coherentes) |
 | Celebración | La Posada Real del Pinar (también «La Posada del Pinar») | Pinar de San Rafael, s/n · 47450 Pozal de Gallinas (Valladolid) | **41.29956, -4.81734** | Media-alta (±50 m; la dirección es segura, el punto viene de portales de reservas) |
 | Parking | Plaza de Portugalete (aparcamiento «IC Plaza de Portugalete») | Plaza de Portugalete · 47002 Valladolid (acceso: Plaza Portugalete 5 / Plaza de la Libertad 5, según el portal) | **41.65335, -4.72386** (centro de la plaza, no la boca del garaje) | Media-alta (±30 m; es el punto de Google Maps de la plaza) |
-| Autocar de vuelta | Plaza del Poniente (Valladolid, Centro) | Plaza del Poniente · 47003 (algunas fuentes 47001) | **41.65316, -4.73128** | Media-alta para el lugar; **sin confirmar que sea la que quiere el cliente** (ver §5) |
-| Zona de alojamiento | Círculo centrado en el baricentro Plaza Mayor–Catedral–San Pablo | — | **41.65423, -4.72563**, radio **900 m** | Decisión de diseño (ver §6) |
+| Autocar de vuelta | Plaza del Poniente (Valladolid, Centro) | Plaza del Poniente · 47003 (algunas fuentes 47001) | **41.65316, -4.73128** | Media-alta para el lugar; el cliente la marcó en su plano de referencia (oct-2026) como parada del autocar de vuelta (ver §5) |
+| Zona de alojamiento | Óvalo que abarca San Pablo, Catedral, Plaza Mayor y Poniente | — | centro **41.65454, -4.72762**, semiejes **700 × 430 m**, girado 32° | Decisión de diseño (ver §6) |
+| Zona «más cómoda» | Óvalo entre la Plaza del Poniente y la Plaza Mayor | — | centro **41.65265, -4.73008**, semiejes **270 × 150 m**, girado −24° | Decisión de diseño a partir del plano del cliente (ver §6) |
+| Plaza de Zorrilla y Campo Grande | Solo rótulos de referencia en el mapa | — | **41.64780, -4.72930** · **41.64560, -4.73080** | Aproximada (±100 m; puestas a ojo, sin fuente contrastada) |
 
 ## 2. Iglesia de San Pablo
 
@@ -44,10 +46,13 @@ Verificado el 8-oct-2026. Sirve de fuente para `js/mapa.js` (constantes `CFG`), 
 - **Coordenadas (4 fuentes dentro de ~100 m):** geocodificación Nominatim 41.6531571, -4.7312823 (repo aldeapucela/fiestas) · parada AUVASA «Paseo Isabel la Católica Plaza Poniente» 41.653327, -4.732088 y «Plaza Poniente frente Jorge Guillén» 41.653499, -4.731113 (GTFS de AUVASA) · calle OSM «Plaza del Poniente» 41.65362, -4.73209. Se usa 41.65316, -4.73128.
 - **Ya es un nudo de autobuses:** paradas urbanas AUVASA (origen de la línea 24, según findit.city) y paradas de líneas de Arroyo de la Encomienda. Una web de boda pública de otra pareja (oct-2026) usa «Poniente» como salida de autocares hacia esta misma finca (anecdótico; no se enlaza por privacidad).
 - **Otras con el mismo nombre:** existen «plaza del Poniente» en otras localidades (p. ej. Fuenlabrada, Madrid), irrelevantes. En Valladolid ciudad no se ha encontrado otra. En la provincia, la búsqueda no fue concluyente.
-- **DUDA ABIERTA (preguntar al cliente):** ¿«Plaza del Poniente» es esta plaza de Valladolid Centro (Paseo de Isabel la Católica)? ¿Es de verdad donde parará el autocar de vuelta? ¿Y dónde recoge el de ida: delante de San Pablo o en otro punto? El mapa de alojamiento **no** la marca.
+- **Actualización (28-oct-2026):** el cliente pasó un plano de referencia con la Plaza de Poniente junto al Paseo de Isabel la Católica y el río («Aquí os deja el bus a la vuelta»), así que el mapa de alojamiento ya la marca. Sigue sin saberse dónde recoge el autocar de ida.
 - URL de búsqueda: `https://www.google.com/maps/search/?api=1&query=Plaza%20del%20Poniente%2C%20Valladolid`.
 
-## 6. Zona recomendada para alojarse (círculo del mapa)
+## 6. Zona recomendada para alojarse (óvalos del mapa)
+
+**Desde oct-2026 el mapa usa Google Maps y dos óvalos** (como en el plano que dibujó el cliente): el grande (zona recomendada) va de la Plaza del Poniente a San Pablo y deja dentro Catedral y Plaza Mayor con margen; el pequeño y discontinuo («la más cómoda») va de Poniente a la Plaza Mayor. Las medidas están en la tabla del §1 y en `CFG.zonas` de `js/mapa.js`. Lo que sigue es el círculo anterior (Leaflet), que se deja como referencia.
+
 
 - **Centro: 41.65423, -4.72563.** Baricentro de Plaza Mayor (41.65225, -4.72861; Google), Catedral/Plaza de Portugalete y San Pablo. Distancias al centro: San Pablo 335 m, Plaza Mayor 331 m, Plaza de Portugalete 177 m, Catedral 270 m.
 - **Radio: 900 m** (≈ 11 min andando). Deja dentro, con margen, todos los puntos de la boda en la ciudad (el más lejano, la Plaza del Poniente, a 484 m) y hacia el sur llega a la zona de la Plaza de Zorrilla y el Campo Grande (aproximado, no contrastado sobre mapa). Se eligió 900 y no 1000–1100 para que el círculo entero quepa a zoom 14 en el mapa del móvil (≈ 343×304 px); en pantallas ≥ 600 px cabe a zoom 15.
@@ -69,10 +74,10 @@ En HTML, escribir `&amp;` en vez de `&`. Si Google no resolviera bien el nombre 
 
 ## 8. Dudas abiertas y lo que NO se pudo verificar
 
-1. **Plaza del Poniente:** confirmar cuál es y si es la parada real del autocar (§5).
+1. **Plaza del Poniente:** confirmada por el plano del cliente como vuelta del autocar; falta saber dónde recoge el de ida (§5).
 2. **Enlace corto del parking:** abrirlo y comprobar a qué punto lleva (§4). Si apunta a la boca del garaje, mejor usarlo como botón «¿Cómo llegar?» del parking.
 3. **Tiempo en coche a la finca:** medirlo en Google Maps (hora de salida real) antes de poner una cifra (§3).
 4. **Código postal de la finca:** 47450 (propio) frente a 47400 (portales).
 5. Sin abrir: webs oficiales (posada, Turismo CyL, Ayuntamiento). Las coordenadas de San Pablo y de la plaza son las que más fuentes avalan; la de la finca depende de portales de reservas.
 6. «5 minutos» a pie desde el parking: ajustar el texto a «unos 500 m (6–8 min)».
-7. **Aspecto real de las teselas** (CARTO Positron) en el mapa: no se pudo ver (hosts externos bloqueados); se probó con teselas falsas y sin teselas.
+7. **Aspecto real del mapa de Google** con la clave y el estilo del Map ID: no se pudo ver desde el entorno de desarrollo (sin clave válida). Se probó la capa propia (óvalos, tarjetas, leyenda) sobre una simulación de la API.

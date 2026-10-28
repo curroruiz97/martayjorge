@@ -16,7 +16,7 @@ propias (a pluma y de acuarela) y formulario de confirmación con acompañantes,
 | **Mesa puesta** | Ilustración de acuarela (guirnalda, narcisos, vela, copa, gerberas, tomates…) entre la portada y la Agenda |
 | **Agenda** | Ilustraciones a pluma de San Pablo y del Palomar unidas por una ruta roja con un lazo en forma de corazón y un avión que la recorre; enlaces «¿Cómo llegar?» a Google Maps, «Añadir al calendario» y un ramo con las alianzas, en acuarela |
 | **Transporte** | Coche (parking recomendado junto a la Catedral) y autocar |
-| **Alojamiento** | Almohada y llave en acuarela, texto y mapa con la zona recomendada marcada con un círculo «a rotulador» |
+| **Alojamiento** | Almohada y llave en acuarela, texto y mapa de Google Maps con la zona recomendada y la más cómoda (junto a Poniente), tarjetas de los lugares y leyenda. Configuración: `docs/mapa-google.md` |
 | **S.R.C.** | Formulario: nombre, asistencia, acompañantes con sus nombres, plazas de autocar por trayecto, alergias por persona y mensaje. No pide correo |
 | **Lista de bodas** | Maleta en acuarela e IBAN en una sola línea con botón para copiarlo |
 | **Cierre** | «¡Os esperamos!» sobre la foto del atardecer y, en el pie, un par de granadas |
@@ -150,4 +150,4 @@ boda y, después, exportad lo que queráis conservar y vaciad la tabla. Guía co
   ni del render con IA). Si contratáis al ilustrador para las invitaciones en papel, basta con sustituir `san-pablo.svg`
   por su versión (mismo `viewBox`) o dejar esta.
 - La página lleva `noindex` y `robots.txt` cerrado: es una invitación privada y no debe salir en buscadores.
-- Todo está autoalojado (fuentes, imágenes, scripts): solo se piden a terceros las teselas del mapa.
+- Todo está autoalojado (fuentes, imágenes, scripts): solo el mapa se pide a terceros (Google Maps, con su clave y Map ID en `index.html`; ver `docs/mapa-google.md`).
