@@ -12,7 +12,7 @@ En `public/index.html`, en el contenedor del mapa:
 ```
 
 - `data-map-id`: el Map ID «martayjorge-web» (JavaScript, Vector). Ya está puesto.
-- `data-api-key`: la clave de Google Maps. **Mientras esté vacío, el mapa muestra «No hemos podido cargar el mapa»**
+- `data-api-key`: la clave de Google Maps (ya puesta). **Si se deja vacío, el mapa muestra «No hemos podido cargar el mapa»**
   con el enlace a Google Maps (la leyenda se ve igual).
 
 La clave de Maps JavaScript siempre acaba en el navegador del visitante: no es un secreto y puede ir en el HTML.

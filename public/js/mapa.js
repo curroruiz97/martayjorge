@@ -76,7 +76,7 @@
       {
         tipo: 'etiqueta', icono: 'catedral', nombre: 'Catedral',
         detalle: 'Al lado, el parking de la Plaza de Portugalete',
-        pos: [41.65335, -4.72386],
+        pos: [41.65275, -4.72343],
         destino: 'Parking Plaza de Portugalete, Valladolid', textoRuta: 'Cómo llegar al parking'
       },
       { tipo: 'punto', nombre: 'Plaza de Zorrilla', pos: [41.64780, -4.72930] },

@@ -14,6 +14,7 @@ Verificado el 8-oct-2026. Sirve de fuente para `js/mapa.js` (constantes `CFG`), 
 | Autocar de vuelta | Plaza del Poniente (Valladolid, Centro) | Plaza del Poniente · 47003 (algunas fuentes 47001) | **41.65316, -4.73128** | Media-alta para el lugar; el cliente la marcó en su plano de referencia (oct-2026) como parada del autocar de vuelta (ver §5) |
 | Zona de alojamiento | Óvalo que abarca San Pablo, Catedral, Plaza Mayor y Poniente | — | centro **41.65454, -4.72762**, semiejes **700 × 430 m**, girado 32° | Decisión de diseño (ver §6) |
 | Zona «más cómoda» | Óvalo entre la Plaza del Poniente y la Plaza Mayor | — | centro **41.65265, -4.73008**, semiejes **270 × 150 m**, girado −24° | Decisión de diseño a partir del plano del cliente (ver §6) |
+| Catedral (icono del mapa) | Catedral de Nuestra Señora de la Asunción | — | **41.65275, -4.72343** | Media (±20 m; leída sobre el mapa de Google a zoom 17, oct-2026) |
 | Plaza de Zorrilla y Campo Grande | Solo rótulos de referencia en el mapa | — | **41.64780, -4.72930** · **41.64560, -4.73080** | Aproximada (±100 m; puestas a ojo, sin fuente contrastada) |
 
 ## 2. Iglesia de San Pablo
@@ -80,4 +81,4 @@ En HTML, escribir `&amp;` en vez de `&`. Si Google no resolviera bien el nombre 
 4. **Código postal de la finca:** 47450 (propio) frente a 47400 (portales).
 5. Sin abrir: webs oficiales (posada, Turismo CyL, Ayuntamiento). Las coordenadas de San Pablo y de la plaza son las que más fuentes avalan; la de la finca depende de portales de reservas.
 6. «5 minutos» a pie desde el parking: ajustar el texto a «unos 500 m (6–8 min)».
-7. **Aspecto real del mapa de Google** con la clave y el estilo del Map ID: no se pudo ver desde el entorno de desarrollo (sin clave válida). Se probó la capa propia (óvalos, tarjetas, leyenda) sobre una simulación de la API.
+7. **Mapa de Google con la clave real** (28-oct-2026): carga bien y los marcadores caen en su sitio (comprobado a zoom 17: Plaza Mayor, Poniente, San Pablo, Catedral, Zorrilla). El navegador de pruebas no tiene WebGL, así que cayó al mapa ráster y **no se pudo ver el estilo del Map ID**: comprobarlo en un navegador normal.
