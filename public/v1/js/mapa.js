@@ -3,7 +3,7 @@
  *
  * Integración (ya hecha en index.html):
  *   <link rel="stylesheet" href="css/mapa.css">
- *   <div id="mapa-alojamiento" class="mapa marco" data-api-key="…" data-map-id="…" data-ilu-san-pablo="…" role="region" aria-label="…"></div>
+ *   <div id="mapa-alojamiento" class="mapa marco" data-api-key="…" data-map-id="…" role="region" aria-label="…"></div>
  *   <aside class="mapa-leyenda">…</aside>          (leyenda en HTML: se ve también sin JS)
  *   <script src="js/mapa.js" defer></script>
  * El tamaño del contenedor lo da el CSS (aspect-ratio), así que no hay saltos de layout.
@@ -42,8 +42,6 @@
     mapId: (el.getAttribute('data-map-id') || '').trim(),
     // El rojo sale de --rojo (base.css) para que el mapa siga a la paleta de cada versión.
     color: (getComputedStyle(document.documentElement).getPropertyValue('--rojo') || '').trim() || '#a3121d',
-    // Dibujo de San Pablo para su marcador (V1: el SVG a pluma; V2: la acuarela). Lo fija data-ilu-san-pablo.
-    iluSanPablo: el.getAttribute('data-ilu-san-pablo') || 'assets/ilustraciones/san-pablo.svg',
     semilla: 20270508,          // fija: el trazo «a mano» sale siempre igual (fecha de la boda)
     zoomMin: 13, zoomMax: 18, zoomMaxEncuadre: 16,
     zonas: {
@@ -154,10 +152,37 @@
     // Plaza Mayor: soportales (arcos) bajo un friso
     plaza: '<path d="M9 15h30M10 15v19M38 15v19M9 34h30M10 34v-8a4.7 4.7 0 0 1 9.3 0v8M19.3 34v-8a4.7 4.7 0 0 1 9.4 0v8M28.7 34v-8a4.7 4.7 0 0 1 9.3 0v8M13 20.5h22"/>'
   };
-  function icono(nombre) {
-    if (nombre === 'san-pablo') {
-      return '<img class="mapa-pin__ilu" src="' + CFG.iluSanPablo + '" alt="" decoding="async">';
+  // Fachada de San Pablo en colores planos y opacos (se lee bien encima de calles y etiquetas):
+  // dos torres con chapitel, portada en arco, retablo con óculo y frontón con escudo y cruz.
+  var SAN_PABLO = (function () {
+    var piedra = '#ecd3a0', sombra = '#d9b475', detalle = '#bb8c50', hueco = '#5a463c', puerta = '#7b4a2e', tejado = '#a8643f';
+    function torre(x) {
+      var c = x + 7;
+      return '<rect x="' + x + '" y="21" width="14" height="51" fill="' + piedra + '"/>' +
+        '<path d="M' + (x - 1) + ' 21L' + c + ' 7 ' + (x + 15) + ' 21Z" fill="' + tejado + '"/>' +
+        '<path d="M' + c + ' 7V2.5"/>' +
+        '<path d="M' + (x + 4) + ' 37V30a3 3 0 0 1 6 0v7Z" fill="' + hueco + '"/>' +
+        '<rect x="' + (x + 5.5) + '" y="47" width="3" height="7" rx="1.5" fill="' + hueco + '"/>';
     }
+    return '<svg class="mapa-pin__ilu" viewBox="0 0 64 76" aria-hidden="true" focusable="false" fill="none" stroke="#4b3c37" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round">' +
+      '<ellipse cx="32" cy="73" rx="27" ry="2.6" fill="#2b2a28" fill-opacity=".2" stroke="none"/>' +
+      torre(4) + torre(46) +
+      '<path d="M18 72V17Q32 3 46 17V72Z" fill="' + piedra + '"/>' +
+      '<path d="M18 17Q32 3 46 17Z" fill="' + sombra + '"/>' +
+      '<path d="M32 6.5V1.5M29.8 3.6h4.4"/>' +
+      '<circle cx="32" cy="12.4" r="2.5" fill="' + detalle + '"/>' +
+      '<rect x="21" y="20" width="22" height="20" fill="' + sombra + '"/>' +
+      '<path d="M26.5 20v20M37.5 20v20M21 26.5h5.5M37.5 26.5H43M21 33.5h5.5M37.5 33.5H43" stroke="' + detalle + '" stroke-width="1.1"/>' +
+      '<circle cx="32" cy="30" r="4.2" fill="#f7e9c8"/>' +
+      '<path d="M21.5 72V52.5Q21.5 43.5 32 41.5 42.5 43.5 42.5 52.5V72Z" fill="' + detalle + '"/>' +
+      '<path d="M25.8 72V55.5Q25.8 49.2 32 48 38.2 49.2 38.2 55.5V72Z" fill="' + puerta + '"/>' +
+      '<path d="M32 49v23" stroke="#3d2a20" stroke-width="1.2"/>' +
+      '<path d="M2 72h60"/>' +
+      '</svg>';
+  })();
+
+  function icono(nombre) {
+    if (nombre === 'san-pablo') return SAN_PABLO;
     var dentro = nombre === 'autocar'
       ? '<use href="' + SPRITE + '#autocar"/>'
       : GLIFOS[nombre];
