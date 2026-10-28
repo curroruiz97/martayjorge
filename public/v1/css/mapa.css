@@ -1,0 +1,139 @@
+/* ==========================================================================
+   Marta & Jorge · mapa de alojamiento (Google Maps, ver js/mapa.js)
+   El tamaño del contenedor (.mapa) lo da site.css (aspect-ratio + min-height),
+   así que la altura queda reservada antes de cargar el mapa y no hay saltos.
+   Los colores del mapa base (beige, río, parques) NO están aquí: van en el
+   estilo del Map ID en Google Cloud (ver docs/mapa-google.md).
+   Aquí: estado previo/sin JS, marcadores, rótulos, ventana, leyenda y foco.
+   ========================================================================== */
+
+/* ---------- Antes de cargar (o sin JS / si falla): óvalo a rotulador ---------- */
+.mapa {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Cpath d='M44 152c-30-28 2-86 70-118s132-26 150 6-6 86-74 116-116 24-146-4z' fill='rgba(163,18,29,.08)' stroke='%23a3121d' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: auto 72%;
+}
+.mapa--lista { background-image: none; }
+
+@media (min-width: 600px) { #mapa-alojamiento.mapa { min-height: 34rem; } }
+
+/* El lienzo llena el contenedor; el recorte va aquí para no cortar el marco desplazado (.marco::before). */
+.mapa .mapa__lienzo { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; background: var(--papel-2); }
+.mapa .mapa__lienzo .gm-style { font: inherit; }
+
+/* ---------- Marcadores ---------- */
+/* El contenido del marcador mide lo que el icono: Google lo ancla por abajo y al centro, así que la
+   tarjeta y el nombre van en posición absoluta a un lado y no desplazan el icono de su sitio. */
+.mapa-pin { position: relative; display: block; color: var(--tinta); font-family: var(--f-sans); }
+.mapa-pin--etiqueta, .mapa-pin--punto { transform: translateY(50%); }   /* chapa y punto: centrados en el lugar */
+
+/* Chapa redonda con el dibujo a pluma */
+.mapa-pin__chapa {
+  position: relative; display: grid; place-items: center; width: 2.75rem; height: 2.75rem; flex: none;
+  border: 1.5px solid var(--rojo); border-radius: 50%;
+  background: var(--papel-3); color: var(--rojo);
+  box-shadow: 2px 2px 0 color-mix(in srgb, var(--rojo) 18%, transparent);
+}
+.mapa-pin__chapa svg { width: 2rem; height: 2rem; }
+.mapa-pin--tarjeta .mapa-pin__chapa { width: 3.25rem; height: 3.25rem; }
+.mapa-pin--tarjeta .mapa-pin__chapa svg { width: 2.4rem; height: 2.4rem; }
+
+/* Fachada de San Pablo (la misma ilustración de la sección Agenda) */
+.mapa-pin__ilu { width: 3.25rem; height: auto; flex: none; filter: drop-shadow(1px 2px 0 rgba(43, 42, 40, .18)); }
+
+/* Tarjeta blanca: nombre + detalle */
+.mapa-pin__tarjeta {
+  position: absolute; bottom: .25rem; left: calc(100% + .45rem); width: max-content;
+  display: grid; gap: .1rem; max-width: 15rem; padding: .5rem .8rem .55rem;
+  border-radius: 8px; background: var(--papel-3);
+  box-shadow: 0 1px 2px rgba(43, 42, 40, .12), 0 4px 14px rgba(43, 42, 40, .12);
+  line-height: 1.25;
+}
+.mapa-pin__tarjeta strong { font: 600 1rem/1.2 var(--f-sans); color: var(--rojo); }
+.mapa-pin__tarjeta span { font-size: .8125rem; color: var(--tinta-suave); }
+
+.mapa-pin--arriba .mapa-pin__tarjeta { left: 50%; bottom: calc(100% + .35rem); transform: translateX(-50%); text-align: center; }
+
+/* Nombre corto (Plaza Mayor, Catedral, Zorrilla) */
+.mapa-pin__nombre {
+  position: absolute; top: 50%; left: calc(100% + .35rem); transform: translateY(-50%);
+  padding: .15rem .45rem; border-radius: 4px; background: var(--campo-mapa);
+  font: 600 .8125rem/1.3 var(--f-sans); white-space: nowrap; color: var(--tinta);
+}
+.mapa-pin__punto { display: block; width: .7rem; height: .7rem; border: 2px solid var(--papel-3); border-radius: 50%; background: var(--tinta-tenue); box-shadow: 0 0 0 1px rgba(43, 42, 40, .25); }
+
+/* Los que tienen «¿Cómo llegar?» */
+[role="button"] > .mapa-pin, gmp-advanced-marker[gmp-clickable] .mapa-pin { cursor: pointer; }
+.mapa-pin .mapa-pin__chapa, .mapa-pin .mapa-pin__ilu { transition: transform .2s var(--ease); transform-origin: 50% 100%; }
+.mapa-pin:hover .mapa-pin__chapa, .mapa-pin:hover .mapa-pin__ilu { transform: translateY(-2px) scale(1.05); }
+.mapa .mapa__lienzo :focus-visible { outline: 3px solid var(--rojo); outline-offset: 2px; border-radius: 8px; }
+
+/* ---------- Rótulos (no interactivos) ---------- */
+.mapa-rotulo { display: block; white-space: nowrap; pointer-events: none; text-shadow: 0 0 2px var(--papel-3), 0 0 4px var(--papel-3), 0 0 8px var(--papel-3); }
+.mapa-rotulo--zona { padding: .2rem .55rem; border-radius: 4px; background: var(--campo-mapa); text-shadow: none; font: 700 .8125rem/1.2 var(--f-sans); letter-spacing: .14em; text-transform: uppercase; color: var(--rojo); }
+.mapa-rotulo--mano { font: 400 1.35rem/1 var(--f-mano); color: var(--rojo); transform: rotate(-14deg); }
+.mapa-rotulo--parque { font: 600 .875rem/1.2 var(--f-sans); color: var(--ok); }
+
+/* ---------- Ventana «¿Cómo llegar?» ---------- */
+.mapa .gm-style .gm-style-iw-c { border-radius: 8px; padding: 0; background: var(--papel-3); box-shadow: 0 2px 14px rgba(43, 42, 40, .22); }
+.mapa .gm-style .gm-style-iw-d { overflow: auto !important; }
+.mapa .gm-style .gm-style-iw-tc::after { background: var(--papel-3); }
+.mapa-popup { display: grid; justify-items: start; gap: .3rem; padding: .25rem 1rem 1rem; font-family: var(--f-sans); color: var(--tinta); }
+.mapa-popup__titulo { font: italic 400 1.5rem/1.15 var(--f-serif); color: var(--rojo); }
+.mapa-popup__detalle { font-size: .9375rem; color: var(--tinta-suave); }
+.mapa-popup .boton { margin-top: .5rem; min-height: 2.75rem; padding: .45rem 1.1rem .4rem; font-size: 1.05rem; letter-spacing: .08em; color: var(--rojo); }
+.mapa-popup .boton:hover { color: var(--papel); }
+
+/* ---------- Leyenda (HTML en index.html: se ve aunque el mapa no cargue) ---------- */
+.mapa-envoltorio { position: relative; }
+.mapa-leyenda {
+  margin-top: 1.25rem; padding: .9rem 1.1rem 1rem;
+  border-radius: 8px; background: var(--campo-mapa);
+  box-shadow: 0 1px 2px rgba(43, 42, 40, .1), 0 4px 14px rgba(43, 42, 40, .1);
+  font-family: var(--f-sans); color: var(--tinta);
+}
+.mapa-leyenda__titulo { margin: 0 0 .55rem; font-style: normal; font: 600 1.05rem/1.2 var(--f-sans); color: var(--tinta); }
+.mapa-leyenda ul { margin: 0; padding: 0; list-style: none; display: grid; gap: .45rem; }
+.mapa-leyenda li { display: flex; font-style: normal; align-items: center; gap: .6rem; font-size: .875rem; line-height: 1.3; }
+.mapa-leyenda__muestra { width: 1.9rem; height: 1.05rem; flex: none; border-radius: 50%; border: 2px solid var(--rojo); background: color-mix(in srgb, var(--rojo) 10%, transparent); }
+.mapa-leyenda__muestra--comoda { border-style: dashed; background: color-mix(in srgb, var(--rojo) 20%, transparent); }
+.mapa-leyenda__nota { margin: .6rem 0 0; font-style: normal; font-size: .75rem; color: var(--tinta-tenue); }
+
+/* En pantallas anchas la leyenda va encima del mapa, abajo a la derecha (como en el plano dibujado) */
+@media (min-width: 760px) {
+  .mapa-leyenda { position: absolute; right: 1rem; bottom: 1.75rem; z-index: 2; max-width: 15rem; margin: 0; }
+}
+
+/* ---------- Móvil: tarjetas más compactas ---------- */
+@media (max-width: 599px) {
+  #mapa-alojamiento.mapa { aspect-ratio: 4 / 5; }
+  .mapa-pin__tarjeta span { display: none; }   /* en el móvil, solo el nombre: el detalle está en la ventana */
+  .mapa-pin__tarjeta, .mapa-pin--arriba .mapa-pin__tarjeta {   /* encima del icono, centrada: no se sale por los lados */
+    left: 50%; right: auto; bottom: calc(100% + .3rem); transform: translateX(-50%); text-align: center;
+  }
+  .mapa-pin__nombre { top: calc(100% + .2rem); left: 50%; transform: translateX(-50%); font-size: .75rem; }   /* nombre debajo del icono */
+  .mapa-pin__tarjeta { max-width: 9.5rem; padding: .35rem .55rem .4rem; }
+  .mapa-pin__tarjeta strong { font-size: .875rem; }
+  .mapa-pin__tarjeta span { font-size: .75rem; }
+  .mapa-pin__ilu, .mapa-pin--tarjeta .mapa-pin__chapa { width: 2.6rem; }
+  .mapa-pin--tarjeta .mapa-pin__chapa { height: 2.6rem; }
+  .mapa-pin--tarjeta .mapa-pin__chapa svg { width: 1.9rem; height: 1.9rem; }
+  .mapa-pin__chapa { width: 2.25rem; height: 2.25rem; }
+  .mapa-pin__chapa svg { width: 1.6rem; height: 1.6rem; }
+  .mapa-rotulo--zona, .mapa-rotulo--mano { display: none; }   /* en el móvil no caben sin pisar nada: los explica la leyenda, justo debajo */
+}
+
+/* ---------- Si el mapa no carga: se quita el óvalo y queda el aviso con su enlace ---------- */
+.mapa[data-mapa="error"] { background-image: none; }
+.mapa .mapa__error {
+  position: absolute; inset: 0; display: grid; place-content: center;
+  padding: 1.5rem; text-align: center;
+}
+.mapa .mapa__error p { max-width: 24ch; margin: 0; font-style: italic; color: var(--tinta-suave); }
+.mapa .mapa__error a { color: var(--tinta); }
+
+/* ---------- Modo de contraste forzado ---------- */
+@media (forced-colors: active) {
+  .mapa-pin__chapa, .mapa-pin__tarjeta, .mapa-leyenda { border: 1px solid CanvasText; }
+}

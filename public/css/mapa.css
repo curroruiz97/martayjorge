@@ -33,7 +33,7 @@
   position: relative; display: grid; place-items: center; width: 2.75rem; height: 2.75rem; flex: none;
   border: 1.5px solid var(--rojo); border-radius: 50%;
   background: var(--papel-3); color: var(--rojo);
-  box-shadow: 2px 2px 0 rgba(163, 18, 29, .18);
+  box-shadow: 2px 2px 0 color-mix(in srgb, var(--rojo) 18%, transparent);
 }
 .mapa-pin__chapa svg { width: 2rem; height: 2rem; }
 .mapa-pin--tarjeta .mapa-pin__chapa { width: 3.25rem; height: 3.25rem; }
@@ -96,8 +96,8 @@
 .mapa-leyenda__titulo { margin: 0 0 .55rem; font-style: normal; font: 600 1.05rem/1.2 var(--f-sans); color: var(--tinta); }
 .mapa-leyenda ul { margin: 0; padding: 0; list-style: none; display: grid; gap: .45rem; }
 .mapa-leyenda li { display: flex; font-style: normal; align-items: center; gap: .6rem; font-size: .875rem; line-height: 1.3; }
-.mapa-leyenda__muestra { width: 1.9rem; height: 1.05rem; flex: none; border-radius: 50%; border: 2px solid var(--rojo); background: rgba(163, 18, 29, .1); }
-.mapa-leyenda__muestra--comoda { border-style: dashed; background: rgba(163, 18, 29, .2); }
+.mapa-leyenda__muestra { width: 1.9rem; height: 1.05rem; flex: none; border-radius: 50%; border: 2px solid var(--rojo); background: color-mix(in srgb, var(--rojo) 10%, transparent); }
+.mapa-leyenda__muestra--comoda { border-style: dashed; background: color-mix(in srgb, var(--rojo) 20%, transparent); }
 .mapa-leyenda__nota { margin: .6rem 0 0; font-style: normal; font-size: .75rem; color: var(--tinta-tenue); }
 
 /* En pantallas anchas la leyenda va encima del mapa, abajo a la derecha (como en el plano dibujado) */

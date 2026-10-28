@@ -3,7 +3,7 @@
  *
  * Integración (ya hecha en index.html):
  *   <link rel="stylesheet" href="css/mapa.css">
- *   <div id="mapa-alojamiento" class="mapa marco" data-api-key="…" data-map-id="…" role="region" aria-label="…"></div>
+ *   <div id="mapa-alojamiento" class="mapa marco" data-api-key="…" data-map-id="…" data-ilu-san-pablo="…" role="region" aria-label="…"></div>
  *   <aside class="mapa-leyenda">…</aside>          (leyenda en HTML: se ve también sin JS)
  *   <script src="js/mapa.js" defer></script>
  * El tamaño del contenedor lo da el CSS (aspect-ratio), así que no hay saltos de layout.
@@ -40,7 +40,10 @@
   var CFG = {
     apiKey: (el.getAttribute('data-api-key') || '').trim(),
     mapId: (el.getAttribute('data-map-id') || '').trim(),
-    color: '#a3121d',           // --rojo
+    // El rojo sale de --rojo (base.css) para que el mapa siga a la paleta de cada versión.
+    color: (getComputedStyle(document.documentElement).getPropertyValue('--rojo') || '').trim() || '#a3121d',
+    // Dibujo de San Pablo para su marcador (V1: el SVG a pluma; V2: la acuarela). Lo fija data-ilu-san-pablo.
+    iluSanPablo: el.getAttribute('data-ilu-san-pablo') || 'assets/ilustraciones/san-pablo.svg',
     semilla: 20270508,          // fija: el trazo «a mano» sale siempre igual (fecha de la boda)
     zoomMin: 13, zoomMax: 18, zoomMaxEncuadre: 16,
     zonas: {
@@ -153,7 +156,7 @@
   };
   function icono(nombre) {
     if (nombre === 'san-pablo') {
-      return '<img class="mapa-pin__ilu" src="assets/ilustraciones/san-pablo.svg" alt="" width="52" height="62" decoding="async">';
+      return '<img class="mapa-pin__ilu" src="' + CFG.iluSanPablo + '" alt="" decoding="async">';
     }
     var dentro = nombre === 'autocar'
       ? '<use href="' + SPRITE + '#autocar"/>'

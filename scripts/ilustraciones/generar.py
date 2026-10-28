@@ -34,23 +34,27 @@ def escribir(carpeta, nombre, texto):
     print("  %-26s %6.1f KB%s" % (nombre, kb, aviso))
 
 
+# San Pablo y el Palomar a pluma (V1): la web usa ahora la versión en acuarela (scripts/acuarela/arquitectura.py), así
+# que estos SVG se guardan en docs/ilustraciones/v1/ y no se publican.
+V1 = os.path.join(ALTERNATIVAS, "v1")
+
+
 def pieza_san_pablo(carpeta):
     import san_pablo
     L = san_pablo.dibujar()
-    escribir(carpeta, "san-pablo.svg", L.svg())
+    escribir(V1, "san-pablo.svg", L.svg())
     escribir(ALTERNATIVAS, "san-pablo-linea.svg", L.svg(con_color=False))
 
 
 def pieza_palomar(carpeta):
     import palomar
     L = palomar.dibujar()
-    escribir(carpeta, "palomar.svg", L.svg())
+    escribir(V1, "palomar.svg", L.svg())
     escribir(ALTERNATIVAS, "palomar-linea.svg", L.svg(con_color=False))
 
 
 def pieza_rutas(carpeta):
     import rutas
-    escribir(carpeta, "ruta-horizontal.svg", rutas.horizontal())
     escribir(carpeta, "ruta-vertical.svg", rutas.vertical())
 
 
