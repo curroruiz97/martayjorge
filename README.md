@@ -30,7 +30,7 @@ fotos de lado a lado con los bordes a pincel; formulario de confirmación con ac
 | **Mesa puesta** | Bodegón de acuarela (narcisos, vela en candelabro turquesa, copa de rosado, menú, tomates cherry, naranjas, uvas, girasoles, botella y tarta) bajo una guirnalda, entre la portada y la Agenda |
 | **Agenda** | San Pablo y el Palomar en acuarela y a pincel, unidos por un caminito rojo que serpentea y un avión que lo recorre; enlaces «¿Cómo llegar?» a Google Maps y «Añadir al calendario» |
 | **Transporte** | Coche (parking recomendado junto a la Catedral) y autocar |
-| **Alojamiento** | Texto y mapa con la zona recomendada: un óvalo a pincel entre la Plaza del Poniente y San Pablo. Icono de acuarela (almohada y llave) junto al título |
+| **Alojamiento** | Texto y mapa de Google Maps con la zona recomendada (de la Plaza del Poniente a San Pablo) y la más cómoda (junto a Poniente), tarjetas de los lugares y leyenda. Icono de acuarela (almohada y llave) junto al título. Configuración: `docs/mapa-google.md` |
 | **Foto de la playa** | De lado a lado, aparece con una aguada |
 | **S.R.C.** | «S.R.C. · Se ruega confirmación» y el formulario: nombre, asistencia, acompañantes con sus nombres, plazas de autocar por trayecto, alergias por persona y mensaje. No pide correo |
 | **Lista de bodas** | Dos alianzas en acuarela junto al título e IBAN en una sola línea con botón para copiarlo |
@@ -180,4 +180,4 @@ boda y, después, exportad lo que queráis conservar y vaciad la tabla. Guía co
   Si contratáis al ilustrador para las invitaciones en papel, basta con sustituir `san-pablo-acuarela-*.webp` por su
   versión (sobre blanco, se multiplica con el lino) o dejar esta.
 - La página lleva `noindex` y `robots.txt` cerrado: es una invitación privada y no debe salir en buscadores.
-- Todo está autoalojado (fuentes, imágenes, scripts): solo se piden a terceros las teselas del mapa.
+- Todo está autoalojado (fuentes, imágenes, scripts): solo el mapa se pide a terceros (Google Maps, con su clave y Map ID en `index.html`; ver `docs/mapa-google.md`).

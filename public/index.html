@@ -164,8 +164,19 @@
       <p class="cursiva alojamiento__texto revelar">En Valladolid tenéis muchísimas opciones de alojamiento en el entorno del centro. Escribidnos y os ayudaremos y aconsejaremos para encontrar el mejor sitio&nbsp;posible.</p>
     </div>
     <div class="contenedor alojamiento__mapa revelar">
-      <!-- Mapa con la zona recomendada (óvalo). Lo monta js/mapa.js al acercarse a la pantalla. -->
-      <div id="mapa-alojamiento" class="mapa marco" role="region" aria-label="Mapa del centro de Valladolid con la zona recomendada para alojarse"></div>
+      <!-- Mapa (Google Maps) con la zona recomendada. Lo monta js/mapa.js al acercarse a la pantalla.
+           data-api-key: clave de Google Maps (pública; protegida por restricción de dominio). Ver docs/mapa-google.md -->
+      <div class="mapa-envoltorio">
+        <div id="mapa-alojamiento" class="mapa marco" data-api-key="AIzaSyCkU4SHcTfzIZYBJ4LMQ41fgptjjvuweXg" data-map-id="ee2adbb68a2af545c55430ab" data-ilu-san-pablo="assets/ilustraciones/acuarela/san-pablo-acuarela-640.webp" role="region" aria-label="Mapa del centro de Valladolid con la zona recomendada para alojarse"></div>
+        <aside class="mapa-leyenda" aria-label="Leyenda del mapa">
+          <p class="mapa-leyenda__titulo">Dónde alojarse</p>
+          <ul>
+            <li><span class="mapa-leyenda__muestra" aria-hidden="true"></span>Zona recomendada</li>
+            <li><span class="mapa-leyenda__muestra mapa-leyenda__muestra--comoda" aria-hidden="true"></span>La más cómoda, junto a la Plaza del Poniente (allí os deja el autocar a la vuelta)</li>
+          </ul>
+          <p class="mapa-leyenda__nota">Plano aproximado</p>
+        </aside>
+      </div>
       <p class="mapa__pie"><a href="https://www.google.com/maps/search/?api=1&amp;query=Valladolid+centro" target="_blank" rel="noopener">Abrir en Google Maps</a></p>
     </div>
   </section>
