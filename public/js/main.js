@@ -164,7 +164,7 @@
 
   function volar(fijar) {
     if (reducirMovimiento) { fijar(1); return; }
-    const duracion = 3400;
+    const duracion = 2400;   // la ruta de la V3 es un 30 % más corta que la de la V2 (3400 ms): el avión va igual de rápido
     let t0 = null;
     const paso = (ts) => {
       if (t0 === null) t0 = ts;

@@ -40,13 +40,13 @@ CAP_CSS = 44           # altura máxima de la mayúscula en CSS px (--cap en bas
 CAP_PX = 104           # altura de la mayúscula en la imagen (móvil de 390 px a 3×: 33 × 3 ≈ 99 px)
 NOMBRES_ANCHO = 1100   # ancho de la imagen de los nombres (≈ 3× del ancho que ocupan en el móvil)
 
-# id, líneas, semilla, texto accesible, subrayado, icono (fichero de scripts/acuarela, opcional)
+# id, líneas, semilla, texto accesible, subrayado, icono (opcional: fichero de assets/ilustraciones/acuarela sin -2x/-3x)
 TITULOS = [
     ('agenda', ['AGENDA'], 3, 'Agenda', True, None),
     ('transporte', ['TRANSPORTE'], 7, 'Transporte', True, None),
     ('alojamiento', ['ALOJAMIENTO'], 17, 'Alojamiento', True, 'almohada-icono'),
     ('src', ['S.R.C. · SE RUEGA', 'CONFIRMACIÓN'], 11, 'S.R.C. · Se ruega confirmación', True, None),
-    ('lista-de-bodas', ['LISTA DE BODAS'], 8, 'Lista de bodas', True, 'alianzas-icono'),
+    ('lista-de-bodas', ['LISTA DE BODAS'], 8, 'Lista de bodas', True, 'alianzas-icono-v3'),
     ('os-esperamos', ['¡OS ESPERAMOS!'], 13, '¡Os esperamos!', False, None),
 ]
 # la fecha de la portada: más pequeña (en CSS, --cap de .portada__fecha); se pinta a una mayúscula de 64 px

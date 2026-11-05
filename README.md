@@ -9,31 +9,36 @@ Estilo de papelería de boda pintada a mano: **lino crema con rayas rosas**, **r
 subrayados a mano, como la invitación de referencia que mandaron los novios), cursiva con serifas, **acuarelas propias** y
 fotos de lado a lado con los bordes a pincel; formulario de confirmación con acompañantes, autocar y alergias.
 
-> **Versiones** · En producción conviven las dos versiones con un **selector «V1 · V2»** fijo arriba a la derecha:
-> - **V2** (la nueva: comentarios de los novios sobre la V1, más acuarela, menos espacio en blanco, pensada para el
->   móvil) es la página de siempre, `public/index.html`, en `/`.
-> - **V1** (la anterior, congelada tal cual estaba en el commit `db679a3`) vive en `public/v1/`, en `/v1/`. Lleva
->   `<base href="/v1/">` para cargar sus propios estilos, scripts e imágenes.
-> - Quien llega a `/` sin haber elegido ve la **V1** (la que había); al pulsar **V2** se queda en la nueva y se
->   recuerda en el navegador. Enlaces directos: `/?v=2` (nueva) y `/v1/?v=1` (anterior). Lo hacen
->   `public/version/elegir.js` (en el `<head>` de la V2) y `public/version/selector.js` + `selector.css` (en las dos).
-> - Las dos versiones envían las confirmaciones a la misma API (`/api/rsvp`).
-> - **Para quedarse solo con la V2**: borrar `public/v1/` y `public/version/`, y en `public/index.html` las tres
->   líneas que los cargan (`/version/elegir.js`, `/version/selector.css` y `/version/selector.js`).
->   **Para que por defecto se vea la V2** (sin quitar el selector): borrar solo la línea de `elegir.js`.
+> **Versiones** · En producción conviven tres versiones con un **selector «V1 · V2 · V3»** fijo arriba a la derecha:
+> - **V3** (la nueva) es la página de siempre, `public/index.html`, en `/`. Es la V2 con los comentarios de Jorge:
+>   sin la guirnalda de banderines sobre el bodegón, la ruta entre la iglesia y la Posada un 30 % más corta (con la
+>   misma forma de serpiente) y el diamante de las alianzas de «Lista de bodas» por fuera del aro.
+> - **V2** (congelada tal cual estaba en el commit `6b9efd9`) vive en `public/v2/`, en `/v2/`. Es la de los
+>   comentarios de los novios sobre la V1: más acuarela, menos espacio en blanco, pensada para el móvil.
+> - **V1** (la primera, congelada tal cual estaba en el commit `db679a3`) vive en `public/v1/`, en `/v1/`.
+> - Las congeladas llevan `<base href="/v1/">` / `<base href="/v2/">` para cargar sus propios estilos, scripts e
+>   imágenes; no se tocan.
+> - Quien llega a `/` sin haber elegido ve la **V1** (la que había); al pulsar **V2** o **V3** se le lleva a esa y se
+>   recuerda en el navegador. Enlaces directos: `/?v=3` (nueva), `/v2/?v=2` y `/v1/?v=1`. Lo hacen
+>   `public/version/elegir.js` (en el `<head>` de la V3) y `public/version/selector.js` + `selector.css` (en las tres).
+> - Las tres versiones envían las confirmaciones a la misma API (`/api/rsvp`).
+> - **Para quedarse solo con la V3**: borrar `public/v1/`, `public/v2/` y `public/version/`, y en `public/index.html`
+>   las tres líneas que los cargan (`/version/elegir.js`, `/version/selector.css` y `/version/selector.js`).
+>   **Para que por defecto se vea la V3** (sin quitar el selector): borrar solo la línea de `elegir.js`. Para
+>   descartar solo una versión antigua, borrar su carpeta y su entrada en `selector.js` (y en `elegir.js`, la V2).
 
 ## Qué incluye
 
 | Sección | Qué hace |
 |---|---|
 | **Portada** | Entrada animada (los nombres se pintan a pincel de acuarela trazo a trazo, la fecha también va rotulada y la foto, de lado a lado con los bordes a pincel, aparece con una aguada), cuenta atrás sobria (días · horas · minutos) y botón para confirmar. Cabe entera en una pantalla. Guía en [`docs/animacion-entrada.md`](docs/animacion-entrada.md) |
-| **Mesa puesta** | Bodegón de acuarela (narcisos, vela en candelabro turquesa, copa de rosado, menú, tomates cherry, naranjas, uvas, girasoles, botella y tarta) bajo una guirnalda, entre la portada y la Agenda |
+| **Mesa puesta** | Bodegón de acuarela (narcisos, vela en candelabro turquesa, copa de rosado, menú, tomates cherry, naranjas, uvas, girasoles, botella y tarta), entre la portada y la Agenda (la guirnalda de banderines de la V2 ya no está) |
 | **Agenda** | San Pablo y el Palomar en acuarela y a pincel, unidos por un caminito rojo que serpentea y un avión que lo recorre; enlaces «¿Cómo llegar?» a Google Maps y «Añadir al calendario» |
 | **Transporte** | Coche (parking recomendado junto a la Catedral) y autocar |
 | **Alojamiento** | Texto y mapa de Google Maps con la zona recomendada (de la Plaza del Poniente a San Pablo) y la más cómoda (junto a Poniente), tarjetas de los lugares y leyenda. Icono de acuarela (almohada y llave) junto al título. Configuración: `docs/mapa-google.md` |
 | **Foto de la playa** | De lado a lado, aparece con una aguada |
 | **S.R.C.** | «S.R.C. · Se ruega confirmación» y el formulario: nombre, asistencia, acompañantes con sus nombres, plazas de autocar por trayecto, alergias por persona y mensaje. No pide correo |
-| **Lista de bodas** | Dos alianzas en acuarela junto al título e IBAN en una sola línea con botón para copiarlo |
+| **Lista de bodas** | Dos alianzas en acuarela junto al título (la de ella con el diamante engastado por fuera del aro) e IBAN en una sola línea con botón para copiarlo |
 | **Cierre** | «¡Os esperamos!» sobre el cielo de la foto del atardecer, que se ve entera. Es el final de la página |
 | **`/admin`** | Panel privado (con contraseña) para que los novios vean totales, filtren y descarguen CSV |
 
@@ -46,8 +51,8 @@ Stack: HTML/CSS/JS **sin build ni frameworks** · hosting y funciones en **Verce
 
 ```
 public/                 ← lo que se publica
-  index.html            la página entera (V2)
-  v1/                   la V1 congelada (commit db679a3), para compararla con el selector · version/ (el selector)
+  index.html            la página entera (V3)
+  v1/ · v2/             la V1 y la V2 congeladas (commits db679a3 y 6b9efd9), para compararlas con el selector · version/ (el selector)
   boda-marta-y-jorge.ics   «Añadir al calendario» (ceremonia y celebración)
   css/                  base.css (diseño: colores, fuentes) · site.css (secciones) · intro.css (entrada de la portada) · rsvp.css · mapa.css
   js/                   boot.js · main.js (animaciones, cuenta atrás, copiar IBAN) · intro.js (saltar la entrada, parallax) · rsvp.js · mapa.js
@@ -175,6 +180,9 @@ boda y, después, exportad lo que queráis conservar y vaciad la tabla. Guía co
   **rótulos pintados con un pincel de acuarela simulado** (`scripts/rotulos/`), en rojo acuarela y con subrayados a mano,
   en el estilo de la invitación de referencia pero más legibles (lo eligieron con dos hojas de muestras); no es una
   tipografía, así que cada letra es algo distinta.
+- **V3** (comentarios de Jorge sobre la V2): sin la guirnalda de banderines encima del bodegón (el bodegón no cambia),
+  la ruta de la Agenda un 30 % más corta con la misma forma de serpiente (mismo grosor, guiones y avión) y el diamante
+  de las alianzas de «Lista de bodas» engastado por fuera del aro. Detalles en [`docs/ilustraciones.md`](docs/ilustraciones.md).
 - Las ilustraciones de **San Pablo** y del **Palomar** son dibujos propios (no calcados de la acuarela ni del render con
   IA): en la V1 a pluma; en la V2, la misma geometría pintada en acuarela y a pincel (`scripts/acuarela/arquitectura.py`).
   Si contratáis al ilustrador para las invitaciones en papel, basta con sustituir `san-pablo-acuarela-*.webp` por su

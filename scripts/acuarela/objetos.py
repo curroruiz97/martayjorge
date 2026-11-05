@@ -315,20 +315,34 @@ def banderines(L, x0, x1, y, caida, n, colores=None, tam=None):
 
 
 # ------------------------------------------------------------------ boda
-def anillos(L, cx, cy, r):
-    """Dos alianzas de oro entrelazadas y un diamante."""
-    for dx, dy, rr in [(-r * .45, r * .1, r), (r * .5, -r * .05, r * .92)]:
+def anillos(L, cx, cy, r, diamante=-75.0):
+    """Dos alianzas de oro entrelazadas y un diamante engastado por FUERA del segundo aro (el de ella).
+
+    diamante: ángulo (grados, 0 = derecha, -90 = arriba) del punto del aro donde va la piedra, medido desde su centro.
+    La piedra apunta hacia fuera: la punta (pabellón) se apoya en el aro, dentro de un engaste de oro, y la tabla mira
+    hacia fuera. (Hasta la V2 el diamante quedaba por el interior del aro.)"""
+    aros = [(-r * .45, r * .1, r), (r * .5, -r * .05, r * .92)]
+    for dx, dy, rr in aros:
         L.trazo_color(L.blob(cx + dx, cy + dy, rr, rr * .96, 14, .025), PAL["oro"], r * .14, .9, rim=PAL["oro_osc"])
         L.linea(L.blob(cx + dx + L.jit(0, 2), cy + dy + L.jit(0, 2), rr * 1.07, rr * 1.03, 14, .025), 1.4, "#6b5210", .6)
         L.linea(L.blob(cx + dx + L.jit(0, 2), cy + dy + L.jit(0, 2), rr * .93, rr * .89, 14, .025), 1.2, "#6b5210", .5)
-    # diamante
-    dx, dy = cx + r * .72, cy - r * .68
-    pts = [(dx - r * .17, dy), (dx - r * .08, dy - r * .14), (dx + r * .09, dy - r * .14), (dx + r * .18, dy), (dx, dy + r * .17)]
-    L.mancha(L.suave(pts, True, .05), "#b9cdd6", .9)
-    L.mancha(L.suave([(dx - r * .08, dy - r * .14), (dx + r * .09, dy - r * .14), (dx + r * .02, dy)], True, .05), "#eaf3f6", .8)
-    L.linea(L.suave(pts, True, .02), 1.5, "#4a5c66")
-    L.linea(L.curva([(dx - r * .17, dy), (dx + r * .18, dy)]), 1.1, "#4a5c66")
-    L.linea(L.curva([(dx - r * .08, dy - r * .14), (dx, dy + r * .17), (dx + r * .09, dy - r * .14)]), 1.1, "#4a5c66")
+    # diamante: se dibuja «de pie» (punta abajo) centrado en (px, py) y se gira para que la punta mire al centro del aro
+    ax, ay, rr = cx + aros[1][0], cy + aros[1][1], aros[1][2]
+    a = math.radians(diamante)
+    dist = rr + r * .045 + r * .17            # la punta entra un poco en la banda (borde exterior: rr + r·.07)
+    px, py = ax + dist * math.cos(a), ay + dist * math.sin(a) * .96
+    pts = [(px - r * .17, py), (px - r * .08, py - r * .14), (px + r * .09, py - r * .14), (px + r * .18, py), (px, py + r * .17)]
+    with L.grupo(diamante + 90, px, py):
+        # engaste: copita de oro que abraza el pabellón, con dos garras hasta el filete
+        cesta = [(px - r * .14, py + r * .02), (px + r * .15, py + r * .02), (px + r * .05, py + r * .2), (px - r * .04, py + r * .2)]
+        L.mancha(L.suave(cesta, True, .05), PAL["oro"], .9, rim=PAL["oro_osc"])
+        L.mancha(L.suave(pts, True, .05), "#b9cdd6", .9)
+        L.mancha(L.suave([(px - r * .08, py - r * .14), (px + r * .09, py - r * .14), (px + r * .02, py)], True, .05), "#eaf3f6", .8)
+        L.linea(L.suave(pts, True, .02), 1.5, "#4a5c66")
+        L.linea(L.curva([(px - r * .17, py), (px + r * .18, py)]), 1.1, "#4a5c66")
+        L.linea(L.curva([(px - r * .08, py - r * .14), (px, py + r * .17), (px + r * .09, py - r * .14)]), 1.1, "#4a5c66")
+        L.linea(L.curva([(px - r * .14, py + r * .02), (px - r * .04, py + r * .2)]), 1.1, "#6b5210", .6)
+        L.linea(L.curva([(px + r * .15, py + r * .02), (px + r * .05, py + r * .2)]), 1.1, "#6b5210", .6)
 
 
 def ramo(L, cx, cy, R):

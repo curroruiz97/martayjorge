@@ -14,6 +14,10 @@ from pluma import TINTA, ROJO, trazado, fnum
 
 PAPEL_CLARO = "#fbf8f1"
 GUIONES = "9 6.5 7 7 10.5 6 6.5 7.5 8 6"
+# V3: la ruta mide el 70 % de la de la V2 (un 30 % más corta) con la misma forma. Se escala solo el camino: el grosor,
+# los guiones, el avión y los márgenes siguen en las mismas unidades, y el CSS (.ruta__v) mantiene la escala de la V2,
+# así que en pantalla todo se ve igual de grueso y solo cambia la longitud.
+ESCALA = 0.7
 
 
 def _mano(pts, semilla, amp=0.6):
@@ -63,13 +67,19 @@ def _svg(w, h, d, titulo, grosor=2.1):
     return "\n".join(o) + "\n"
 
 
-def vertical():
-    """viewBox 220 x 560. De arriba abajo: un caminito que serpentea en cuatro curvas amplias (sin corazón; V2)."""
+def vertical(escala=ESCALA):
+    """De arriba abajo: un caminito que serpentea en cuatro curvas amplias (sin corazón; desde la V2).
+    Los puntos son los de la V2 (viewBox 220 x 560); con escala=0.7 (V3) el viewBox queda en 178 x 404."""
     pts = [
         (110.0, 18.0), (140.0, 48.0), (176.0, 88.0), (182.0, 126.0), (152.0, 160.0), (88.0, 190.0),
         (44.0, 226.0), (42.0, 266.0), (86.0, 296.0), (148.0, 322.0), (182.0, 358.0), (178.0, 398.0),
         (134.0, 428.0), (72.0, 452.0), (46.0, 484.0), (68.0, 514.0), (108.0, 540.0),
     ]
+    # márgenes de la V2 alrededor del camino (x 42..182, y 18..540), que se conservan tal cual
+    izq, der, arr, aba = 42.0, 38.0, 18.0, 20.0
+    pts = [(izq + (x - izq) * escala, arr + (y - arr) * escala) for x, y in pts]
+    w = math.ceil(izq + (182.0 - izq) * escala + der)
+    h = math.ceil(arr + (540.0 - arr) * escala + aba)
     pts = _mano(pts, 11, amp=0.8)
     d = _ruta_d(pts, [])
-    return _svg(220, 560, d, "Ruta de la iglesia de San Pablo al Palomar", grosor=2.3)
+    return _svg(w, h, d, "Ruta de la iglesia de San Pablo al Palomar", grosor=2.3)

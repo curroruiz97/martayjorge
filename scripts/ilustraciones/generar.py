@@ -55,7 +55,8 @@ def pieza_palomar(carpeta):
 
 def pieza_rutas(carpeta):
     import rutas
-    escribir(carpeta, "ruta-vertical.svg", rutas.vertical())
+    # -v3: la ruta de la V3 es más corta; con otro nombre nadie ve en caché la de la V2 (que sigue en public/v2/)
+    escribir(carpeta, "ruta-vertical-v3.svg", rutas.vertical())
 
 
 def pieza_adornos(carpeta):
