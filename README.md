@@ -18,14 +18,13 @@ fotos de lado a lado con los bordes a pincel; formulario de confirmación con ac
 > - **V1** (la primera, congelada tal cual estaba en el commit `db679a3`) vive en `public/v1/`, en `/v1/`.
 > - Las congeladas llevan `<base href="/v1/">` / `<base href="/v2/">` para cargar sus propios estilos, scripts e
 >   imágenes; no se tocan.
-> - Quien llega a `/` sin haber elegido ve la **V1** (la que había); al pulsar **V2** o **V3** se le lleva a esa y se
->   recuerda en el navegador. Enlaces directos: `/?v=3` (nueva), `/v2/?v=2` y `/v1/?v=1`. Lo hacen
->   `public/version/elegir.js` (en el `<head>` de la V3) y `public/version/selector.js` + `selector.css` (en las tres).
+> - En `/` se ve siempre la **V3** (la de por defecto); el selector lleva a `/v1/` y `/v2/`. No se recuerda ninguna
+>   elección. Los enlaces antiguos `/?v=1` y `/?v=2` siguen llevando a la V1 y la V2 (`public/version/elegir.js`, en
+>   el `<head>` de la V3). El selector lo pintan `public/version/selector.js` + `selector.css` (en las tres).
 > - Las tres versiones envían las confirmaciones a la misma API (`/api/rsvp`).
 > - **Para quedarse solo con la V3**: borrar `public/v1/`, `public/v2/` y `public/version/`, y en `public/index.html`
 >   las tres líneas que los cargan (`/version/elegir.js`, `/version/selector.css` y `/version/selector.js`).
->   **Para que por defecto se vea la V3** (sin quitar el selector): borrar solo la línea de `elegir.js`. Para
->   descartar solo una versión antigua, borrar su carpeta y su entrada en `selector.js` (y en `elegir.js`, la V2).
+>   Para descartar solo una versión antigua, borrar su carpeta y su entrada en `selector.js` (y en `elegir.js`).
 
 ## Qué incluye
 

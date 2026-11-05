@@ -1,16 +1,14 @@
 /* Selector de versión (V1 · V2 · V3) mientras los novios comparan las versiones de la web.
    · V1 (la primera) vive congelada en /v1/, V2 en /v2/ y V3 (la nueva) es la portada (/).
-   · Los enlaces llevan ?v=1 / ?v=2 / ?v=3: la página que se abre recuerda la elección (localStorage) y limpia la dirección.
-   · Quien llega a / sin haber elegido ve la V1 (lo decide /version/elegir.js, en el <head> de la V3).
+   · Por defecto, en / se ve la V3. Los enlaces antiguos con ?v=1 / ?v=2 siguen llevando a esa versión
+     (/version/elegir.js, en el <head> de la V3) y aquí solo se limpia el ?v= de la dirección.
    Para quitarlo cuando se decida: ver README («Versiones»). */
 (function () {
   'use strict';
-  var CLAVE = 'mj-version';
   var m = /^\/v([12])(\/|$)/.exec(location.pathname);
   var actual = m ? m[1] : '3';
   var q = /[?&]v=(1|2|3)(?:&|$)/.exec(location.search);
   if (q) {
-    try { localStorage.setItem(CLAVE, q[1]); } catch (e) { /* modo privado: no se recuerda */ }
     try {
       var u = new URL(location.href);
       u.searchParams.delete('v');
@@ -21,7 +19,7 @@
     var nav = document.createElement('nav');
     nav.className = 'mj-version';
     nav.setAttribute('aria-label', 'Versión de la web');
-    [['1', '/v1/?v=1', 'V1', 'Versión 1 (la primera)'], ['2', '/v2/?v=2', 'V2', 'Versión 2'], ['3', '/?v=3', 'V3', 'Versión 3 (la nueva)']].forEach(function (d) {
+    [['1', '/v1/', 'V1', 'Versión 1 (la primera)'], ['2', '/v2/', 'V2', 'Versión 2'], ['3', '/', 'V3', 'Versión 3 (la nueva)']].forEach(function (d) {
       var a = document.createElement('a');
       a.href = d[1];
       a.textContent = d[2];
