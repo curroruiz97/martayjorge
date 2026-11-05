@@ -1,6 +1,6 @@
 """Escenas completas de acuarela para la web. Cada función devuelve un Lienzo ya dibujado.
 
-  guirnalda    un tramo de guirnalda de banderines, para repetirlo en horizontal         420 × 130
+  guirnalda    un tramo de guirnalda de banderines, para repetirlo en horizontal (solo V2) 420 × 130
   bodegon      bodegón de boda rústica (entre la portada y la Agenda)                    1000 × 545
   ramo         un ramo de flores rojas con las alianzas (entre la Agenda y el Transporte)  760 × 420
   almohada     almohada y llave de habitación (Alojamiento)                             640 × 400
@@ -115,6 +115,8 @@ def almohada_icono():
     return L
 
 
-# (ramo, almohada grande, maleta y granadas ya no salen en la V2; se quedan aquí por si se quieren recuperar)
-ESCENAS = {"guirnalda": guirnalda, "bodegon": bodegon, "alianzas-icono": alianzas_icono, "almohada-icono": almohada_icono}
+# (ramo, almohada grande, maleta y granadas ya no salen desde la V2, ni la guirnalda en la V3; se quedan aquí por si se
+#  quieren recuperar)
+ESCENAS = {"bodegon": bodegon, "alianzas-icono": alianzas_icono, "almohada-icono": almohada_icono}
 ESCENAS_V1 = {"ramo": ramo, "almohada": almohada, "maleta": maleta, "granadas": granadas}
+ESCENAS_V2 = {"guirnalda": guirnalda}

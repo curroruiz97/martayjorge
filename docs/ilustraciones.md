@@ -10,7 +10,7 @@ En la **V2** (comentarios de los novios: «efecto general de acuarela, hecho a m
 1. **Rotulado a pincel** (§R): títulos de sección, los nombres y la fecha de la portada (pincel de acuarela fino), los
    bordes de las fotos, la aguada de la entrada y la pincelada de los botones (pincel seco).
    `scripts/rotulos/` → `public/assets/rotulos/`.
-2. **Acuarelas** (§0): la guirnalda y el bodegón entre la portada y la Agenda, San Pablo y el Palomar (§A) y los iconos
+2. **Acuarelas** (§0): el bodegón entre la portada y la Agenda, San Pablo y el Palomar (§A) y los iconos
    de Alojamiento y Lista de bodas. `scripts/acuarela/` → `public/assets/ilustraciones/acuarela/`.
 3. **A pluma** (§1 en adelante): la ruta con el avión de la Agenda, adornos, iconos y favicon (SVG). San Pablo y el
    Palomar a pluma eran de la V1 y se conservan fuera de la web.
@@ -63,21 +63,23 @@ terracota, mostaza, verde salvia, rosa polvoriento y crema, más el turquesa del
 
 | Fichero | Dónde sale | Tamaños |
 |---|---|---|
-| `guirnalda-v2-630.webp` | tira de banderines que se repite a todo el ancho, sobre el bodegón | 630 px |
 | `bodegon-v2-640/1000.webp` | bodegón de boda rústica: narcisos en un jarrón, vela en candelabro turquesa, copa de rosado, menú, tomates cherry, rodajas de naranja, uvas, girasoles en una jarra de barro, botella verde y tarta | 640 y 1000 px |
 | `san-pablo-acuarela-640/960.webp`, `palomar-acuarela-640/960.webp` | Agenda (§A) | 640 y 960 px |
-| `almohada-icono-2x/3x.webp`, `alianzas-icono-2x/3x.webp` | iconos a la izquierda de «Alojamiento» y «Lista de bodas», del alto de las mayúsculas | 2× y 3× |
+| `almohada-icono-2x/3x.webp`, `alianzas-icono-v3-2x/3x.webp` | iconos a la izquierda de «Alojamiento» y «Lista de bodas», del alto de las mayúsculas. En las alianzas (V3) el diamante va engastado por **fuera** del aro de ella, casi arriba (`objetos.anillos(…, diamante=-75)`: ángulo desde el centro del aro); hasta la V2 quedaba por el interior | 2× y 3× |
 
-- **Regenerar**: `python3 scripts/acuarela/generar.py` (todas) o `… generar.py bodegon guirnalda` (algunas), y
+- **Regenerar**: `python3 scripts/acuarela/generar.py` (todas) o `… generar.py bodegon alianzas-icono` (algunas), y
   `python3 scripts/acuarela/arquitectura.py` (San Pablo y el Palomar). Necesitan Pillow, Node con Playwright y Chromium
   (variables `PLAYWRIGHT_PATH` y `CHROME_PATH` si no están instalados globalmente).
-- **Sobre blanco y multiplicadas**: el bodegón, la guirnalda, San Pablo y el Palomar se guardan **sin transparencia**
+- **Sobre blanco y multiplicadas**: el bodegón, San Pablo y el Palomar se guardan **sin transparencia**
   (sobre blanco: pesan la tercera parte) y en la página llevan `.acuarela-plana` (`mix-blend-mode: multiply`): el blanco
   desaparece y el color queda transparente sobre el lino, como el pigmento sobre el papel. La animación de aparición
   (`.revelar`) va en la propia imagen, no en un contenedor (si no, mientras este se funde se vería el blanco).
 - Los iconos llevan transparencia (son pequeños) y se recortan al dibujo.
 - Las escenas de la V1 que ya no salen (ramo con alianzas, almohada grande, maleta, granadas) siguen en `escenas.py`
-  (`ESCENAS_V1`) y en la historia del repositorio.
+  (`ESCENAS_V1`) y en la historia del repositorio; la guirnalda de banderines de la V2, que la V3 quitó de encima del
+  bodegón, en `ESCENAS_V2` (y su WebP, en `public/v2/`).
+- Cuando un dibujo cambia de una versión a otra se publica con otro nombre (`FICHERO` en `generar.py`: `bodegon-v2`,
+  `alianzas-icono-v3`) para que nadie vea el anterior en la caché del navegador.
 - El fondo de lino con rayas **no** es una acuarela: la textura (`public/assets/img/lino.webp`) sale de
   `scripts/fondo/generar.py` y las rayas rosas son un degradado CSS en `base.css` (`--rosa`, `--p`).
 
@@ -112,7 +114,7 @@ imágenes incrustadas, sin `<filter>` y solo con `viewBox` (sin width/height).
 |---|---|---|
 | `san-pablo.svg` / `san-pablo-linea.svg` | `0 0 520 620` | 59 / 56 KB |
 | `palomar.svg` / `palomar-linea.svg` | `0 0 700 440` | 51 / 48 KB |
-| `ruta-vertical.svg` | `0 0 220 560` | 1,3 KB |
+| `ruta-vertical-v3.svg` | `0 0 178 404` | 1 KB |
 | `adornos.svg` (sprite) | por símbolo | 4 KB |
 | `iconos.svg` (sprite) | `0 0 48 48` | 5 KB |
 | `favicon.svg` | `0 0 64 64` | 0,6 KB |
@@ -220,12 +222,20 @@ document.querySelectorAll('.ilustracion[data-svg]').forEach(async (fig) => {
 
 ---
 
-## 2. `ruta-vertical.svg`
+## 2. `ruta-vertical-v3.svg`
 
 > **V2:** los novios pidieron quitar el corazón y que el camino fuera «más serpeante/zigzag para darle volumen»: ahora
 > serpentea en cuatro curvas amplias (`rutas.vertical()`, viewBox 220 × 560) y la versión horizontal ya no existe (la
-> web usa la misma composición de una columna en todas las pantallas). Lo que sigue describe la V1 y sigue valiendo
-> para la estructura (`#ruta` + `#avion`) y el JS del vuelo.
+> web usa la misma composición de una columna en todas las pantallas).
+>
+> **V3:** Jorge pidió la ruta un 30 % más corta con la misma forma de serpiente. `rutas.vertical()` escala los puntos
+> de la V2 por `ESCALA = 0.7` (viewBox 178 × 404, `getTotalLength()` ≈ 0,7 × el de la V2) y deja igual el grosor, los
+> guiones, el avión y los márgenes; `.ruta__v` (en `site.css`) mantiene la escala de la V2 (ancho × 178 / 220), así
+> que en pantalla solo cambia la longitud (móvil de 390 px: de 475 a 333 px de camino). El vuelo dura 2,4 s en vez de
+> 3,4 s (`volar()` en `main.js`) para ir a la misma velocidad. Se publica como `ruta-vertical-v3.svg` (la de la V2
+> sigue en `public/v2/`).
+>
+> Lo que sigue describe la V1 y sigue valiendo para la estructura (`#ruta` + `#avion`) y el JS del vuelo.
 
 - `<path id="ruta">`: UN trazo continuo, sin subtrazos ni `pathLength`. Lleva
   `stroke-dasharray="9 6.5 7 7 10.5 6 6.5 7.5 8 6"` (guiones irregulares, a mano) y tinta.

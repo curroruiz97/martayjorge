@@ -22,15 +22,16 @@ sys.path.insert(0, str(AQUI))
 import escenas  # noqa: E402
 
 # anchuras (px) de cada imagen: la pequeña para móviles, la grande para pantallas anchas o de mucha densidad
-ANCHOS = {"guirnalda": (630,), "bodegon": (640, 1000)}
-# nombre del fichero publicado (las de la V2 llevan nombre nuevo para que nadie vea la versión anterior en caché)
-FICHERO = {"guirnalda": "guirnalda-v2", "bodegon": "bodegon-v2"}
+ANCHOS = {"bodegon": (640, 1000)}
+# nombre del fichero publicado: cuando un dibujo cambia de una versión a otra, lleva nombre nuevo para que nadie vea
+# el anterior en caché (bodegón de la V2; alianzas de la V3, con el diamante por fuera del aro)
+FICHERO = {"bodegon": "bodegon-v2", "alianzas-icono": "alianzas-icono-v3"}
 # iconos junto a los títulos: se recortan al dibujo y se guardan a 2× y 3× de su alto en pantalla (1,15 × la mayúscula
 # de los rótulos, que mide como mucho 44 px: ver .titulo__icono en site.css)
 ICONOS = {"alianzas-icono": 51, "almohada-icono": 51}
 # estas se guardan sobre blanco, sin transparencia (pesan la tercera parte); en la página se funden con el lino con
 # mix-blend-mode: multiply (clase .acuarela-plana en site.css)
-PLANAS = {"bodegon", "guirnalda"}
+PLANAS = {"bodegon"}
 CALIDAD, CALIDAD_ALFA = 66, 62      # con estos valores pesan la mitad que con 82/90 y no se nota (el grano del papel se suaviza algo)
 
 
@@ -55,7 +56,7 @@ def main():
                 for sufijo, k in (("2x", 2), ("3x", 3)):
                     alto = ICONOS[nombre] * k
                     ic = im.convert("RGBa").resize((round(im.width * alto / im.height), alto), Image.LANCZOS).convert("RGBA")
-                    destino = SALIDA / f"{nombre}-{sufijo}.webp"
+                    destino = SALIDA / f"{FICHERO.get(nombre, nombre)}-{sufijo}.webp"
                     ic.save(destino, "WEBP", quality=80, alpha_quality=80, method=6)
                     kb = destino.stat().st_size / 1024
                     total += kb

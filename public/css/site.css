@@ -168,7 +168,9 @@
 .evento__lugar { font-family: var(--f-serif); font-style: italic; font-weight: 400; font-size: min(var(--fs-h3), 9.5vw); color: var(--rojo); overflow-wrap: anywhere; line-height: 1.15; margin-top: .1rem; text-wrap: balance; }
 
 .ruta { width: 100%; display: grid; justify-items: center; margin-block: .75rem; }
-.ruta__v { width: min(8rem, 36vw); aspect-ratio: 220 / 560; }
+/* V3: la ruta es un 30 % más corta (viewBox 178 × 404; en la V2, 220 × 560). Se mantiene la escala de la V2
+   (ancho de la V2 × 178 / 220) para que el trazo, los guiones y el avión se vean igual que antes */
+.ruta__v { width: calc(min(8rem, 36vw) * 178 / 220); aspect-ratio: 178 / 404; }
 .ruta svg { width: 100%; height: auto; overflow: visible; }
 .ruta__linea { stroke: var(--rojo); }
 
@@ -252,12 +254,8 @@
 .acuarela-fig { margin: 0 auto; display: grid; justify-items: center; }
 .acuarela-fig .acuarela { width: var(--w); }
 
-/* Mesa puesta entre la portada y la agenda: una guirnalda que se repite a todo el ancho y, debajo, el dibujo */
-.mesa { --tile: clamp(180px, 46vw, 300px); display: grid; justify-items: center; margin-top: 1.25rem; }
-.mesa__guirnalda {
-  width: 100%; height: calc(var(--tile) * 130 / 420);
-  background: url("../assets/ilustraciones/acuarela/guirnalda-v2-630.webp") repeat-x 50% 0 / var(--tile) auto;
-}
+/* Mesa puesta entre la portada y la agenda (la V2 llevaba encima una guirnalda de banderines; en la V3 ya no) */
+.mesa { display: grid; justify-items: center; margin-top: 1.25rem; }
 .mesa__img { width: min(100%, 40rem); margin-top: clamp(.25rem, 2vw, 1rem); }
 
 /* ---------- Aviso flotante (copiar IBAN, etc.) ---------- */
@@ -274,5 +272,5 @@
 @media (min-width: 600px) {
   .ilu--san-pablo { --w: min(24rem, 84vw); }
   .ilu--palomar { --w: min(30rem, 92vw); }
-  .ruta__v { width: min(9.5rem, 36vw); }
+  .ruta__v { width: calc(min(9.5rem, 36vw) * 178 / 220); }
 }
