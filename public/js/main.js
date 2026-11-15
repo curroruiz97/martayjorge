@@ -251,7 +251,7 @@
         const valor = btn.dataset.copiar.replace(/\s+/g, '');
         let ok = false;
         try { await navigator.clipboard.writeText(valor); ok = true; } catch (e) { ok = copiaAntigua(valor); }
-        avisar(ok ? 'IBAN copiado ✓' : 'No hemos podido copiarlo: selecciona el número y cópialo a mano');
+        avisar(ok ? (btn.dataset.copiarAviso || 'IBAN copiado ✓') : 'No hemos podido copiarlo: selecciónalo y cópialo a mano');
         if (ok && etiqueta) {
           btn.classList.add('copiado');
           etiqueta.textContent = '¡Copiado!';

@@ -74,6 +74,9 @@
   text-shadow: 0 0 2px var(--papel-3), 0 0 3px var(--papel-3), 0 0 6px var(--papel-3), 0 0 9px var(--papel-3);
 }
 
+/* Mapa estrecho (móvil): los hoteles solo con su número, para que los rótulos no se pisen */
+@media (max-width: 599.98px) { .mapa .mapa-pin--hotel .mapa-pin__nombre { display: none; } }
+
 /* ---------- Rótulo del círculo ---------- */
 .mapa .mapa-rotulo { background: none; border: 0; }
 .mapa .mapa-rotulo span {

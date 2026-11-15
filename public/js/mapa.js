@@ -13,7 +13,8 @@
  *
  * Qué dibuja: la zona recomendada para alojarse (círculo «a rotulador»: contorno irregular
  * ±2–4 % con semilla fija, trazo discontinuo rojo, relleno suave y rótulo manuscrito) y dos
- * marcadores (Iglesia de San Pablo y parking de la Plaza de Portugalete) con «¿Cómo llegar?».
+ * marcadores (Iglesia de San Pablo y parking de la Plaza de Portugalete) más los tres hoteles recomendados,
+ * numerados como sus tarjetas, todos con «¿Cómo llegar?».
  * Sin secuestrar el scroll: la rueda solo hace zoom tras hacer clic; en táctil se mueve el mapa
  * con DOS dedos (con uno se desplaza la página y sale un aviso).
  *
@@ -42,7 +43,7 @@
       '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors ' +
       '© <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>',
     rotulo: ['Zona recomendada', 'para alojarse'],
-    rotuloPos: [-0.06, -0.50],  // desplazamiento del rótulo desde el centro, en fracciones del radio [este, norte]
+    rotuloPos: [0.10, -0.70],  // desplazamiento del rótulo desde el centro, en fracciones del radio [este, norte]
     puntos: [
       {
         tipo: 'iglesia', nombre: 'Iglesia de San Pablo', etiqueta: 'San Pablo',
@@ -55,6 +56,25 @@
         detalle: 'Junto a la Catedral, a unos 500 m',
         pos: [41.65335, -4.72386],
         destino: 'Parking Plaza de Portugalete, Valladolid'
+      },
+      // Hoteles recomendados: el número coincide con el de su tarjeta en index.html (#alojamiento .hoteles)
+      {
+        tipo: 'hotel', numero: 1, nombre: 'Hotel Imperial', etiqueta: 'Imperial',
+        detalle: '10 % de descuento · junto a Poniente',
+        pos: [41.65262, -4.72953],
+        destino: 'Hotel Imperial, Calle del Peso 4, 47001 Valladolid'
+      },
+      {
+        tipo: 'hotel', numero: 2, nombre: 'Hotel Olid', etiqueta: 'Olid',
+        detalle: '10 % de descuento · Plaza de San Miguel',
+        pos: [41.65522, -4.72638],
+        destino: 'Hotel Olid, Plaza de San Miguel 10, 47003 Valladolid'
+      },
+      {
+        tipo: 'hotel', numero: 3, nombre: 'Eurostars Valladolid', etiqueta: 'Eurostars',
+        detalle: '15 % de descuento · junto a la Plaza Mayor',
+        pos: [41.65085, -4.72822],
+        destino: 'Eurostars Valladolid, Calle de la Constitución 2, 47001 Valladolid'
       }
     ]
   };
@@ -138,15 +158,18 @@
   var GOTA = 'M22.4 49.4C21.3 48.1 6.7 33.6 6.5 20.7 6.3 11.4 13.1 3.7 22.1 3.5 31.2 3.3 38 10.6 37.7 20.2 37.3 33 23.6 48 22.4 49.4Z';
   var PIN = {
     iglesia: { fill: '#a3121d', glifo: 'M22 10.8v18.2M15.2 17.6h13.6' },
-    parking: { fill: '#6c7550', glifo: 'M17.6 28.6V12.2h6c3.9 0 5.7 2.4 5.7 5.2 0 2.9-1.9 5.3-5.8 5.3h-5.9' }
+    parking: { fill: '#6c7550', glifo: 'M17.6 28.6V12.2h6c3.9 0 5.7 2.4 5.7 5.2 0 2.9-1.9 5.3-5.8 5.3h-5.9' },
+    hotel: { fill: '#fbf8f1', tinta: '#a3121d' }   // gota clara con el número de la tarjeta en rojo
   };
-  function svgPin(tipo) {
-    var p = PIN[tipo];
+  function svgPin(p) {
+    var e = PIN[p.tipo];
+    var dentro = p.numero
+      ? '<text x="22" y="28.2" text-anchor="middle" fill="' + e.tinta + '" font-family="Playfair Display, Georgia, serif" font-style="italic" font-weight="700" font-size="19">' + p.numero + '</text>'
+      : '<path d="' + e.glifo + '" fill="none" stroke="#fbf8f1" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>';
     return '<svg class="mapa-pin__svg" viewBox="0 0 44 52" width="44" height="52" aria-hidden="true" focusable="false">' +
       '<ellipse cx="22" cy="50.4" rx="8" ry="1.7" fill="#2b2a28" opacity=".2"/>' +
-      '<path d="' + GOTA + '" fill="' + p.fill + '" stroke="#2b2a28" stroke-width="2.2" stroke-linejoin="round"/>' +
-      '<path d="' + p.glifo + '" fill="none" stroke="#fbf8f1" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>' +
-      '</svg>';
+      '<path d="' + GOTA + '" fill="' + e.fill + '" stroke="' + (e.tinta || '#2b2a28') + '" stroke-width="2.2" stroke-linejoin="round"/>' +
+      dentro + '</svg>';
   }
 
   /* ---------------------------------------------------------------------------------------
@@ -282,7 +305,7 @@
     CFG.puntos.forEach(function (p) {
       var icono = L.divIcon({
         className: 'mapa-pin mapa-pin--' + p.tipo, iconSize: [44, 52], iconAnchor: [22, 50], popupAnchor: [0, -44],
-        html: svgPin(p.tipo) + '<span class="mapa-pin__nombre" aria-hidden="true">' + p.etiqueta + '</span>'
+        html: svgPin(p) + '<span class="mapa-pin__nombre" aria-hidden="true">' + p.etiqueta + '</span>'
       });
       var m = L.marker(p.pos, { icon: icono, title: p.nombre, alt: p.nombre, keyboard: true, riseOnHover: true }).addTo(map);
       m.getElement().setAttribute('aria-label', p.nombre);

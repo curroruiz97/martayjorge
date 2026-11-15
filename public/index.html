@@ -186,15 +186,63 @@
         <p class="etiqueta">Dónde dormir</p>
         <h2 class="titulo" id="t-alojamiento">Alojamiento</h2>
       </header>
-      <div class="revelar">
-        <p class="cursiva alojamiento__texto">En Valladolid tenéis muchísimas opciones de alojamiento en el entorno del centro. Escribidnos y os ayudaremos y aconsejaremos para encontrar el mejor sitio&nbsp;posible.</p>
-        <p class="alojamiento__contacto" data-contacto hidden></p>
-      </div>
+      <p class="cursiva alojamiento__texto revelar">En Valladolid tenéis muchísimas opciones de alojamiento en el entorno del centro. Os dejamos algunas recomendaciones de hoteles con descuentos especiales para vosotros, junto con una zona&nbsp;sugerida.</p>
     </div>
+
+    <!-- Hoteles recomendados. El número de cada tarjeta es el de su marcador en el mapa (js/mapa.js, CFG.puntos). -->
+    <div class="contenedor hoteles-caja">
+      <ol class="hoteles" aria-label="Hoteles recomendados con descuento">
+        <li class="hotel revelar">
+          <span class="hotel__num" aria-hidden="true">1</span>
+          <p class="hotel__dto"><strong>10%</strong> <span>dto.</span></p>
+          <h3 class="hotel__nombre">Hotel Imperial</h3>
+          <p class="hotel__zona">Junto a Poniente</p>
+          <p class="hotel__como">Reservad por teléfono o por correo diciendo que venís a nuestra&nbsp;boda.</p>
+          <ul class="hotel__datos">
+            <li><a href="tel:+34983330300"><svg class="icono" aria-hidden="true" focusable="false"><use href="assets/ilustraciones/iconos.svg#telefono"></use></svg><span>983 330 300</span></a></li>
+            <li><a href="mailto:recepcion@himperial.com?subject=Reserva%20para%20la%20boda%20de%20Marta%20y%20Jorge"><svg class="icono" aria-hidden="true" focusable="false"><use href="assets/ilustraciones/iconos.svg#sobre"></use></svg><span>recepcion@himperial.com</span></a></li>
+          </ul>
+        </li>
+        <li class="hotel revelar">
+          <span class="hotel__num" aria-hidden="true">2</span>
+          <p class="hotel__dto"><strong>10%</strong> <span>dto.</span></p>
+          <h3 class="hotel__nombre">Hotel Olid</h3>
+          <p class="hotel__zona">Plaza de San Miguel</p>
+          <p class="hotel__como">Reservad en su web con el&nbsp;código:</p>
+          <button class="hotel__codigo" type="button" data-copiar="MARTAYJORGE" data-copiar-aviso="Código copiado ✓" aria-label="Código MARTAYJORGE. Pulsa para copiarlo">
+            <span class="hotel__codigo-txt">MARTAYJORGE</span>
+            <span class="hotel__codigo-acc"><svg class="icono" aria-hidden="true" focusable="false"><use href="assets/ilustraciones/iconos.svg#copiar"></use></svg><span data-copiar-txt>Copiar</span></span>
+          </button>
+          <ul class="hotel__datos">
+            <li><a href="https://www.hotelolid.com" target="_blank" rel="noopener"><svg class="icono" aria-hidden="true" focusable="false"><use href="assets/ilustraciones/iconos.svg#web"></use></svg><span>hotelolid.com</span><span class="sr-only"> (se abre en otra pestaña)</span></a></li>
+          </ul>
+        </li>
+        <li class="hotel revelar">
+          <span class="hotel__num" aria-hidden="true">3</span>
+          <p class="hotel__dto"><strong>15%</strong> <span>dto.</span></p>
+          <h3 class="hotel__nombre">Eurostars Valladolid</h3>
+          <p class="hotel__zona">Junto a la Plaza Mayor</p>
+          <p class="hotel__como">Reservad en su web con el&nbsp;código:</p>
+          <button class="hotel__codigo" type="button" data-copiar="BODASMYJ" data-copiar-aviso="Código copiado ✓" aria-label="Código BODASMYJ. Pulsa para copiarlo">
+            <span class="hotel__codigo-txt">BODASMYJ</span>
+            <span class="hotel__codigo-acc"><svg class="icono" aria-hidden="true" focusable="false"><use href="assets/ilustraciones/iconos.svg#copiar"></use></svg><span data-copiar-txt>Copiar</span></span>
+          </button>
+          <ul class="hotel__datos">
+            <li><a href="https://www.eurostarshotels.com" target="_blank" rel="noopener"><svg class="icono" aria-hidden="true" focusable="false"><use href="assets/ilustraciones/iconos.svg#web"></use></svg><span>eurostarshotels.com</span><span class="sr-only"> (se abre en otra pestaña)</span></a></li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+
     <div class="contenedor alojamiento__mapa revelar">
-      <!-- Mapa con la zona recomendada (círculo). Lo monta js/mapa.js al acercarse a la pantalla. -->
-      <div id="mapa-alojamiento" class="mapa marco" role="region" aria-label="Mapa del centro de Valladolid con la zona recomendada para alojarse"></div>
+      <!-- Mapa con la zona recomendada (círculo) y los hoteles numerados. Lo monta js/mapa.js al acercarse a la pantalla. -->
+      <div id="mapa-alojamiento" class="mapa marco" role="region" aria-label="Mapa del centro de Valladolid con la zona recomendada para alojarse y los hoteles recomendados"></div>
       <p class="mapa__pie"><a href="https://www.google.com/maps/search/?api=1&amp;query=Valladolid+centro" target="_blank" rel="noopener">Abrir en Google Maps</a></p>
+    </div>
+
+    <div class="contenedor contenedor--estrecho alojamiento__ayuda revelar">
+      <p class="cursiva alojamiento__texto">¿Dudas sobre dónde quedaros? Escribidnos y os aconsejaremos para encontrar el mejor sitio&nbsp;posible.</p>
+      <p class="alojamiento__contacto" data-contacto hidden></p>
     </div>
   </section>
 
