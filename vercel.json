@@ -88,5 +88,17 @@
       "path": "/api/ping",
       "schedule": "17 9 * * *"
     }
+  ],
+  "redirects": [
+    {
+      "source": "/admin",
+      "destination": "/panel",
+      "permanent": false
+    },
+    {
+      "source": "/admin/(.*)",
+      "destination": "/panel",
+      "permanent": false
+    }
   ]
 }

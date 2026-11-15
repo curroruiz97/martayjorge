@@ -270,3 +270,28 @@ revoke all on table public.rsvp_vigentes, public.rsvp_personas, public.rsvp_resu
   from anon, authenticated, service_role;
 grant select on table public.rsvp_vigentes, public.rsvp_personas, public.rsvp_resumen
   to service_role;
+
+
+-- -----------------------------------------------------------------------------
+-- 7. Acceso al panel de los novios (/panel)
+--    Marta y Jorge entran con correo y contraseña (Supabase → Authentication →
+--    Users). Solo ven los datos los correos que estén en esta tabla: aunque
+--    alguien se creara una cuenta, el servidor (api/panel.js) le negaría el
+--    acceso. Como rsvps, la tabla no se puede leer desde el navegador (RLS sin
+--    políticas): solo la consulta api/panel.js con la clave secreta.
+--    Añadir a alguien:  insert into public.panel_acceso (email, nombre)
+--                       values ('correo@ejemplo.com', 'Nombre');
+-- -----------------------------------------------------------------------------
+create table if not exists public.panel_acceso (
+  email      text primary key,
+  nombre     text not null default '',
+  created_at timestamptz not null default now(),
+  constraint panel_acceso_email_chk check (email = lower(btrim(email)) and email like '%_@_%')
+);
+
+comment on table public.panel_acceso is
+  'Correos que pueden entrar en el panel de los novios (/panel). Cada uno necesita además un usuario en Authentication → Users.';
+
+alter table public.panel_acceso enable row level security;
+revoke all on table public.panel_acceso from anon, authenticated, service_role;
+grant select on table public.panel_acceso to service_role;

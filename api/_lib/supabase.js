@@ -188,6 +188,90 @@ async function comprobarConexion(cfg) {
   return true;
 }
 
+/* --------------------------------------------------------------------------
+   Acceso al panel de los novios (api/panel.js): Supabase Auth + lista de acceso
+   -------------------------------------------------------------------------- */
+
+/**
+ * Sesión de Supabase Auth a partir de una respuesta de /auth/v1/token.
+ * Devuelve { access_token, refresh_token, expires_at, email } o null si las credenciales no valen.
+ */
+async function sesionDesdeToken(r) {
+  if (r.status === 200) {
+    const j = await r.json().catch(() => null);
+    if (!j || !j.access_token || !j.refresh_token) throw new ErrorSupabase('Respuesta inesperada de Supabase Auth');
+    const expira = Number(j.expires_at) || Math.floor(Date.now() / 1000) + (Number(j.expires_in) || 3600);
+    return { access_token: j.access_token, refresh_token: j.refresh_token, expires_at: expira, email: String((j.user && j.user.email) || '').toLowerCase() };
+  }
+  // 400/401/403/404: credenciales o token de renovación no válidos (o usuario sin confirmar)…
+  if (r.status >= 400 && r.status < 500 && r.status !== 429) { await comprobarClaveAuth(r); return null; }
+  if (r.status === 429) {
+    await r.arrayBuffer().catch(() => {});
+    throw new ErrorSupabase('Supabase Auth: demasiados intentos (429)', { status: 429, diagnostico: 'Demasiados intentos seguidos. Espera unos minutos y vuelve a probar.' });
+  }
+  throw await errorDesdeRespuesta(r);
+}
+
+/** Correo + contraseña → sesión (o null si no son correctos). */
+async function entrarConContrasena(cfg, email, password) {
+  const r = await peticion(cfg, '/auth/v1/token?grant_type=password', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }),
+  });
+  return sesionDesdeToken(r);
+}
+
+/** Token de renovación → sesión nueva (o null si ya no vale). */
+async function renovarSesion(cfg, refreshToken) {
+  const r = await peticion(cfg, '/auth/v1/token?grant_type=refresh_token', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ refresh_token: refreshToken }),
+  });
+  return sesionDesdeToken(r);
+}
+
+/** Token de acceso del navegador → correo del usuario (o null si no es válido o ha caducado). */
+async function usuarioDeToken(cfg, accessToken) {
+  const r = await peticion(cfg, '/auth/v1/user', { headers: { Authorization: `Bearer ${accessToken}` } });
+  if (r.status === 200) {
+    const j = await r.json().catch(() => null);
+    return j && j.email ? { email: String(j.email).toLowerCase() } : null;
+  }
+  if (r.status === 401 || r.status === 403 || r.status === 404) { await comprobarClaveAuth(r); return null; }
+  throw await errorDesdeRespuesta(r);
+}
+
+/** …salvo que el «no» sea a la clave del servidor: entonces no es culpa de quien entra y se dice claro. */
+async function comprobarClaveAuth(r) {
+  const texto = (await r.text().catch(() => '')).slice(0, 1000);
+  if (/invalid api key|no api key|apikey/i.test(texto)) {
+    throw new ErrorSupabase(`Supabase Auth HTTP ${r.status}: clave no válida`, {
+      status: r.status, diagnostico: 'La clave de Supabase no es válida. Revisa SUPABASE_SECRET_KEY en Vercel.',
+    });
+  }
+}
+
+/** Cierra la sesión en Supabase (invalida el token de renovación). Los fallos se ignoran. */
+async function cerrarSesion(cfg, accessToken) {
+  try {
+    const r = await peticion(cfg, '/auth/v1/logout', { method: 'POST', headers: { Authorization: `Bearer ${accessToken}` }, plazoMs: 4000 });
+    await r.arrayBuffer().catch(() => {});
+  } catch { /* la sesión caducará sola */ }
+}
+
+/** ¿Este correo está en public.panel_acceso? Devuelve { email, nombre } o null. */
+async function accesoPanel(cfg, email) {
+  const ruta = `/rest/v1/panel_acceso?select=email,nombre&email=eq.${encodeURIComponent(String(email).toLowerCase())}&limit=1`;
+  const r = await peticion(cfg, ruta);
+  if (r.status !== 200) {
+    const err = await errorDesdeRespuesta(r);
+    if (err.codigo === 'PGRST205' || err.codigo === '42P01') {
+      err.diagnostico = 'No existe la tabla «panel_acceso». Ejecuta supabase/schema.sql en el SQL Editor de Supabase.';
+    }
+    throw err;
+  }
+  const datos = await r.json().catch(() => null);
+  return Array.isArray(datos) && datos[0] ? { email: datos[0].email, nombre: datos[0].nombre || '' } : null;
+}
+
 /** Descripción del error apta para los logs (sin claves ni datos personales). */
 function describirError(err) {
   if (!err) return 'error desconocido';
@@ -201,6 +285,11 @@ module.exports = {
   insertarRsvp,
   listarRsvps,
   comprobarConexion,
+  entrarConContrasena,
+  renovarSesion,
+  usuarioDeToken,
+  cerrarSesion,
+  accesoPanel,
   describirError,
   LIMITE_FILAS,
 };
