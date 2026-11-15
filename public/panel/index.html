@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#f7f4f0">
+  <title>Panel de invitados · Marta y Jorge</title>
+  <link rel="icon" href="/assets/ilustraciones/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="/assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/panel/monograma.webp" as="image" type="image/webp">
+  <link rel="stylesheet" href="/panel/panel.css">
+  <script src="/panel/panel.js" defer></script>
+</head>
+<body>
+<noscript><p class="aviso-js">Este panel necesita JavaScript activado.</p></noscript>
+
+<!-- ============ ACCESO ============ -->
+<main class="acceso" data-vista="acceso" hidden>
+  <section class="acceso__marca" aria-hidden="true">
+    <img class="acceso__monograma" src="/panel/monograma.webp" width="519" height="267" alt="">
+    <img class="acceso__fecha" src="/assets/rotulos/fecha.webp" width="830" height="103" alt="">
+    <p class="acceso__lugar">Valladolid</p>
+  </section>
+  <section class="acceso__panel">
+    <form class="acceso__form" data-form-acceso novalidate>
+      <p class="sobretitulo">Marta y Jorge</p>
+      <h1 class="acceso__titulo">Panel de invitados</h1>
+      <p class="acceso__intro">Entra con tu correo para ver quién viene, el autocar y las alergias.</p>
+
+      <label class="campo">
+        <span class="campo__etiqueta">Correo electrónico</span>
+        <input class="campo__input" type="email" name="email" autocomplete="username" inputmode="email" required data-email>
+      </label>
+      <label class="campo">
+        <span class="campo__etiqueta">Contraseña</span>
+        <span class="campo__clave">
+          <input class="campo__input" type="password" name="password" autocomplete="current-password" required data-password>
+          <button class="campo__ver" type="button" data-ver-clave aria-label="Mostrar la contraseña" aria-pressed="false">Ver</button>
+        </span>
+      </label>
+      <label class="casilla">
+        <input type="checkbox" data-recordar checked>
+        <span>Mantener la sesión iniciada en este dispositivo</span>
+      </label>
+
+      <p class="acceso__error" data-error-acceso role="alert"></p>
+      <button class="boton boton--primario boton--ancho" type="submit" data-entrar>Entrar</button>
+      <p class="acceso__ayuda">¿Has olvidado la contraseña? Pide que te la cambien en Supabase (Authentication → Users).</p>
+    </form>
+  </section>
+</main>
+
+<!-- ============ PANEL ============ -->
+<div class="app" data-vista="panel" hidden>
+  <header class="barra">
+    <div class="barra__marca">
+      <img class="barra__monograma" src="/panel/monograma.webp" width="519" height="267" alt="">
+      <div>
+        <p class="barra__titulo">Marta &amp; Jorge</p>
+        <p class="barra__sub">Panel de invitados</p>
+      </div>
+    </div>
+    <div class="barra__derecha">
+      <span class="pastilla" data-cuenta-atras></span>
+      <span class="barra__usuario" data-usuario></span>
+      <button class="boton boton--fantasma" type="button" data-salir>Salir</button>
+    </div>
+  </header>
+
+  <main class="contenido" id="contenido" tabindex="-1">
+    <div class="cabecera">
+      <div>
+        <h1 class="cabecera__titulo">Resumen</h1>
+        <p class="cabecera__estado" data-actualizado aria-live="polite"></p>
+      </div>
+      <div class="cabecera__acciones">
+        <button class="boton" type="button" data-recargar>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M16.5 10a6.5 6.5 0 1 1-1.9-4.6M16.5 3.5v3.6h-3.6"/></svg>
+          Actualizar
+        </button>
+        <button class="boton" type="button" data-csv="respuestas">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 15.5h12"/></svg>
+          Respuestas (Excel)
+        </button>
+        <button class="boton" type="button" data-csv="personas">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10m0 0-4-4m4 4 4-4M4 15.5h12"/></svg>
+          Lista por persona
+        </button>
+      </div>
+    </div>
+
+    <p class="aviso" data-aviso role="alert" hidden></p>
+
+    <!-- Indicadores -->
+    <section class="kpis" aria-label="Totales">
+      <article class="kpi kpi--destacado">
+        <p class="kpi__etiqueta">Personas que vienen</p>
+        <p class="kpi__valor" data-kpi="personas_asisten">–</p>
+        <p class="kpi__nota" data-nota="personas"></p>
+      </article>
+      <article class="kpi">
+        <p class="kpi__etiqueta">Respuestas</p>
+        <p class="kpi__valor" data-kpi="respuestas_vigentes">–</p>
+        <div class="reparto" data-reparto aria-hidden="true"><span class="reparto__si"></span><span class="reparto__no"></span></div>
+        <p class="kpi__nota" data-nota="respuestas"></p>
+      </article>
+      <article class="kpi">
+        <p class="kpi__etiqueta">Autocar</p>
+        <p class="kpi__valor kpi__valor--doble"><span data-kpi="plazas_ida">–</span><small>ida</small><span data-kpi="plazas_vuelta">–</span><small>vuelta</small></p>
+        <p class="kpi__nota">San Pablo → Posada · Posada → Poniente</p>
+      </article>
+      <article class="kpi">
+        <p class="kpi__etiqueta">Con alergias o dieta</p>
+        <p class="kpi__valor" data-kpi="personas_con_alergias">–</p>
+        <p class="kpi__nota" data-nota="alergias"></p>
+      </article>
+    </section>
+
+    <!-- Evolución y alergias -->
+    <section class="rejilla">
+      <article class="tarjeta">
+        <header class="tarjeta__cabecera">
+          <h2 class="tarjeta__titulo">Confirmaciones en el tiempo</h2>
+          <p class="tarjeta__sub">Personas que vienen, acumulado por día</p>
+        </header>
+        <div class="grafica" data-grafica role="img" aria-label="Evolución de las confirmaciones"></div>
+      </article>
+      <article class="tarjeta">
+        <header class="tarjeta__cabecera">
+          <h2 class="tarjeta__titulo">Alergias e intolerancias</h2>
+          <p class="tarjeta__sub">Personas que vienen, según su última respuesta</p>
+        </header>
+        <ul class="barras" data-alergias></ul>
+      </article>
+    </section>
+
+    <!-- Invitados -->
+    <section class="tarjeta tarjeta--tabla" aria-labelledby="t-invitados">
+      <header class="tabla-cabecera">
+        <h2 class="tarjeta__titulo" id="t-invitados">Invitados</h2>
+        <div class="filtros" role="tablist" aria-label="Filtrar invitados" data-filtros>
+          <button type="button" role="tab" data-filtro="todos" aria-selected="true">Todos <span></span></button>
+          <button type="button" role="tab" data-filtro="si" aria-selected="false">Vienen <span></span></button>
+          <button type="button" role="tab" data-filtro="no" aria-selected="false">No vienen <span></span></button>
+          <button type="button" role="tab" data-filtro="alergias" aria-selected="false">Con alergias <span></span></button>
+          <button type="button" role="tab" data-filtro="autocar" aria-selected="false">Con autocar <span></span></button>
+          <button type="button" role="tab" data-filtro="mensaje" aria-selected="false">Con mensaje <span></span></button>
+        </div>
+        <div class="tabla-herramientas">
+          <label class="buscador">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="9" cy="9" r="5.5"/><path d="m13.2 13.2 3.8 3.8"/></svg>
+            <span class="sr-only">Buscar por nombre</span>
+            <input type="search" placeholder="Buscar invitado o acompañante…" autocomplete="off" data-buscar>
+          </label>
+          <label class="casilla casilla--pequena">
+            <input type="checkbox" data-sustituidas>
+            <span>Ver respuestas antiguas</span>
+          </label>
+        </div>
+      </header>
+
+      <div class="tabla-envoltorio">
+        <table class="tabla">
+          <caption class="sr-only">Respuestas de los invitados. Pulsa una fila para ver el detalle.</caption>
+          <thead>
+            <tr>
+              <th scope="col"><button type="button" data-orden="nombre">Invitado</button></th>
+              <th scope="col">Estado</th>
+              <th scope="col" class="num"><button type="button" data-orden="personas">Personas</button></th>
+              <th scope="col">Autocar</th>
+              <th scope="col">Alergias</th>
+              <th scope="col" class="centro">Mensaje</th>
+              <th scope="col" class="num"><button type="button" data-orden="fecha" aria-sort="descending">Fecha</button></th>
+            </tr>
+          </thead>
+          <tbody data-filas></tbody>
+        </table>
+        <p class="vacio" data-vacio hidden></p>
+      </div>
+      <p class="tabla-pie" data-contador></p>
+    </section>
+  </main>
+</div>
+
+<!-- ============ FICHA DE UN INVITADO ============ -->
+<div class="ficha-fondo" data-ficha-fondo hidden></div>
+<aside class="ficha" data-ficha role="dialog" aria-modal="true" aria-labelledby="ficha-nombre" hidden tabindex="-1">
+  <header class="ficha__cabecera">
+    <div>
+      <p class="ficha__estado" data-ficha-estado></p>
+      <h2 class="ficha__nombre" id="ficha-nombre" data-ficha-nombre></h2>
+      <p class="ficha__fecha" data-ficha-fecha></p>
+    </div>
+    <button class="ficha__cerrar" type="button" data-cerrar-ficha aria-label="Cerrar">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15"/></svg>
+    </button>
+  </header>
+  <div class="ficha__cuerpo" data-ficha-cuerpo></div>
+</aside>
+
+<div class="tostada" data-tostada role="status" aria-live="polite"></div>
+</body>
+</html>

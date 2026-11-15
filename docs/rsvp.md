@@ -3,7 +3,7 @@
 > **En 30 segundos, para Marta y Jorge**
 >
 > - Cada confirmación se guarda en **vuestra base de datos de Supabase**, en la tabla `rsvps`.
-> - Para verlas, lo más fácil: abrid **`https://vuestro-dominio/admin`**, escribid vuestra contraseña
+> - Para verlas, lo más fácil: abrid **`https://vuestro-dominio/panel`**, entrad con vuestro correo y contraseña
 >   y tendréis los totales, la lista de respuestas y un botón **«Descargar CSV»** (se abre en Excel).
 > - También podéis verlas en **supabase.com → vuestro proyecto → Table Editor**.
 > - Nadie más puede leerlas: la web nunca deja ver la base de datos y la clave solo vive en Vercel.
@@ -17,20 +17,20 @@
 Se guardan en **Supabase**, un servicio de base de datos (Postgres) en la nube, en vuestro propio
 proyecto. Hay tres formas de consultarlos, de más fácil a más completa:
 
-### Opción A · El panel `/admin` (recomendada)
+### Opción A · El panel `/panel` (recomendada)
 
-1. Entrad en `https://vuestro-dominio/admin` (desde el móvil también funciona).
-2. Escribid la contraseña: es el valor que pusisteis en Vercel como `ADMIN_TOKEN`.
-3. Veréis:
-   - **Totales**: personas que asisten (acompañantes incluidos), respuestas «sí», quién no puede
-     venir y plazas de autocar de ida y de vuelta.
-   - **Alergias e intolerancias**: cuántas personas tienen cada una.
-   - **Respuestas**: una tarjeta por persona, con buscador y filtros (todas / asisten / no asisten).
-4. Botones **«Descargar CSV»** (una fila por respuesta) y **«CSV por persona»** (una fila por cada
+Guía completa, y cómo dar acceso a alguien: [`docs/panel.md`](panel.md).
+
+1. Entrad en `https://vuestro-dominio/panel` (desde el móvil también funciona).
+2. Escribid vuestro correo y contraseña (cuentas de Supabase Auth; además, el correo tiene que estar en la tabla
+   `panel_acceso`).
+3. Veréis los totales (personas que vienen, respuestas, autocar, alergias), la evolución de las
+   confirmaciones, las alergias y la lista de invitados con buscador, filtros y una ficha por persona.
+4. Botones **«Respuestas (Excel)»** (una fila por respuesta) y **«Lista por persona»** (una fila por cada
    invitado y acompañante con sus alergias: perfecto para el catering y las mesas).
 
-La contraseña solo se recuerda en esa pestaña del navegador; al cerrarla o pulsar «Salir» hay que
-volver a escribirla.
+Con «Mantener la sesión iniciada» no hay que volver a escribir la contraseña en ese dispositivo;
+«Salir» cierra la sesión.
 
 ### Opción B · Supabase → Table Editor
 
@@ -95,8 +95,8 @@ Invitado (móvil)                       Vercel                         Supabase
 │ formulario           │ ────────────▶ │ api/rsvp.js       │ ───────▶ │ tabla rsvps      │
 │ public/js/rsvp.js    │ ◀──────────── │ valida y guarda   │ ◀─────── │ (RLS, sin acceso │
 └──────────────────────┘  201 / 400 …  └───────────────────┘          │  público)        │
-                                        api/admin.js ── lee ───────▶ └──────────────────┘
-Novios ── /admin (contraseña) ──────────▶ (ADMIN_TOKEN)
+                                        api/panel.js ── lee ───────▶ └──────────────────┘
+Novios ── /panel (correo + contraseña) ─▶ (Supabase Auth + panel_acceso)
 ```
 
 - El navegador **nunca** habla con Supabase: solo con `/api/rsvp` (mismo dominio). La clave secreta
@@ -157,7 +157,6 @@ Vercel → vuestro proyecto → **Settings → Environment Variables**. Añadid 
 |---|---|---|
 | `SUPABASE_URL` | `https://xxxx.supabase.co` | Sí |
 | `SUPABASE_SECRET_KEY` | `sb_secret_…` (marcadla como *Sensitive*) | Sí |
-| `ADMIN_TOKEN` | La contraseña del panel `/admin`: **mínimo 12 caracteres**. Ej.: `pinar-sanpablo-mayo-2027` | Para usar el panel |
 | `CRON_SECRET` | Cualquier texto largo y aleatorio | Recomendada (protege `/api/ping`) |
 
 Después, **Deployments → (último) → ⋯ → Redeploy**: las variables solo se aplican en despliegues nuevos.
@@ -168,7 +167,7 @@ a la de Supabase (p. ej. París o Fráncfort) para que el guardado sea más ráp
 ### 3.5 Probar que todo funciona
 
 1. Abrid la web, rellenad el formulario con el nombre **«Prueba Marta»** y enviad.
-2. Entrad en `/admin`: debe aparecer. También en Supabase → Table Editor → `rsvps`.
+2. Entrad en `/panel`: debe aparecer. También en Supabase → Table Editor → `rsvps`.
 3. Borrad las pruebas antes de mandar la invitación (§5).
 
 ### 3.6 Mantener Supabase despierto (¡importante en el plan gratuito!)
@@ -204,7 +203,7 @@ npm test             # pruebas de la API contra el Supabase simulado (node:test)
   las mismas columnas y restricciones que `schema.sql` guarda en memoria y en `.dev-data/rsvps.json`
   (ignorado por git). Para vaciarlo: borrad ese fichero y reiniciad.
 - Rutas útiles: `/` (la web), `/_dev/rsvp` (solo la sección del formulario, para trabajar en ella),
-  `/admin` (contraseña en local: `desarrollo-local-2027`).
+  `/panel` (en local: `marta@ejemplo.com`, contraseña `desarrollo-local-2027`).
 - El servidor aplica las cabeceras de `vercel.json` (incluida la CSP) para ver los problemas antes
   de desplegar, y recarga `api/*.js` en cada petición.
 - Contra el Supabase real: copiad `.env.example` a `.env`, rellenadlo y ejecutad
@@ -224,7 +223,7 @@ delete from public.rsvps where nombre ilike '%prueba%';                         
 truncate table public.rsvps;
 ```
 
-(Desde `/admin` no se puede borrar nada, a propósito.)
+(Desde `/panel` no se puede borrar nada, a propósito.)
 
 ---
 
@@ -254,9 +253,9 @@ truncate table public.rsvps;
   spam, la defensa buena está en Vercel: *Firewall → Add Rule* → «Rate limit» sobre
   `POST /api/rsvp` (por ejemplo, 10 envíos por minuto y por IP; según el plan puede estar o no
   disponible). Todas las filas quedan en Supabase aunque el panel solo muestre las 1000 últimas.
-- **Panel**: protegido con `ADMIN_TOKEN` (mín. 12 caracteres), comparación en tiempo constante,
-  ~0,8 s de espera tras cada contraseña incorrecta, respuestas `no-store` y `noindex`. La contraseña
-  viaja en la cabecera `Authorization`, nunca en la URL. Todo lo que escriben los invitados se pinta
+- **Panel**: correo y contraseña de Supabase Auth y, además, el correo en `panel_acceso`; ~0,8 s de
+  espera tras cada contraseña incorrecta, respuestas `no-store` y `noindex`. El token viaja en la
+  cabecera `Authorization`, nunca en la URL (detalle en `docs/panel.md`). Todo lo que escriben los invitados se pinta
   como texto (nunca como HTML).
 - **Privacidad**: las alergias son datos de salud. Usadlas solo para organizar la boda, no compartáis
   los CSV más de lo necesario y, **después de la boda**, exportad lo que queráis conservar y vaciad la
@@ -305,11 +304,10 @@ con `apikey` (y `Authorization: Bearer` solo si la clave es un JWT antiguo) y
 devuelve `[]` y así se detecta el duplicado. Un reintento ante fallo de red o 502/503/504, con un
 plazo total de ~8,5 s; no sigue redirecciones.
 
-### `GET /api/admin`
+### `/api/panel`
 
-Cabecera `Authorization: Bearer <ADMIN_TOKEN>` (el panel la envía con `encodeURIComponent` para
-admitir tildes). Sin `ADMIN_TOKEN` (o con menos de 12 caracteres) → `404`; incorrecta → `401`;
-correcta → `{ok, generado, resumen, respuestas, limite_alcanzado}`, donde `respuestas` son todas las
+Inicio de sesión, renovación y datos del panel: ver la tabla de `docs/panel.md`. Los datos son
+`{ok, usuario, generado, resumen, respuestas, limite_alcanzado}`, donde `respuestas` son todas las
 filas (más recientes primero) marcadas con `vigente` y `n_respuestas`. Los cálculos replican las
 vistas de `schema.sql`.
 
@@ -326,8 +324,8 @@ Consulta mínima para que Supabase no pause el proyecto. Si existe `CRON_SECRET`
 |---|---|
 | `public/index.html` (sección `#confirmacion`) | Marcado del formulario |
 | `public/css/rsvp.css` · `public/js/rsvp.js` | Estilos y comportamiento del formulario |
-| `public/admin/` | Panel de los novios (`index.html`, `admin.css`, `admin.js`) |
-| `api/rsvp.js` · `api/admin.js` · `api/ping.js` | Funciones de Vercel |
+| `public/panel/` | Panel de los novios (`index.html`, `panel.css`, `panel.js`) |
+| `api/rsvp.js` · `api/panel.js` · `api/ping.js` | Funciones de Vercel |
 | `api/_lib/` | Validación, acceso a Supabase y cálculos compartidos (no son funciones) |
 | `supabase/schema.sql` · `supabase/consultas.sql` | Tabla, vistas y permisos · consultas útiles |
 | `scripts/dev.mjs` · `scripts/test-rsvp.mjs` | Servidor de desarrollo con Supabase simulado · pruebas |
@@ -340,8 +338,7 @@ Consulta mínima para que Supabase no pause el proyecto. Si existe `CRON_SECRET`
 - **Los invitados ven «No hemos podido enviar tu respuesta»** → Vercel → proyecto → **Logs**, función
   `/api/rsvp`. El mensaje dice la causa: *Faltan las variables…* (§3.4), *Invalid API key* (clave mal
   copiada), *No existe la tabla «rsvps»* (falta §3.2), *Faltan permisos* (volved a ejecutar
-  `schema.sql`), *proyecto en pausa* (§3.6). El panel `/admin` muestra el mismo diagnóstico.
-- **`/admin` dice que el panel no está activado** → falta `ADMIN_TOKEN` o tiene menos de 12 caracteres;
-  tras cambiarlo, **Redeploy**.
+  `schema.sql`), *proyecto en pausa* (§3.6). El panel `/panel` muestra el mismo diagnóstico.
+- **No podéis entrar en `/panel`** → ver «Si algo falla» en `docs/panel.md`.
 - **Alguien no encuentra su respuesta** → mirad el historial (consulta 9): quizá escribió el nombre
   de otra forma.

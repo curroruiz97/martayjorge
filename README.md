@@ -23,7 +23,7 @@ fotos de lado a lado con los bordes a pincel; formulario de confirmación con ac
 | **S.R.C.** | «S.R.C. · Se ruega confirmación» y el formulario: nombre, asistencia, acompañantes con sus nombres, plazas de autocar por trayecto, alergias por persona y mensaje. No pide correo |
 | **Lista de bodas** | Dos alianzas en acuarela junto al título (la de ella con el diamante engastado por fuera del aro) e IBAN en una sola línea con botón para copiarlo |
 | **Cierre** | «¡Os esperamos!» sobre el cielo de la foto del atardecer, que se ve entera. Es el final de la página |
-| **`/admin`** | Panel privado (con contraseña) para que los novios vean totales, filtren y descarguen CSV |
+| **`/panel`** | Panel privado de invitados (correo y contraseña de Supabase) para que los novios vean totales, quién viene, autocar, alergias y mensajes, y descarguen Excel. Guía: [`docs/panel.md`](docs/panel.md) |
 
 Todos los títulos son rótulos pintados con el motor de pincel de `scripts/rotulos/` (el texto va en un `.sr-only`
 para lectores de pantalla). Una sola composición, la del móvil, en todas las pantallas (en escritorio, centrada).
@@ -42,8 +42,8 @@ public/                 ← lo que se publica
   assets/img/           fotos optimizadas (WebP), textura de lino (lino.webp), imagen para compartir (og.jpg) e icono del móvil
   assets/rotulos/       rótulos a pincel de acuarela (títulos, nombres y fecha), máscaras de los bordes de las fotos, aguada y pincelada de botón
   assets/ilustraciones/ acuarela/ (bodegón, San Pablo, Palomar, iconos…) y SVG a pluma (ruta, adornos, iconos, favicon); guía: docs/ilustraciones.md
-  admin/                panel de respuestas
-api/                    funciones serverless de Vercel (rsvp, admin, ping)
+  panel/                panel de invitados (con inicio de sesión)
+api/                    funciones serverless de Vercel (rsvp, panel, ping)
 supabase/               schema.sql (tabla y vistas) · consultas.sql (consultas listas para pegar)
 scripts/                dev.mjs (servidor local) · test-rsvp.mjs · rotulos/ (pincel: rótulos, nombres, fecha, bordes de foto) · acuarela/ (acuarelas, San Pablo y Palomar) · ilustraciones/ (SVG a pluma) · fondo/ (textura de lino) · og/ (imagen para compartir el enlace y el icono del móvil)
 docs/                   rsvp.md (guía completa del formulario y los datos) · animacion-entrada.md · ilustraciones.md · contenido-original.md (brief) · datos-verificados.md · ilustraciones/v1/ (dibujos a pluma de la V1)
@@ -60,7 +60,7 @@ npm test        # pruebas de la API
 ```
 
 Los envíos de prueba se guardan en `.dev-data/rsvps.json` (ignorado por git). El panel en local:
-`http://127.0.0.1:3000/admin` (contraseña `desarrollo-local-2027`). Más detalles en [`docs/rsvp.md`](docs/rsvp.md).
+`http://127.0.0.1:3000/panel` (`marta@ejemplo.com`, contraseña `desarrollo-local-2027`). Más detalles en [`docs/rsvp.md`](docs/rsvp.md).
 
 ## Publicarla (GitHub + Vercel + Supabase + dominio)
 
@@ -85,7 +85,6 @@ Los envíos de prueba se guardan en `.dev-data/rsvps.json` (ignorado por git). E
    |---|---|
    | `SUPABASE_URL` | `https://xxxx.supabase.co` |
    | `SUPABASE_SECRET_KEY` | `sb_secret_…` (marcarla como *Sensitive*) |
-   | `ADMIN_TOKEN` | contraseña del panel `/admin` (mínimo 12 caracteres) |
    | `CRON_SECRET` | texto largo y aleatorio (protege `/api/ping`) |
 
    Después, *Redeploy* (las variables solo se aplican a despliegues nuevos). La **rama de producción** debe ser
@@ -94,7 +93,7 @@ Los envíos de prueba se guardan en `.dev-data/rsvps.json` (ignorado por git). E
    Las 3 metaetiquetas de `public/index.html` (`og:url`, `og:image`, `twitter:image`) usan ese dominio y
    `vercel.json` manda `martayjorge-eta.vercel.app` a `https://martayjorge.com`.
 5. **Probar antes de repartir la invitación**: abrir la web, enviar una confirmación como «Prueba Marta»,
-   comprobarla en `/admin`, borrar las pruebas (`docs/rsvp.md` §5) y compartir el enlace en un chat para ver la
+   comprobarla en `/panel`, borrar las pruebas (`docs/rsvp.md` §5) y compartir el enlace en un chat para ver la
    vista previa.
 
 > **Plan gratuito de Supabase**: pausa los proyectos con poca actividad durante 7 días y un proyecto pausado no
@@ -105,8 +104,8 @@ Los envíos de prueba se guardan en `.dev-data/rsvps.json` (ignorado por git). E
 
 En la tabla `rsvps` de **vuestro proyecto de Supabase**. Tres formas de verlas (de más fácil a más completa):
 
-1. **`https://vuestro-dominio/admin`** + la contraseña `ADMIN_TOKEN`: totales, filtros, lista por persona y botones
-   de **descargar CSV** (abre bien en Excel).
+1. **`https://vuestro-dominio/panel`** con vuestro correo y contraseña: totales, gráfica, alergias, lista de invitados
+   con filtros y ficha de cada uno, y botones para **descargar en Excel**. Cómo dar acceso: [`docs/panel.md`](docs/panel.md).
 2. **Supabase → Table Editor**: tablas `rsvps` (todo lo recibido), `rsvp_vigentes` (última respuesta de cada
    persona), `rsvp_personas` (una fila por invitado/acompañante, con alergias) y `rsvp_resumen` (totales).
 3. **Supabase → SQL Editor** con las consultas de [`supabase/consultas.sql`](supabase/consultas.sql).

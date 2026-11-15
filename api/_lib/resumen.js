@@ -1,7 +1,7 @@
 'use strict';
 /**
  * Cálculos del panel de los novios. Replican EXACTAMENTE las vistas de
- * supabase/schema.sql (rsvp_vigentes y rsvp_resumen) para que el panel /admin y
+ * supabase/schema.sql (rsvp_vigentes y rsvp_resumen) para que el panel /panel y
  * el SQL Editor de Supabase den siempre los mismos números.
  */
 

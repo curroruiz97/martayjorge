@@ -121,6 +121,12 @@ LETRAS = {
     '·': (0.26, [
         (L, [(0.13, 0.48), (0.13, 0.52)], PUNTO),
     ]),
+    # «&» de rotulista, de un solo golpe: sale de la cola de abajo a la derecha, sube en diagonal, da la vuelta al
+    # bucle de arriba, baja a la panza y remata en la cola de arriba a la derecha (monograma «M & J» del panel)
+    '&': (0.66, [
+        (C, [(0.62, 1.0), (0.42, 0.78), (0.2, 0.5), (0.12, 0.27), (0.2, 0.07), (0.34, 0.02), (0.45, 0.12),
+             (0.42, 0.3), (0.26, 0.45), (0.08, 0.62), (0.04, 0.82), (0.14, 0.97), (0.32, 0.99), (0.5, 0.86), (0.62, 0.6)], {}),
+    ]),
     ' ': (0.3, []),
     # números (para la fecha)
     '0': (0.54, [(C, [(0.27, 0.02), (0.09, 0.15), (0.04, 0.5), (0.1, 0.86), (0.27, 0.98), (0.44, 0.86), (0.5, 0.5),

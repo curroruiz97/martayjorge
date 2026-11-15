@@ -26,7 +26,6 @@ let dirDatos;
 
 before(async () => {
   dirDatos = await fs.mkdtemp(path.join(os.tmpdir(), 'mj-rsvp-test-'));
-  delete process.env.ADMIN_TOKEN;
   delete process.env.CRON_SECRET;
   srv = await iniciar({ puerto: 0, mock: true, dirDatos, silencioso: true });
 });
@@ -536,52 +535,68 @@ describe('compatibilidad con los «helpers» de Vercel', () => {
 
 /* ------------------------------------------------------------ panel de los novios */
 
-describe('/api/admin', () => {
-  const TOKEN = 'una-contraseña-larga-ñ-2027';
-  const pedir = (token, metodo = 'GET') => enviar(null, {
-    ruta: '/api/admin', metodo, tipo: null,
-    cabeceras: token === null ? {} : { Authorization: `Bearer ${encodeURIComponent(token)}` },
+describe('/api/panel', () => {
+  const CONTRASENA = 'desarrollo-local-2027';
+  const entrar = (email, password) => enviar({ email, password }, { ruta: '/api/panel?accion=entrar' });
+  const datos = (token) => enviar(null, {
+    ruta: '/api/panel', metodo: 'GET', tipo: null, cabeceras: token ? { Authorization: `Bearer ${token}` } : {},
   });
 
-  test('sin ADMIN_TOKEN (o demasiado corto) → 404', async () => {
-    await conEntorno({ ADMIN_TOKEN: undefined }, async () => assert.equal((await pedir('loquesea')).status, 404));
-    await conEntorno({ ADMIN_TOKEN: 'corto' }, async () => assert.equal((await pedir('corto')).status, 404));
+  test('correo o contraseña mal → 401 tras una pequeña espera (sin decir cuál falla)', async () => {
+    const t0 = Date.now();
+    const r = await entrar('marta@ejemplo.com', 'otra-contraseña');
+    assert.equal(r.status, 401);
+    assert.ok(Date.now() - t0 >= 550, 'debe esperar antes de responder');
+    assert.equal(r.headers.get('cache-control'), 'no-store, private');
+    const r2 = await entrar('nadie@ejemplo.com', CONTRASENA);
+    assert.equal(r2.status, 401);
+    assert.equal(r2.json.error, r.json.error);
+    assert.equal((await entrar('no-es-un-correo', CONTRASENA)).status, 401);
   });
 
-  test('contraseña incorrecta o ausente → 401 tras una pequeña espera', async () => {
-    await conEntorno({ ADMIN_TOKEN: TOKEN }, async () => {
-      const t0 = Date.now();
-      const r = await pedir('otra-contraseña-larga');
-      assert.equal(r.status, 401);
-      assert.ok(Date.now() - t0 >= 550, 'debe esperar antes de responder');
-      assert.equal((await pedir(null)).status, 401);
-      assert.equal(r.headers.get('cache-control'), 'no-store, private');
-    });
+  test('cuenta que no está en la lista de acceso → 403', async () => {
+    const r = await entrar('intruso@ejemplo.com', CONTRASENA);
+    assert.equal(r.status, 403);
+    assert.ok(!r.json.sesion);
   });
 
-  test('contraseña correcta (con ñ) → 200 con resumen y respuestas marcadas', async () => {
-    await conEntorno({ ADMIN_TOKEN: TOKEN }, async () => {
-      const r = await pedir(TOKEN);
-      assert.equal(r.status, 200);
-      assert.equal(r.json.ok, true);
-      assert.equal(r.headers.get('cache-control'), 'no-store, private');
-      assert.ok(Array.isArray(r.json.respuestas) && r.json.respuestas.length > 0);
-      assert.ok(r.json.respuestas.every((f) => typeof f.vigente === 'boolean' && f.n_respuestas >= 1));
-      assert.ok(!('user_agent' in r.json.respuestas[0]) && !('submission_id' in r.json.respuestas[0]));
-      for (const k of ['respuestas_recibidas', 'respuestas_vigentes', 'confirman_si', 'no_asisten', 'personas_asisten',
-        'plazas_ida', 'plazas_vuelta', 'alergias', 'otras_alergias']) assert.ok(k in r.json.resumen, k);
-    });
+  test('entrar → datos con resumen y respuestas; renovar; salir', async () => {
+    const r = await entrar('  Marta@Ejemplo.com ', CONTRASENA);
+    assert.equal(r.status, 200);
+    assert.equal(r.json.usuario.nombre, 'Marta');
+    const { access_token: at, refresh_token: rt } = r.json.sesion;
+    assert.ok(at && rt && r.json.sesion.expires_at > Date.now() / 1000);
+
+    const d = await datos(at);
+    assert.equal(d.status, 200);
+    assert.equal(d.headers.get('cache-control'), 'no-store, private');
+    assert.equal(d.json.usuario.email, 'marta@ejemplo.com');
+    assert.ok(Array.isArray(d.json.respuestas) && d.json.respuestas.length > 0);
+    assert.ok(d.json.respuestas.every((f) => typeof f.vigente === 'boolean' && f.n_respuestas >= 1));
+    assert.ok(!('user_agent' in d.json.respuestas[0]) && !('submission_id' in d.json.respuestas[0]));
+    for (const k of ['respuestas_recibidas', 'respuestas_vigentes', 'confirman_si', 'no_asisten', 'personas_asisten',
+      'plazas_ida', 'plazas_vuelta', 'alergias', 'otras_alergias']) assert.ok(k in d.json.resumen, k);
+
+    const n = await enviar({ refresh_token: rt }, { ruta: '/api/panel?accion=renovar' });
+    assert.equal(n.status, 200);
+    assert.notEqual(n.json.sesion.access_token, at);
+    assert.equal((await enviar({ refresh_token: rt }, { ruta: '/api/panel?accion=renovar' })).status, 401, 'el token de renovación vale una vez');
+
+    const nuevo = n.json.sesion.access_token;
+    assert.equal((await enviar(null, { ruta: '/api/panel?accion=salir', tipo: null, cabeceras: { Authorization: `Bearer ${nuevo}` } })).status, 200);
+    assert.equal((await datos(nuevo)).status, 401, 'tras salir, el token ya no vale');
   });
 
-  test('solo GET → 405', async () => {
-    await conEntorno({ ADMIN_TOKEN: TOKEN }, async () => {
-      assert.equal((await pedir(TOKEN, 'POST')).status, 405);
-    });
+  test('sin token o con token inventado → 401; métodos raros → 405', async () => {
+    assert.equal((await datos(null)).status, 401);
+    assert.equal((await datos('eyJinventado')).status, 401);
+    assert.equal((await enviar(null, { ruta: '/api/panel', metodo: 'PUT', tipo: null })).status, 405);
+    assert.equal((await enviar({}, { ruta: '/api/panel?accion=otra' })).status, 405);
   });
 
   test('Supabase caído → 503 con diagnóstico comprensible', async () => {
-    await conEntorno({ ADMIN_TOKEN: TOKEN, SUPABASE_URL: 'http://127.0.0.1:1' }, async () => {
-      const r = await pedir(TOKEN);
+    await conEntorno({ SUPABASE_URL: 'http://127.0.0.1:1' }, async () => {
+      const r = await entrar('marta@ejemplo.com', CONTRASENA);
       assert.equal(r.status, 503);
       assert.match(r.json.error, /Supabase/);
     });

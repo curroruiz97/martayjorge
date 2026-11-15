@@ -7,16 +7,18 @@
  *   node scripts/dev.mjs         → usa el Supabase real de las variables de .env
  *
  * Qué hace:
- *   · Sirve public/ con URLs limpias como Vercel (/admin → /admin/index.html).
+ *   · Sirve public/ con URLs limpias como Vercel (/panel → /panel/index.html).
  *   · Monta api/*.js como funciones de Vercel (se recargan solas al editarlas).
  *   · Aplica las cabeceras de vercel.json (incluida la CSP) para ver los fallos antes de desplegar.
- *   · MOCK_SUPABASE=1: imita la API de Supabase (PostgREST) con las mismas columnas y
+ *   · MOCK_SUPABASE=1: imita la API de Supabase (PostgREST y el inicio de sesión de Auth) con las mismas columnas y
  *     restricciones que supabase/schema.sql; guarda en memoria y en .dev-data/rsvps.json.
  *   · /_dev/rsvp   → el formulario aislado (la sección #confirmacion de index.html,
  *     o public/partials/rsvp.html si existe). /_dev/pagina → index.html (con el parcial
  *     insertado entre los marcadores RSVP:INICIO/FIN si los hay).
  *
- * Variables: PORT (3000), HOST (127.0.0.1), MOCK_SUPABASE, DEV_DATA_DIR, ADMIN_TOKEN.
+ *   · Panel /panel en modo simulado: marta@ejemplo.com o jorge@ejemplo.com, contraseña «desarrollo-local-2027»
+ *     (intruso@ejemplo.com tiene cuenta pero no está en la lista de acceso).
+ * Variables: PORT (3000), HOST (127.0.0.1), MOCK_SUPABASE, DEV_DATA_DIR.
  */
 
 import http from 'node:http';
@@ -33,7 +35,10 @@ const DIR_API = path.join(RAIZ, 'api');
 const requerir = createRequire(import.meta.url);
 
 const CLAVE_MOCK = 'sb_secret_mock_desarrollo_local';
-const TOKEN_ADMIN_DEV = 'desarrollo-local-2027';
+const CONTRASENA_DEV = 'desarrollo-local-2027';
+// Usuarios de Supabase Auth simulados y lista de acceso al panel (public.panel_acceso)
+const USUARIOS_MOCK = ['marta@ejemplo.com', 'jorge@ejemplo.com', 'intruso@ejemplo.com'];
+const ACCESO_MOCK = [{ email: 'marta@ejemplo.com', nombre: 'Marta' }, { email: 'jorge@ejemplo.com', nombre: 'Jorge' }];
 
 const TIPOS = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8',
@@ -169,15 +174,71 @@ function crearMock(dirDatos) {
     return out;
   };
 
+  // Supabase Auth simulado: tokens opacos que empiezan por «eyJ» como los JWT reales
+  const sesiones = new Map();   // access_token → { email, expira }
+  const renovaciones = new Map(); // refresh_token → email
+  const nuevoToken = () => 'eyJmock.' + crypto.randomBytes(24).toString('base64url');
+  function emitirSesion(email) {
+    const access = nuevoToken();
+    const refresh = crypto.randomBytes(16).toString('hex');
+    const expira = Math.floor(Date.now() / 1000) + 3600;
+    sesiones.set(access, { email, expira });
+    renovaciones.set(refresh, email);
+    return { access_token: access, token_type: 'bearer', expires_in: 3600, expires_at: expira, refresh_token: refresh, user: { email } };
+  }
+  async function manejarAuth(req, res, url, ruta) {
+    if (ruta === '/auth/v1/token' && req.method === 'POST') {
+      let cuerpo = {};
+      try { cuerpo = JSON.parse(await leerCuerpo(req)); } catch { /* vacío */ }
+      const tipo = url.searchParams.get('grant_type');
+      if (tipo === 'password') {
+        const email = String(cuerpo.email || '').toLowerCase();
+        if (!USUARIOS_MOCK.includes(email) || cuerpo.password !== CONTRASENA_DEV) {
+          return json(res, 400, { code: 400, error_code: 'invalid_credentials', msg: 'Invalid login credentials' });
+        }
+        return json(res, 200, emitirSesion(email));
+      }
+      if (tipo === 'refresh_token') {
+        const email = renovaciones.get(String(cuerpo.refresh_token || ''));
+        if (!email) return json(res, 400, { code: 400, error_code: 'refresh_token_not_found', msg: 'Invalid Refresh Token: Refresh Token Not Found' });
+        renovaciones.delete(String(cuerpo.refresh_token)); // como Supabase: cada token de renovación vale una vez
+        return json(res, 200, emitirSesion(email));
+      }
+      return json(res, 400, { code: 400, error_code: 'unsupported_grant_type', msg: 'unsupported grant type' });
+    }
+    const token = String(req.headers.authorization || '').replace(/^Bearer\s+/i, '');
+    const sesion = sesiones.get(token);
+    const valida = sesion && sesion.expira > Date.now() / 1000;
+    if (ruta === '/auth/v1/user' && req.method === 'GET') {
+      if (!valida) return json(res, 403, { code: 403, error_code: 'bad_jwt', msg: 'invalid JWT: unable to parse or verify signature' });
+      return json(res, 200, { id: crypto.randomUUID(), email: sesion.email, aud: 'authenticated', role: 'authenticated' });
+    }
+    if (ruta === '/auth/v1/logout' && req.method === 'POST') {
+      if (valida) {
+        sesiones.delete(token);
+        for (const [r, e] of renovaciones) if (e === sesion.email) renovaciones.delete(r);
+      }
+      res.statusCode = 204;
+      return res.end();
+    }
+    return json(res, 404, { code: 404, msg: 'Not found' });
+  }
+
   async function manejar(req, res, url) {
     if (req.headers.apikey !== CLAVE_MOCK) {
       return json(res, 401, { message: 'Invalid API key', hint: 'Double check your Supabase `anon` or `service_role` API key.' });
     }
+    const ruta = url.pathname.replace(/^\/__supabase/, '');
+    if (ruta.startsWith('/auth/v1/')) return manejarAuth(req, res, url, ruta);
     // Igual que Supabase: una clave sb_secret_ no es un JWT y no puede ir en Authorization.
     if (req.headers.authorization && !/^Bearer eyJ/.test(req.headers.authorization)) {
       return json(res, 401, { code: 'PGRST301', message: 'Invalid JWT' });
     }
-    const ruta = url.pathname.replace(/^\/__supabase/, '');
+    if (ruta === '/rest/v1/panel_acceso' && req.method === 'GET') {
+      const filtro = /^eq\.(.*)$/.exec(url.searchParams.get('email') || '');
+      const lista = filtro ? ACCESO_MOCK.filter((a) => a.email === filtro[1]) : ACCESO_MOCK;
+      return json(res, 200, lista.map((a) => ({ ...a })));
+    }
     if (ruta !== '/rest/v1/rsvps') {
       return json(res, 404, { code: 'PGRST205', message: `Could not find the table '${ruta.replace('/rest/v1/', 'public.')}' in the schema cache` });
     }
@@ -412,14 +473,13 @@ export async function iniciar({
     process.env.SUPABASE_URL = `${url}/__supabase`;
     process.env.SUPABASE_SECRET_KEY = CLAVE_MOCK;
     delete process.env.SUPABASE_SERVICE_ROLE_KEY;
-    if (!process.env.ADMIN_TOKEN) process.env.ADMIN_TOKEN = TOKEN_ADMIN_DEV;
   }
 
   log(`\n  Marta y Jorge · servidor de desarrollo → ${url}`);
   log(`  Formulario aislado: ${url}/_dev/rsvp · página completa con formulario: ${url}/_dev/pagina`);
   if (mock) {
     log(`  Supabase SIMULADO: los envíos se guardan en ${path.relative(RAIZ, supabaseMock.fichero) || supabaseMock.fichero}`);
-    log(`  Panel: ${url}/admin  (contraseña: ${process.env.ADMIN_TOKEN === TOKEN_ADMIN_DEV ? TOKEN_ADMIN_DEV : 'la de ADMIN_TOKEN'})\n`);
+    log(`  Panel: ${url}/panel  (marta@ejemplo.com o jorge@ejemplo.com · contraseña ${CONTRASENA_DEV})\n`);
   } else if (!process.env.SUPABASE_URL) {
     log('  Aviso: sin MOCK_SUPABASE ni SUPABASE_URL, /api/rsvp responderá 503. Usa «npm run dev» o crea .env (ver .env.example).\n');
   } else {
