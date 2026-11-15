@@ -84,14 +84,22 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round
 
 /* ---------- Acceso ---------- */
 .acceso { min-height: 100vh; min-height: 100svh; display: grid; grid-template-columns: 1fr; }
+/* El lado de la marca es papel de lino con las rayas rosas, como la portada de la web, y lleva el monograma y la
+   fecha pintados a acuarela con el mismo pincel que los títulos (scripts/rotulos/monograma.py y generar.py). */
 .acceso__marca {
-  display: grid; place-content: center; justify-items: center; gap: .35rem; padding: 2.5rem 1.5rem;
-  background: radial-gradient(120% 90% at 30% 20%, #c4484e 0%, var(--acento) 45%, #7d2328 100%); color: #fff7f2; text-align: center;
+  display: grid; place-content: center; justify-items: center; gap: 1.1rem; padding: 2.75rem 1.5rem 2.25rem; text-align: center;
+  background-color: #fbf9f1;
+  background-image:
+    url("../assets/img/lino.webp"),
+    linear-gradient(90deg, transparent 0, transparent 39%, rgba(238, 200, 190, .18) 40.6%, rgba(238, 200, 190, .18) 47.6%, rgba(246, 226, 218, .07) 49%, rgba(246, 226, 218, .07) 51%, rgba(238, 200, 190, .18) 52.4%, rgba(238, 200, 190, .18) 59.4%, transparent 61%, transparent 100%);
+  background-size: 256px 256px, clamp(72px, 20vw, 150px) 100%;
+  background-position: 0 0, 50% 0;
+  background-blend-mode: multiply, normal;
+  border-bottom: 1px solid var(--borde);
 }
-.acceso__monograma { margin: 0; font: italic 400 clamp(3rem, 9vw, 5.5rem)/1 var(--serif); letter-spacing: .02em; }
-.acceso__monograma span { font-size: .6em; vertical-align: .18em; opacity: .85; }
-.acceso__fecha { margin: .6rem 0 0; font-size: .8125rem; font-weight: 600; letter-spacing: .3em; text-transform: uppercase; }
-.acceso__lugar { margin: 0; font: italic 400 1.05rem/1.4 var(--serif); opacity: .85; }
+.acceso__monograma { width: clamp(11rem, 42vw, 19rem); height: auto; }
+.acceso__fecha { width: clamp(9.5rem, 34vw, 15rem); height: auto; }
+.acceso__lugar { margin: -.35rem 0 0; font: italic 400 1.1rem/1.4 var(--serif); color: var(--texto-2); }
 .acceso__panel { display: grid; place-items: center; padding: 2rem 1.25rem 3rem; }
 .acceso__form { width: min(100%, 24rem); }
 .acceso__titulo { margin: .35rem 0 0; font-size: 1.75rem; line-height: 1.2; font-weight: 700; letter-spacing: -.01em; }
@@ -100,7 +108,8 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round
 .acceso__ayuda { margin: 1.25rem 0 0; font-size: .8125rem; color: var(--texto-3); }
 @media (min-width: 860px) {
   .acceso { grid-template-columns: minmax(0, 1fr) minmax(26rem, 1fr); }
-  .acceso__marca { padding: 3rem; }
+  .acceso__marca { padding: 3rem; border-bottom: 0; border-right: 1px solid var(--borde); }
+  .acceso__panel { background: var(--superficie); }
 }
 
 /* ---------- Barra superior ---------- */
@@ -110,7 +119,7 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round
   -webkit-backdrop-filter: saturate(1.2) blur(10px); backdrop-filter: saturate(1.2) blur(10px);
 }
 .barra__marca { display: flex; align-items: center; gap: .7rem; min-width: 0; }
-.barra__monograma { display: grid; place-items: center; width: 2.4rem; height: 2.4rem; border-radius: 10px; background: var(--acento); color: #fff; font: italic 400 .8rem/1 var(--serif); letter-spacing: -.02em; flex: none; }
+.barra__monograma { width: 4.6rem; height: auto; flex: none; }
 .barra__titulo { margin: 0; font: italic 400 1.15rem/1.15 var(--serif); white-space: nowrap; }
 .barra__sub { margin: 0; font-size: .75rem; color: var(--texto-3); }
 .barra__derecha { display: flex; align-items: center; gap: .6rem; }

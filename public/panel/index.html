@@ -9,6 +9,7 @@
   <title>Panel de invitados · Marta y Jorge</title>
   <link rel="icon" href="/assets/ilustraciones/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="/assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/panel/monograma.webp" as="image" type="image/webp">
   <link rel="stylesheet" href="/panel/panel.css">
   <script src="/panel/panel.js" defer></script>
 </head>
@@ -18,8 +19,8 @@
 <!-- ============ ACCESO ============ -->
 <main class="acceso" data-vista="acceso" hidden>
   <section class="acceso__marca" aria-hidden="true">
-    <p class="acceso__monograma">M <span>&amp;</span> J</p>
-    <p class="acceso__fecha">8 · mayo · 2027</p>
+    <img class="acceso__monograma" src="/panel/monograma.webp" width="519" height="267" alt="">
+    <img class="acceso__fecha" src="/assets/rotulos/fecha.webp" width="830" height="103" alt="">
     <p class="acceso__lugar">Valladolid</p>
   </section>
   <section class="acceso__panel">
@@ -55,7 +56,7 @@
 <div class="app" data-vista="panel" hidden>
   <header class="barra">
     <div class="barra__marca">
-      <span class="barra__monograma" aria-hidden="true">M&amp;J</span>
+      <img class="barra__monograma" src="/panel/monograma.webp" width="519" height="267" alt="">
       <div>
         <p class="barra__titulo">Marta &amp; Jorge</p>
         <p class="barra__sub">Panel de invitados</p>
