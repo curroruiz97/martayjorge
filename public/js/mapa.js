@@ -20,7 +20,8 @@
  *
  * Qué dibuja: la zona recomendada (óvalo grande), la zona más cómoda junto a la Plaza del Poniente
  * (óvalo discontinuo), los rótulos de las dos zonas y los puntos de referencia (San Pablo, Poniente,
- * Plaza Mayor, Catedral, Plaza de Zorrilla y Campo Grande). Los que tienen «¿Cómo llegar?» abren
+ * Plaza Mayor, Catedral, Plaza de Zorrilla y Campo Grande) y los tres hoteles recomendados, numerados
+ * como sus tarjetas. Los que tienen «¿Cómo llegar?» abren
  * una ventana al pulsarlos (ratón, dedo o teclado).
  * Sin secuestrar el scroll: gestureHandling «cooperative» (Ctrl + rueda en ordenador, dos dedos en móvil).
  *
@@ -69,7 +70,7 @@
         destino: 'Plaza del Poniente, Valladolid'
       },
       {
-        tipo: 'etiqueta', icono: 'plaza', nombre: 'Plaza Mayor',
+        tipo: 'punto', nombre: 'Plaza Mayor',   // punto pequeño: el Hotel Imperial (1) está pegado a la plaza
         detalle: 'El corazón del centro',
         pos: [41.65225, -4.72861],
         destino: 'Plaza Mayor, Valladolid'
@@ -79,6 +80,26 @@
         detalle: 'Al lado, el parking de la Plaza de Portugalete',
         pos: [41.65275, -4.72343],
         destino: 'Parking Plaza de Portugalete, Valladolid', textoRuta: 'Cómo llegar al parking'
+      },
+      // Hoteles recomendados: el número es el de su tarjeta en index.html (#alojamiento .hoteles).
+      // Posiciones de OpenStreetMap (nominatim), comprobadas en noviembre de 2026.
+      {
+        tipo: 'hotel', numero: 1, nombre: 'Hotel Imperial', etiqueta: 'Imperial',
+        detalle: '10 % de descuento · junto a Poniente',
+        pos: [41.65262, -4.72953],
+        destino: 'Hotel Imperial, Calle del Peso 4, 47001 Valladolid'
+      },
+      {
+        tipo: 'hotel', numero: 2, nombre: 'Hotel Olid', etiqueta: 'Olid',
+        detalle: '10 % de descuento · Plaza de San Miguel',
+        pos: [41.65522, -4.72638],
+        destino: 'Hotel Olid, Plaza de San Miguel 10, 47003 Valladolid'
+      },
+      {
+        tipo: 'hotel', numero: 3, nombre: 'Eurostars Valladolid', etiqueta: 'Eurostars',
+        detalle: '15 % de descuento · junto a la Plaza Mayor',
+        pos: [41.65085, -4.72822],
+        destino: 'Eurostars Valladolid, Calle de la Constitución 2, 47001 Valladolid'
       },
       { tipo: 'punto', nombre: 'Plaza de Zorrilla', pos: [41.64780, -4.72930] },
       { tipo: 'texto', nombre: 'Campo Grande', pos: [41.64560, -4.73080], clase: 'mapa-rotulo--parque' }
@@ -308,6 +329,10 @@
       } else if (p.tipo === 'etiqueta') {
         c.innerHTML = icono(p.icono) + '<span class="mapa-pin__nombre"></span>';
         c.querySelector('.mapa-pin__nombre').textContent = p.nombre;
+      } else if (p.tipo === 'hotel') {
+        // Solo el número (como su tarjeta): el nombre va en el título y en la ventana al pulsarlo.
+        c.innerHTML = '<span class="mapa-pin__chapa"></span>';
+        c.querySelector('.mapa-pin__chapa').textContent = p.numero;
       } else if (p.tipo === 'punto') {
         c.innerHTML = '<span class="mapa-pin__punto"></span><span class="mapa-pin__nombre"></span>';
         c.querySelector('.mapa-pin__nombre').textContent = p.nombre;
@@ -321,7 +346,7 @@
         map: map, position: { lat: p.pos[0], lng: p.pos[1] }, content: c,
         title: conRuta ? p.nombre + ' · ' + TXT.comoLlegar : '', gmpClickable: conRuta,
         collisionBehavior: g.CollisionBehavior.REQUIRED,
-        zIndex: p.tipo === 'tarjeta' ? 30 : p.tipo === 'etiqueta' ? 20 : 10
+        zIndex: p.tipo === 'hotel' ? 35 : p.tipo === 'tarjeta' ? 30 : p.tipo === 'etiqueta' ? 20 : 10
       });
       if (!conRuta) return;
 

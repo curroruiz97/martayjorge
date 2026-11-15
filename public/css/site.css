@@ -192,7 +192,67 @@
 
 /* ---------- ALOJAMIENTO ---------- */
 .alojamiento__texto { max-width: 36ch; margin-inline: auto; text-align: center; text-wrap: pretty; }
-.alojamiento__mapa { margin-top: clamp(1.25rem, 4vw, 1.75rem); }
+.alojamiento__mapa { margin-top: clamp(2.25rem, 6vw, 3rem); }
+.alojamiento__ayuda { margin-top: clamp(2rem, 6vw, 3rem); }
+.alojamiento__contacto { display: flex; justify-content: center; margin-top: 1.25rem; }
+
+/* Hoteles recomendados: tarjetas «de papel» con el número de su marcador en el mapa y un sello con el descuento */
+.hoteles { list-style: none; margin: clamp(2rem, 6vw, 2.75rem) 0 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(1.75rem, 5vw, 2.25rem); counter-reset: none; }
+.hotel {
+  position: relative; display: flex; flex-direction: column; align-items: flex-start;
+  padding: clamp(1.5rem, 5vw, 2rem) clamp(1.25rem, 5vw, 1.85rem) clamp(1.4rem, 4vw, 1.75rem);
+  border: 1px solid var(--linea-fuerte); border-radius: var(--radio); background: var(--campo);
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--rojo) 10%, transparent);
+}
+.hotel__num {
+  display: grid; place-items: center; width: 2.6rem; height: 2.6rem; margin-bottom: .9rem;
+  border: 1.5px solid var(--rojo); border-radius: 50% 46% 52% 48% / 48% 52% 46% 50%;   /* círculo a mano */
+  font: 400 1.55rem/1 var(--f-mano); color: var(--rojo); padding-top: .12em;
+}
+/* Sello del descuento: arriba a la derecha, ligeramente girado */
+.hotel__dto {
+  position: absolute; top: clamp(1rem, 4vw, 1.4rem); right: clamp(1rem, 4vw, 1.4rem);
+  display: grid; place-items: center; align-content: center; width: 4.6rem; height: 4.6rem;
+  border: 1.5px dashed var(--rojo); border-radius: 50%; transform: rotate(-9deg);
+  font-family: var(--f-mano); color: var(--rojo); text-transform: uppercase; line-height: 1; text-align: center;
+}
+.hotel__dto::before { content: ""; position: absolute; inset: 4px; border: 1px solid var(--linea); border-radius: 50%; }
+.hotel__dto strong { font-weight: 400; font-size: 1.65rem; letter-spacing: .02em; }
+.hotel__dto span { font-size: .95rem; letter-spacing: .12em; margin-top: .05rem; }
+.hotel__nombre {
+  max-width: calc(100% - 5rem);
+  font: italic 400 min(clamp(1.7rem, 1.45rem + 1.2vw, 2.1rem), 9vw)/1.1 var(--f-serif); color: var(--rojo); text-wrap: balance;
+}
+.hotel__zona { margin-top: .35rem; display: inline-flex; align-items: center; gap: .45rem; font: italic 400 var(--fs-etiqueta)/1.3 var(--f-serif); color: var(--tinta-tenue); }
+.hotel__zona::before { content: ""; width: 1.1rem; height: 1px; background: var(--linea-fuerte); flex: none; }
+.hotel__como { margin-top: 1.1rem; font-style: italic; text-wrap: pretty; }
+/* Código de descuento: un toque lo copia */
+.hotel__codigo {
+  margin-top: .7rem; display: flex; flex-direction: column; align-items: flex-start; gap: .55rem; width: 100%; min-height: 2.75rem;
+  padding: .5rem .5rem .5rem .8rem; cursor: pointer;
+  border: 1.5px dashed var(--linea-fuerte); border-radius: var(--radio); background: var(--campo-activo); color: var(--tinta);
+  transition: border-color .2s var(--ease), background-color .2s var(--ease);
+}
+.hotel__codigo:hover { border-color: var(--rojo); }
+.hotel__codigo:focus-visible { outline: 3px solid var(--rojo); outline-offset: 2px; }
+.hotel__codigo-txt { font: 600 .97rem/1.2 var(--f-sans); letter-spacing: .06em; white-space: nowrap; -webkit-user-select: all; user-select: all; }
+.hotel__codigo-acc {
+  display: inline-flex; align-items: center; gap: .3rem; padding: .3rem .65rem .25rem; border-radius: 999px; background: var(--rojo); color: var(--papel);
+  font: 400 1rem/1 var(--f-mano); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap;
+}
+.hotel__codigo-acc .icono { width: 1rem; height: 1rem; color: currentColor; }
+.hotel__codigo.copiado { border-color: var(--rojo); border-style: solid; }
+.hotel__datos { list-style: none; margin: auto 0 0; padding: .95rem 0 0; display: grid; gap: .35rem; width: 100%; border-top: 1.5px dotted var(--linea); }
+.hotel > :nth-last-child(2) { margin-bottom: 1.1rem; }   /* separa la línea de puntos del contenido aunque los datos bajen al pie */
+.hotel__datos a {
+  display: inline-flex; align-items: center; gap: .6rem; min-height: 2.25rem; max-width: 100%;
+  color: var(--tinta); text-decoration: underline; text-decoration-color: var(--linea-fuerte); text-underline-offset: .22em;
+  font-size: 1rem;
+}
+.hotel__datos a:hover { color: var(--rojo); text-decoration-color: var(--rojo); }
+.hotel__datos a span:first-of-type { overflow-wrap: anywhere; }
+.hotel__datos .icono { width: 1.35rem; height: 1.35rem; }
+
 .alojamiento__mapa .mapa { width: 100%; max-width: 100%; aspect-ratio: 4 / 3; min-height: 19rem; border-radius: var(--radio); background-color: var(--papel-2); }
 .mapa__pie { margin-top: .5rem; text-align: center; font: 400 min(1.3rem, 5.6vw)/1.4 var(--f-mano); letter-spacing: .08em; text-transform: uppercase; }
 .mapa__pie a { color: var(--rojo); }
