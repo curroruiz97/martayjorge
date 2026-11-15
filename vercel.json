@@ -91,12 +91,32 @@
   ],
   "redirects": [
     {
-      "source": "/v1/:path*",
+      "source": "/v1",
       "destination": "/",
       "permanent": false
     },
     {
-      "source": "/v2/:path*",
+      "source": "/v1/",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/v1/(.*)",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/v2",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/v2/",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/v2/(.*)",
       "destination": "/",
       "permanent": false
     }
