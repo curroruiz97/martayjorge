@@ -9,23 +9,6 @@ Estilo de papelería de boda pintada a mano: **lino crema con rayas rosas**, **r
 subrayados a mano, como la invitación de referencia que mandaron los novios), cursiva con serifas, **acuarelas propias** y
 fotos de lado a lado con los bordes a pincel; formulario de confirmación con acompañantes, autocar y alergias.
 
-> **Versiones** · En producción conviven tres versiones con un **selector «V1 · V2 · V3»** fijo arriba a la derecha:
-> - **V3** (la nueva) es la página de siempre, `public/index.html`, en `/`. Es la V2 con los comentarios de Jorge:
->   sin la guirnalda de banderines sobre el bodegón, la ruta entre la iglesia y la Posada un 30 % más corta (con la
->   misma forma de serpiente) y el diamante de las alianzas de «Lista de bodas» por fuera del aro.
-> - **V2** (congelada tal cual estaba en el commit `6b9efd9`) vive en `public/v2/`, en `/v2/`. Es la de los
->   comentarios de los novios sobre la V1: más acuarela, menos espacio en blanco, pensada para el móvil.
-> - **V1** (la primera, congelada tal cual estaba en el commit `db679a3`) vive en `public/v1/`, en `/v1/`.
-> - Las congeladas llevan `<base href="/v1/">` / `<base href="/v2/">` para cargar sus propios estilos, scripts e
->   imágenes; no se tocan.
-> - Quien llega a `/` sin haber elegido ve la **V1** (la que había); al pulsar **V2** o **V3** se le lleva a esa y se
->   recuerda en el navegador. Enlaces directos: `/?v=3` (nueva), `/v2/?v=2` y `/v1/?v=1`. Lo hacen
->   `public/version/elegir.js` (en el `<head>` de la V3) y `public/version/selector.js` + `selector.css` (en las tres).
-> - Las tres versiones envían las confirmaciones a la misma API (`/api/rsvp`).
-> - **Para quedarse solo con la V3**: borrar `public/v1/`, `public/v2/` y `public/version/`, y en `public/index.html`
->   las tres líneas que los cargan (`/version/elegir.js`, `/version/selector.css` y `/version/selector.js`).
->   **Para que por defecto se vea la V3** (sin quitar el selector): borrar solo la línea de `elegir.js`. Para
->   descartar solo una versión antigua, borrar su carpeta y su entrada en `selector.js` (y en `elegir.js`, la V2).
 
 ## Qué incluye
 
@@ -51,8 +34,7 @@ Stack: HTML/CSS/JS **sin build ni frameworks** · hosting y funciones en **Verce
 
 ```
 public/                 ← lo que se publica
-  index.html            la página entera (V3)
-  v1/ · v2/             la V1 y la V2 congeladas (commits db679a3 y 6b9efd9), para compararlas con el selector · version/ (el selector)
+  index.html            la página entera (V3, la única versión publicada; /v1/ y /v2/ redirigen a /)
   boda-marta-y-jorge.ics   «Añadir al calendario» (ceremonia y celebración)
   css/                  base.css (diseño: colores, fuentes) · site.css (secciones) · intro.css (entrada de la portada) · rsvp.css · mapa.css
   js/                   boot.js · main.js (animaciones, cuenta atrás, copiar IBAN) · intro.js (saltar la entrada, parallax) · rsvp.js · mapa.js
@@ -85,8 +67,8 @@ Los envíos de prueba se guardan en `.dev-data/rsvps.json` (ignorado por git). E
 > **Estado actual** · El WhatsApp de contacto ya está puesto (`data-whatsapp` en la sección `#confirmacion` de
 > `public/index.html`: lo usa el formulario si falla un envío). Pendiente:
 > conectar **Supabase** (hasta entonces, si alguien pulsa «Enviar confirmación», la web le ofrece mandar la respuesta
-> por WhatsApp, ya escrita, y no se guarda nada) y elegir el **dominio** definitivo (mientras tanto sirve el
-> `martayjorge-eta.vercel.app` que da Vercel; las metaetiquetas `og:` de `index.html` llevan ese mismo dominio temporal).
+> por WhatsApp, ya escrita, y no se guarda nada) El **dominio** es **https://martayjorge.com** (DNS en IONOS apuntando a Vercel;
+> `www.` y la dirección antigua `martayjorge-eta.vercel.app` redirigen a él, y las metaetiquetas `og:` ya lo usan).
 
 1. **GitHub**: el código ya está en este repositorio, en la rama `main`. Conviene que sea también la rama principal
    (*Settings → Branches → Default branch*).
@@ -107,10 +89,9 @@ Los envíos de prueba se guardan en `.dev-data/rsvps.json` (ignorado por git). E
 
    Después, *Redeploy* (las variables solo se aplican a despliegues nuevos). La **rama de producción** debe ser
    `main` (*Settings → Git → Production Branch*).
-4. **Dominio**: *Settings → Domains* → añadir el dominio elegido (p. ej. `martayjorge.com`) y crear en el
-   registrador los registros DNS que indique Vercel. Después, sustituir `https://martayjorge-eta.vercel.app` por el
-   dominio definitivo en las 3 metaetiquetas de `public/index.html` (`og:url`, `og:image`, `twitter:image`); si no,
-   la vista previa al compartir el enlace por WhatsApp seguirá apuntando al dominio temporal.
+4. **Dominio** (hecho): `martayjorge.com` en *Settings → Domains*, con `www.martayjorge.com` redirigiendo a él.
+   Las 3 metaetiquetas de `public/index.html` (`og:url`, `og:image`, `twitter:image`) usan ese dominio y
+   `vercel.json` manda `martayjorge-eta.vercel.app` a `https://martayjorge.com`.
 5. **Probar antes de repartir la invitación**: abrir la web, enviar una confirmación como «Prueba Marta»,
    comprobarla en `/panel`, borrar las pruebas (`docs/rsvp.md` §5) y compartir el enlace en un chat para ver la
    vista previa.

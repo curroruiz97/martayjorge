@@ -19,11 +19,25 @@ La clave de Maps JavaScript siempre acaba en el navegador del visitante: no es u
 Lo que la protege es restringirla en Google Cloud (abajo). **No** la pongas en las variables de entorno de Vercel:
 la web es estática y no las leería.
 
+## Facturación (obligatoria)
+
+Google exige un **proyecto con facturación activada** aunque el uso sea gratuito. Sin ella el mapa sale oscurecido,
+con «For development purposes only» y el aviso **«Esta página no puede cargar Google Maps correctamente»**
+(en la consola: `BillingNotEnabledMapError`). Se arregla así:
+
+1. https://console.cloud.google.com/billing → **Vincular una cuenta de facturación** al proyecto de la clave
+   (o crear una con una tarjeta).
+2. Google Maps Platform incluye **10.000 cargas de mapa gratis al mes** por la Maps JavaScript API: una web de boda
+   no se acerca. Para dormir tranquilos, poned el tope de cuotas de abajo y una alerta de presupuesto (Facturación →
+   Presupuestos y alertas, p. ej. 1 €).
+3. No hay que tocar el código: en unos minutos el mapa sale bien.
+
 ## Restringir la clave (Google Cloud → APIs y servicios → Credenciales)
 
 1. **Restricciones de aplicación → Sitios web** (HTTP referrers). No sirve «Direcciones IP»: esa opción es para
    servidores, y con ella el mapa del navegador falla. Añade:
-   - `https://martayjorge-eta.vercel.app/*` (y el dominio definitivo cuando lo haya, p. ej. `https://www.tudominio.com/*`)
+   - `https://martayjorge.com/*` y `https://www.martayjorge.com/*` (el dominio de la web)
+   - `https://martayjorge-eta.vercel.app/*` (la dirección antigua de Vercel; ahora redirige a martayjorge.com)
    - `https://*.vercel.app/*` si queréis probar en las vistas previas de Vercel
    - `http://localhost:*/*` y `http://127.0.0.1:*/*` para `npm run dev`
 2. **Restricciones de API**: solo «Maps JavaScript API».
@@ -53,8 +67,9 @@ Todo está en `CFG` al principio de `js/mapa.js`:
 
 - `zonas.recomendada` y `zonas.comoda`: los dos óvalos (centro, semiejes en metros y giro en grados).
 - `rotulos`: «Zona recomendada» y «¡la más cómoda!».
-- `puntos`: San Pablo y Plaza del Poniente (tarjeta con detalle), Plaza Mayor y Catedral (icono y nombre),
-  Plaza de Zorrilla (punto) y Campo Grande (rótulo). Los que llevan `destino` abren «¿Cómo llegar?».
+- `puntos`: San Pablo y Plaza del Poniente (tarjeta con detalle), Catedral (icono y nombre), Plaza Mayor y
+  Plaza de Zorrilla (punto), Campo Grande (rótulo) y los tres hoteles recomendados (`tipo: 'hotel'`, chapa roja
+  con el número de su tarjeta en `index.html`). Los que llevan `destino` abren «¿Cómo llegar?».
 
 La leyenda («Dónde alojarse») es HTML normal en `index.html`: en pantallas anchas va encima del mapa, abajo a la
 derecha; en el móvil, debajo.
@@ -72,6 +87,7 @@ vectorial y `'unsafe-eval'`, que Google incluye en su guía de CSP para la API
 Abre la consola del navegador (F12):
 
 - `RefererNotAllowedMapError`: falta el dominio en «Sitios web» de la clave.
+- `BillingNotEnabledMapError`: el proyecto no tiene facturación (ver «Facturación» arriba).
 - `InvalidKeyMapError` / `ApiNotActivatedMapError`: clave mal copiada o API sin activar.
 - `Refused to load… Content Security Policy`: falta un dominio en la CSP de `vercel.json`.
 - El mapa sale gris o sin estilo: el Map ID no tiene un estilo asociado o no está publicado.

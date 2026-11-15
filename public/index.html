@@ -2,8 +2,6 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <!-- Comparación de versiones (V1 en /v1/ · V2 en /v2/ · V3 aquí): sin elegir, se ve la V1. Ver README («Versiones») -->
-  <script src="/version/elegir.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Marta y Jorge · 8 de mayo de 2027 · Valladolid</title>
   <meta name="description" content="Nos casamos el 8 de mayo de 2027 en Valladolid. Aquí tenéis todos los detalles y podéis confirmar vuestra asistencia.">
@@ -18,13 +16,13 @@
   <meta property="og:site_name" content="Marta y Jorge">
   <meta property="og:title" content="Marta y Jorge · 8 de mayo de 2027">
   <meta property="og:description" content="¡Nos casamos! Valladolid, 8 de mayo de 2027. Todos los detalles y confirmación de asistencia.">
-  <meta property="og:url" content="https://martayjorge-eta.vercel.app/">
-  <meta property="og:image" content="https://martayjorge-eta.vercel.app/assets/img/og.jpg">
+  <meta property="og:url" content="https://martayjorge.com/">
+  <meta property="og:image" content="https://martayjorge.com/assets/img/og.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Marta y Jorge · 8 de mayo de 2027 · Valladolid">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://martayjorge-eta.vercel.app/assets/img/og.jpg">
+  <meta name="twitter:image" content="https://martayjorge.com/assets/img/og.jpg">
 
   <link rel="icon" href="assets/ilustraciones/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
@@ -37,7 +35,6 @@
   <link rel="stylesheet" href="css/intro.css">
   <link rel="stylesheet" href="css/rsvp.css">
   <link rel="stylesheet" href="css/mapa.css">
-  <link rel="stylesheet" href="/version/selector.css">
 </head>
 <body>
 <main>
@@ -160,23 +157,71 @@
       <header class="cabecera revelar">
         <h2 class="titulo titulo--rotulo" id="t-alojamiento"><!-- rotulo:alojamiento --><img class="titulo__icono" src="assets/ilustraciones/acuarela/almohada-icono-3x.webp" srcset="assets/ilustraciones/acuarela/almohada-icono-2x.webp 2x, assets/ilustraciones/acuarela/almohada-icono-3x.webp 3x" width="60" height="51" alt="" decoding="async" loading="lazy"><span class="sr-only">Alojamiento</span><img class="rotulo" src="assets/rotulos/alojamiento.webp" width="388" height="77" style="--u:8.806" alt="" decoding="async" loading="lazy"><!-- /rotulo:alojamiento --></h2>
       </header>
-      <p class="cursiva alojamiento__texto revelar">En Valladolid tenéis muchísimas opciones de alojamiento en el entorno del centro. Escribidnos y os ayudaremos y aconsejaremos para encontrar el mejor sitio&nbsp;posible.</p>
+      <p class="cursiva alojamiento__texto revelar">En Valladolid tenéis muchísimas opciones de alojamiento en el entorno del centro. Os dejamos algunas recomendaciones de hoteles con descuentos especiales para vosotros, junto con una zona&nbsp;sugerida.</p>
+
+      <!-- Hoteles recomendados. El número de cada tarjeta es el de su marcador en el mapa (js/mapa.js, CFG.puntos, tipo «hotel»). -->
+      <ol class="hoteles" aria-label="Hoteles recomendados con descuento">
+        <li class="hotel revelar">
+          <span class="hotel__num" aria-hidden="true">1</span>
+          <p class="hotel__dto"><strong>10%</strong> <span>dto.</span></p>
+          <h3 class="hotel__nombre">Hotel Imperial</h3>
+          <p class="hotel__zona">Junto a Poniente</p>
+          <p class="hotel__como">Reservad por teléfono o por correo diciendo que venís a nuestra&nbsp;boda.</p>
+          <ul class="hotel__datos">
+            <li><a href="tel:+34983330300"><svg class="icono" aria-hidden="true" focusable="false"><use href="assets/ilustraciones/iconos.svg#telefono"></use></svg><span>983 330 300</span></a></li>
+            <li><a href="mailto:recepcion@himperial.com?subject=Reserva%20para%20la%20boda%20de%20Marta%20y%20Jorge"><svg class="icono" aria-hidden="true" focusable="false"><use href="assets/ilustraciones/iconos.svg#sobre"></use></svg><span>recepcion@himperial.com</span></a></li>
+          </ul>
+        </li>
+        <li class="hotel revelar">
+          <span class="hotel__num" aria-hidden="true">2</span>
+          <p class="hotel__dto"><strong>10%</strong> <span>dto.</span></p>
+          <h3 class="hotel__nombre">Hotel Olid</h3>
+          <p class="hotel__zona">Plaza de San Miguel</p>
+          <p class="hotel__como">Reservad en su web con el&nbsp;código:</p>
+          <button class="hotel__codigo" type="button" data-copiar="MARTAYJORGE" data-copiar-aviso="Código copiado ✓" aria-label="Código MARTAYJORGE. Pulsa para copiarlo">
+            <span class="hotel__codigo-txt">MARTAYJORGE</span>
+            <span class="hotel__codigo-acc"><svg class="icono" aria-hidden="true" focusable="false"><use href="assets/ilustraciones/iconos.svg#copiar"></use></svg><span data-copiar-txt>Copiar</span></span>
+          </button>
+          <ul class="hotel__datos">
+            <li><a href="https://www.hotelolid.com" target="_blank" rel="noopener"><svg class="icono" aria-hidden="true" focusable="false"><use href="assets/ilustraciones/iconos.svg#web"></use></svg><span>hotelolid.com</span><span class="sr-only"> (se abre en otra pestaña)</span></a></li>
+          </ul>
+        </li>
+        <li class="hotel revelar">
+          <span class="hotel__num" aria-hidden="true">3</span>
+          <p class="hotel__dto"><strong>15%</strong> <span>dto.</span></p>
+          <h3 class="hotel__nombre">Eurostars Valladolid</h3>
+          <p class="hotel__zona">Junto a la Plaza Mayor</p>
+          <p class="hotel__como">Reservad en su web con el&nbsp;código:</p>
+          <button class="hotel__codigo" type="button" data-copiar="BODASMYJ" data-copiar-aviso="Código copiado ✓" aria-label="Código BODASMYJ. Pulsa para copiarlo">
+            <span class="hotel__codigo-txt">BODASMYJ</span>
+            <span class="hotel__codigo-acc"><svg class="icono" aria-hidden="true" focusable="false"><use href="assets/ilustraciones/iconos.svg#copiar"></use></svg><span data-copiar-txt>Copiar</span></span>
+          </button>
+          <ul class="hotel__datos">
+            <li><a href="https://www.eurostarshotels.com" target="_blank" rel="noopener"><svg class="icono" aria-hidden="true" focusable="false"><use href="assets/ilustraciones/iconos.svg#web"></use></svg><span>eurostarshotels.com</span><span class="sr-only"> (se abre en otra pestaña)</span></a></li>
+          </ul>
+        </li>
+      </ol>
     </div>
     <div class="contenedor alojamiento__mapa revelar">
       <!-- Mapa (Google Maps) con la zona recomendada. Lo monta js/mapa.js al acercarse a la pantalla.
            data-api-key: clave de Google Maps (pública; protegida por restricción de dominio). Ver docs/mapa-google.md -->
       <div class="mapa-envoltorio">
-        <div id="mapa-alojamiento" class="mapa marco" data-api-key="AIzaSyCkU4SHcTfzIZYBJ4LMQ41fgptjjvuweXg" data-map-id="ee2adbb68a2af545c55430ab" role="region" aria-label="Mapa del centro de Valladolid con la zona recomendada para alojarse"></div>
+        <div id="mapa-alojamiento" class="mapa marco" data-api-key="AIzaSyCkU4SHcTfzIZYBJ4LMQ41fgptjjvuweXg" data-map-id="ee2adbb68a2af545c55430ab" role="region" aria-label="Mapa del centro de Valladolid con la zona recomendada para alojarse y los hoteles recomendados"></div>
         <aside class="mapa-leyenda" aria-label="Leyenda del mapa">
           <p class="mapa-leyenda__titulo">Dónde alojarse</p>
           <ul>
             <li><span class="mapa-leyenda__muestra" aria-hidden="true"></span>Zona recomendada</li>
             <li><span class="mapa-leyenda__muestra mapa-leyenda__muestra--comoda" aria-hidden="true"></span>La más cómoda, junto a la Plaza del Poniente (allí os deja el autocar a la vuelta)</li>
+            <li><span class="mapa-leyenda__hotel" aria-hidden="true">1</span>Hoteles con descuento (el número es el de su tarjeta)</li>
           </ul>
           <p class="mapa-leyenda__nota">Plano aproximado</p>
         </aside>
       </div>
       <p class="mapa__pie"><a href="https://www.google.com/maps/search/?api=1&amp;query=Valladolid+centro" target="_blank" rel="noopener">Abrir en Google Maps</a></p>
+    </div>
+    <div class="contenedor contenedor--estrecho alojamiento__ayuda revelar">
+      <p class="cursiva alojamiento__texto">¿Dudas sobre dónde quedaros? Escribidnos y os aconsejaremos para encontrar el mejor sitio&nbsp;posible.</p>
+      <p class="alojamiento__contacto"><a class="boton" href="https://wa.me/34689343750?text=Hola%20Marta%20y%20Jorge%2C%20os%20escribo%20sobre%20el%20alojamiento%20para%20la%20boda." target="_blank" rel="noopener">Escribirnos por WhatsApp<span class="sr-only"> (se abre en otra pestaña)</span></a></p>
     </div>
   </section>
 
@@ -444,6 +489,5 @@
 <script src="js/intro.js" defer></script>
 <script src="js/rsvp.js" defer></script>
 <script src="js/mapa.js" defer></script>
-<script src="/version/selector.js" defer></script>
 </body>
 </html>
