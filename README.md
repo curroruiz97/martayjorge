@@ -67,8 +67,8 @@ Los envíos de prueba se guardan en `.dev-data/rsvps.json` (ignorado por git). E
 > **Estado actual** · El WhatsApp de contacto ya está puesto (`data-whatsapp` en la sección `#confirmacion` de
 > `public/index.html`: lo usa el formulario si falla un envío). Pendiente:
 > conectar **Supabase** (hasta entonces, si alguien pulsa «Enviar confirmación», la web le ofrece mandar la respuesta
-> por WhatsApp, ya escrita, y no se guarda nada) y elegir el **dominio** definitivo (mientras tanto sirve el
-> `martayjorge-eta.vercel.app` que da Vercel; las metaetiquetas `og:` de `index.html` llevan ese mismo dominio temporal).
+> por WhatsApp, ya escrita, y no se guarda nada) El **dominio** es **https://martayjorge.com** (DNS en IONOS apuntando a Vercel;
+> `www.` y la dirección antigua `martayjorge-eta.vercel.app` redirigen a él, y las metaetiquetas `og:` ya lo usan).
 
 1. **GitHub**: el código ya está en este repositorio, en la rama `main`. Conviene que sea también la rama principal
    (*Settings → Branches → Default branch*).
@@ -90,10 +90,9 @@ Los envíos de prueba se guardan en `.dev-data/rsvps.json` (ignorado por git). E
 
    Después, *Redeploy* (las variables solo se aplican a despliegues nuevos). La **rama de producción** debe ser
    `main` (*Settings → Git → Production Branch*).
-4. **Dominio**: *Settings → Domains* → añadir el dominio elegido (p. ej. `martayjorge.com`) y crear en el
-   registrador los registros DNS que indique Vercel. Después, sustituir `https://martayjorge-eta.vercel.app` por el
-   dominio definitivo en las 3 metaetiquetas de `public/index.html` (`og:url`, `og:image`, `twitter:image`); si no,
-   la vista previa al compartir el enlace por WhatsApp seguirá apuntando al dominio temporal.
+4. **Dominio** (hecho): `martayjorge.com` en *Settings → Domains*, con `www.martayjorge.com` redirigiendo a él.
+   Las 3 metaetiquetas de `public/index.html` (`og:url`, `og:image`, `twitter:image`) usan ese dominio y
+   `vercel.json` manda `martayjorge-eta.vercel.app` a `https://martayjorge.com`.
 5. **Probar antes de repartir la invitación**: abrir la web, enviar una confirmación como «Prueba Marta»,
    comprobarla en `/admin`, borrar las pruebas (`docs/rsvp.md` §5) y compartir el enlace en un chat para ver la
    vista previa.
