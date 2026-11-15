@@ -91,14 +91,14 @@
   ],
   "redirects": [
     {
-      "source": "/:path*",
+      "source": "/(.*)",
       "has": [
         {
           "type": "host",
           "value": "martayjorge-eta.vercel.app"
         }
       ],
-      "destination": "https://martayjorge.com/:path*",
+      "destination": "https://martayjorge.com/$1",
       "permanent": true
     },
     {
