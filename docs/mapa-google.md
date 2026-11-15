@@ -36,7 +36,8 @@ con «For development purposes only» y el aviso **«Esta página no puede carga
 
 1. **Restricciones de aplicación → Sitios web** (HTTP referrers). No sirve «Direcciones IP»: esa opción es para
    servidores, y con ella el mapa del navegador falla. Añade:
-   - `https://martayjorge-eta.vercel.app/*` (y el dominio definitivo cuando lo haya, p. ej. `https://www.tudominio.com/*`)
+   - `https://martayjorge.com/*` y `https://www.martayjorge.com/*` (el dominio de la web)
+   - `https://martayjorge-eta.vercel.app/*` (la dirección antigua de Vercel; ahora redirige a martayjorge.com)
    - `https://*.vercel.app/*` si queréis probar en las vistas previas de Vercel
    - `http://localhost:*/*` y `http://127.0.0.1:*/*` para `npm run dev`
 2. **Restricciones de API**: solo «Maps JavaScript API».
